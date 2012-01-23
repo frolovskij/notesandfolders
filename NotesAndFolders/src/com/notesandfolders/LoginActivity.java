@@ -18,10 +18,9 @@ This file is a part of Notes & Folders project.
 
 package com.notesandfolders;
 
-import com.notesandfolders.dataaccess.NodeHelper;
-
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -33,18 +32,32 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
 	private Button okButton;
 	private EditText password;
 
+	private boolean isFirstTime = true;
+
+	@Override
+	public void onResume() {
+		super.onResume();
+
+		// if going back from explorer && no password is set
+		if (login.isEmptyPassword()) {
+			this.finish();
+		}
+	}
+
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		settings = new SqliteSettings(this);
+		settings = new Settings(this);
 		login = new Login(settings);
 
-		/*
-		 * if (!login.isEmptyPassword()) { Intent explorer = new Intent(this,
-		 * ExplorerActivity.class); startActivity(explorer); }
-		 */
+		// Start automatically if password is empty
+		if (login.isEmptyPassword()) {
+			Intent explorer = new Intent(this, ExplorerActivity.class);
+			explorer.putExtra("password", Settings.EMPTY_PASSWORD);
+			startActivity(explorer);
+		}
 
 		setContentView(R.layout.login);
 		okButton = (Button) findViewById(R.id.btnLogin);
@@ -56,9 +69,11 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
 	public void onClick(View v) {
 		if (v == okButton) {
 			if (login.isPasswordValid(password.getText().toString())) {
+
 				Intent explorer = new Intent(this, ExplorerActivity.class);
 				explorer.putExtra("password", password.getText().toString());
 				startActivity(explorer);
+
 			} else {
 				showAlert(R.string.password_incorrect);
 			}

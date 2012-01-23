@@ -23,7 +23,6 @@ import java.util.Date;
 import net.sf.andhsli.hotspotlogin.SimpleCrypto;
 
 import com.notesandfolders.KeyGenerator;
-import com.notesandfolders.Login;
 import com.notesandfolders.Settings;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
@@ -74,7 +73,7 @@ public class DbOpenHelper extends SQLiteOpenHelper {
 		// default password (empty, "")
 		db.execSQL("INSERT INTO 'settings' ('name', 'value') VALUES (?, ?)",
 				new String[] { Settings.SETTINGS_PASSWORD_SHA1_HASH,
-						Login.EMPTY_PASSWORD_SHA1_HASH });
+						Settings.EMPTY_PASSWORD_SHA1_HASH });
 
 		// encryption key, encrypted by password
 		try {
