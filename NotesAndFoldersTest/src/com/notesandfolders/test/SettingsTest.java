@@ -1,13 +1,13 @@
 package com.notesandfolders.test;
 
-import com.notesandfolders.SqliteSettings;
+import com.notesandfolders.Settings;
 import com.notesandfolders.dataaccess.DbOpenHelper;
 
 import android.database.sqlite.SQLiteDatabase;
 import android.test.AndroidTestCase;
 
-public class SqliteSettingsTest extends AndroidTestCase {
-	SqliteSettings settings;
+public class SettingsTest extends AndroidTestCase {
+	Settings settings;
 
 	@Override
 	protected void setUp() {
@@ -17,7 +17,7 @@ public class SqliteSettingsTest extends AndroidTestCase {
 		dbOpenHelper.createAllTables(db);
 		db.close();
 
-		settings = new SqliteSettings(getContext());
+		settings = new Settings(getContext());
 	}
 
 	@Override
@@ -25,7 +25,8 @@ public class SqliteSettingsTest extends AndroidTestCase {
 	}
 
 	public void testGetNotExistingString() {
-		assertEquals("default", settings.getString("this_key_does_not_exist", "default"));
+		assertEquals("default",
+				settings.getString("this_key_does_not_exist", "default"));
 	}
 
 	public void testGetNotExistingInt() {
@@ -63,7 +64,8 @@ public class SqliteSettingsTest extends AndroidTestCase {
 	public void testGetStringAsInt() {
 		settings.setString("key", "value");
 		assertEquals("value", settings.getString("key", "wrong_value"));
-		// assertEquals(5, settings.getInt("key", 5)); // this behavior is undefined
+		// assertEquals(5, settings.getInt("key", 5)); // this behavior is
+		// undefined
 	}
 
 	public void testReSet() {

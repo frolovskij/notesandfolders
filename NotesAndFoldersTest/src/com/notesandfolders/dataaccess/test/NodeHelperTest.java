@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.notesandfolders.NodeType;
 import com.notesandfolders.Node;
+import com.notesandfolders.Settings;
 import com.notesandfolders.dataaccess.DbOpenHelper;
 import com.notesandfolders.dataaccess.NodeHelper;
 import android.database.sqlite.SQLiteDatabase;
@@ -13,6 +14,7 @@ import android.test.AndroidTestCase;
 import android.util.Log;
 
 public class NodeHelperTest extends AndroidTestCase {
+	Settings s;
 	NodeHelper fh;
 	Node root;
 
@@ -24,7 +26,9 @@ public class NodeHelperTest extends AndroidTestCase {
 		dbOpenHelper.createAllTables(db);
 		db.close();
 
-		fh = new NodeHelper(getContext());
+		s = new Settings(getContext());
+
+		fh = new NodeHelper(getContext(), "");
 		root = fh.getRootFolder();
 	}
 
@@ -147,5 +151,13 @@ public class NodeHelperTest extends AndroidTestCase {
 				assertTrue(expected.get(i).equalsTo(children.get(i)));
 			}
 		}
+	}
+
+	public void testCreateNodeTextContent() {
+		String expected = "ololo";
+		Node f1 = fh.createNode(root, "test", expected, NodeType.NOTE);
+
+		String tc = fh.getTextContentById(f1.getId());
+		assertEquals(expected, tc);
 	}
 }
