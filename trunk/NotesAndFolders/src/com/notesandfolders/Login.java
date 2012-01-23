@@ -21,18 +21,13 @@ package com.notesandfolders;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-
-import android.util.Log;
-
 import net.sf.andhsli.hotspotlogin.SimpleCrypto;
 
 public class Login {
 	String passwordSha1Hash;
-	public static final String EMPTY_PASSWORD_SHA1_HASH = "DA39A3EE5E6B4B0D3255BFEF95601890AFD80709";
 
 	public Login(Settings settings) {
-		passwordSha1Hash = settings.getString(
-				Settings.SETTINGS_PASSWORD_SHA1_HASH, EMPTY_PASSWORD_SHA1_HASH);
+		passwordSha1Hash = settings.getPasswordSha1Hash();
 	}
 
 	public static String getSha1Digest(String text) {
@@ -57,6 +52,6 @@ public class Login {
 	}
 
 	public boolean isEmptyPassword() {
-		return passwordSha1Hash.equals(EMPTY_PASSWORD_SHA1_HASH);
+		return passwordSha1Hash.equals(Settings.EMPTY_PASSWORD_SHA1_HASH);
 	}
 }

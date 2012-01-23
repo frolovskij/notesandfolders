@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <PreferenceCategory android:title="Security" >
+        <Preference
+            android:key="password"
+            android:summary="If set empty it won&apos;t be asked at start"
+            android:title="Password" />
+    </PreferenceCategory>
+
+</PreferenceScreen>

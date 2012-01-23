@@ -25,7 +25,6 @@ import net.sf.andhsli.hotspotlogin.SimpleCrypto;
 import com.notesandfolders.Node;
 import com.notesandfolders.NodeType;
 import com.notesandfolders.Settings;
-import com.notesandfolders.SqliteSettings;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -42,7 +41,7 @@ public class NodeHelper {
 
 		// decrypting key with password
 		try {
-			Settings s = new SqliteSettings(context);
+			Settings s = new Settings(context);
 			String encryptedKey = s.getString(Settings.SETTINGS_ENCRYPTED_KEY,
 					"");
 			this.key = SimpleCrypto.decrypt(password, encryptedKey);
