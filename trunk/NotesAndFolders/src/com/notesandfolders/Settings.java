@@ -20,6 +20,7 @@ package com.notesandfolders;
 
 public interface Settings {
 	final String SETTINGS_PASSWORD_SHA1_HASH = "password_sha1_hash";
+	final String SETTINGS_ENCRYPTED_KEY = "encrypted_key";
 
 	String getString(String name, String defaultValue);
 
