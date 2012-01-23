@@ -21,8 +21,11 @@ package com.notesandfolders.dataaccess;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Date;
+import net.sf.andhsli.hotspotlogin.SimpleCrypto;
 import com.notesandfolders.Node;
 import com.notesandfolders.NodeType;
+import com.notesandfolders.Settings;
+import com.notesandfolders.SqliteSettings;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -32,9 +35,20 @@ import android.util.Log;
 
 public class NodeHelper {
 	Context context;
+	String key = null;
 
-	public NodeHelper(Context context) {
+	public NodeHelper(Context context, String password) {
 		this.context = context;
+
+		// decrypting key with password
+		try {
+			Settings s = new SqliteSettings(context);
+			String encryptedKey = s.getString(Settings.SETTINGS_ENCRYPTED_KEY,
+					"");
+			this.key = SimpleCrypto.decrypt(password, encryptedKey);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	public Node createNode(Node parent, String name, String textContent,
@@ -55,7 +69,6 @@ public class NodeHelper {
 		}
 
 		Node f = new Node();
-
 		f.setName(name);
 		f.setParentId(parent.getId());
 		f.setDateCreated(new Date());
@@ -73,7 +86,6 @@ public class NodeHelper {
 			cv.put("date_created", f.getDateCreated().getTime());
 			cv.put("date_modified", f.getDateModified().getTime());
 			cv.put("type", f.getType().getType());
-			cv.put("text_content", f.getTextContent());
 
 			long id = db.insertOrThrow("data", null, cv);
 			if (id != -1) {
@@ -81,6 +93,11 @@ public class NodeHelper {
 			} else {
 				Log.i("createNode", "inserted id is -1, result is null");
 				f = null;
+			}
+
+			if (f.getType() != NodeType.FOLDER && f.getTextContent() != null
+					&& (!f.getTextContent().trim().equals(""))) {
+				setTextContentById(id, f.getTextContent());
 			}
 		} catch (SQLException ex) {
 			// if not created for some reason
@@ -294,6 +311,57 @@ public class NodeHelper {
 		try {
 			db.insert("data", null, cv);
 		} catch (Exception ex) {
+		} finally {
+			if (db != null) {
+				db.close();
+			}
+		}
+	}
+
+	public String getTextContentById(long id) {
+		DbOpenHelper dbOpenHelper = new DbOpenHelper(context);
+		SQLiteDatabase db = dbOpenHelper.getWritableDatabase();
+
+		String textContent = "";
+		Cursor c = null;
+		try {
+			c = db.rawQuery("select text_content from data where id = ?",
+					new String[] { Long.toString(id) });
+
+			if (c.moveToFirst()) {
+				textContent = SimpleCrypto.decrypt(key, c.getString(0));
+			} else {
+				Log.i("getTextContentById", "Cursor is empty");
+			}
+		} catch (Exception ex) {
+			Log.i("getTextContentById", ex.toString());
+		} finally {
+			if (c != null) {
+				c.close();
+			}
+			if (db != null) {
+				db.close();
+			}
+		}
+
+		return textContent;
+	}
+
+	public void setTextContentById(long id, String textContent) {
+		if (textContent == null) {
+			textContent = "";
+		}
+
+		DbOpenHelper dbOpenHelper = new DbOpenHelper(context);
+		SQLiteDatabase db = dbOpenHelper.getWritableDatabase();
+
+		try {
+			db.execSQL(
+					"update data set text_content = ? where id = ?",
+					new String[] { SimpleCrypto.encrypt(key, textContent),
+							Long.toString(id) });
+		} catch (Exception ex) {
+			Log.i("setTextContentById", ex.toString());
 		} finally {
 			if (db != null) {
 				db.close();
