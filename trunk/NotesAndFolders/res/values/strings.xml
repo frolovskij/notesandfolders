@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <string name="app_name">Notes &amp; Folders</string>
     <string name="password_prompt">Password</string>
     <string name="password_incorrect">Wrong password</string>
     <string name="password_hint"></string>
     <string name="login_button">OK</string>
+    <string name="msg_wrong_password">Wrong password</string>
+    <string name="msg_password_confirmation_do_not_match">The password and confirmation do not match</string>
+
 </resources>

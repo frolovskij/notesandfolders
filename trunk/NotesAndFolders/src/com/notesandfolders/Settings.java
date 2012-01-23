@@ -37,8 +37,15 @@ public class Settings {
 	}
 
 	public String getPasswordSha1Hash() {
-		return getString(Settings.SETTINGS_PASSWORD_SHA1_HASH,
-				EMPTY_PASSWORD_SHA1_HASH);
+		return getString(Settings.SETTINGS_PASSWORD_SHA1_HASH, EMPTY_PASSWORD_SHA1_HASH);
+	}
+
+	public void setPassword(String password) {
+		if (password == null) {
+			password = "";
+		}
+
+		setString(Settings.SETTINGS_PASSWORD_SHA1_HASH, Login.getSha1Digest(password));
 	}
 
 	private Object getData(String name, Object defaultValue) {
@@ -49,8 +56,7 @@ public class Settings {
 
 		Cursor c = null;
 		try {
-			c = db.rawQuery("select value from settings where name = ?",
-					new String[] { name });
+			c = db.rawQuery("select value from settings where name = ?", new String[] { name });
 			if (c.getCount() != 0) {
 				c.moveToFirst();
 
@@ -86,8 +92,7 @@ public class Settings {
 		SQLiteDatabase db = dbOpenHelper.getWritableDatabase();
 
 		try {
-			db.execSQL(
-					"INSERT OR REPLACE INTO 'settings' ('name', 'value') VALUES (?, ?)",
+			db.execSQL("INSERT OR REPLACE INTO 'settings' ('name', 'value') VALUES (?, ?)",
 					new String[] { name, value.toString() });
 		} finally {
 			db.close();
