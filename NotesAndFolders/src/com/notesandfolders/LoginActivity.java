@@ -56,13 +56,8 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
 	public void onClick(View v) {
 		if (v == okButton) {
 			if (login.isPasswordValid(password.getText().toString())) {
-				NodeHelper nh = new NodeHelper(this);
-				for (Node n : FileImporter.getFiles("/mnt/sdcard/test_import",
-						1)) {
-					nh.insertNode(n);
-				}
-
 				Intent explorer = new Intent(this, ExplorerActivity.class);
+				explorer.putExtra("password", password.getText().toString());
 				startActivity(explorer);
 			} else {
 				showAlert(R.string.password_incorrect);

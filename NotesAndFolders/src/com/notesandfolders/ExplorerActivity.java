@@ -33,12 +33,12 @@ public class ExplorerActivity extends BaseActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		fh = new NodeHelper(this);
+		fh = new NodeHelper(this, getIntent().getExtras().getString("password"));
 
 		setContentView(R.layout.explorer);
 
 		lv = (ListView) findViewById(R.id.explorer_listview);
-		items = fh.getChildrenById(1);
+		items = fh.getChildrenById(0);
 		adapter = new NodeAdapter(this, R.layout.explorer_item, items);
 		lv.setAdapter(adapter);
 	}
