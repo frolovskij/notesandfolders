@@ -19,6 +19,10 @@ This file is a part of Notes & Folders project.
 package com.notesandfolders.dataaccess;
 
 import java.util.Date;
+
+import net.sf.andhsli.hotspotlogin.SimpleCrypto;
+
+import com.notesandfolders.KeyGenerator;
 import com.notesandfolders.Login;
 import com.notesandfolders.Settings;
 import android.content.Context;
@@ -28,7 +32,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 public class DbOpenHelper extends SQLiteOpenHelper {
-	private static final int DB_VERSION = 10;
+	private static final int DB_VERSION = 1;
 	private static final String DB_NAME = "foldersandnotes.db";
 
 	private static final String SQL_PRAGMA = "PRAGMA foreign_keys=ON;";
@@ -72,6 +76,19 @@ public class DbOpenHelper extends SQLiteOpenHelper {
 				new String[] { Settings.SETTINGS_PASSWORD_SHA1_HASH,
 						Login.EMPTY_PASSWORD_SHA1_HASH });
 
+		// encryption key, encrypted by password
+		try {
+			String password = ""; // default password
+			String key = KeyGenerator.getRandomKey();
+			String encryptedKeyHex = SimpleCrypto.encrypt(password, key);
+
+			db.execSQL(
+					"INSERT INTO 'settings' ('name', 'value') VALUES (?, ?)",
+					new String[] { Settings.SETTINGS_ENCRYPTED_KEY,
+							encryptedKeyHex });
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void dropAllTables(SQLiteDatabase db) {
