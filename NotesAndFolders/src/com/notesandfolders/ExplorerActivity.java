@@ -21,12 +21,20 @@ package com.notesandfolders;
 import java.util.List;
 import com.notesandfolders.dataaccess.NodeHelper;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
+import android.view.ViewGroup;
+import android.widget.Toast;
 
 public class ExplorerActivity extends BaseActivity {
 	NodeHelper fh;
@@ -58,6 +66,49 @@ public class ExplorerActivity extends BaseActivity {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
+		case R.id.explorer_options_add:
+			final AlertDialogListItem[] items = {
+					new AlertDialogListItem(getText(R.string.create_folder)
+							.toString(), R.drawable.folder),
+					new AlertDialogListItem(getText(R.string.create_note)
+							.toString(), R.drawable.note),
+					new AlertDialogListItem(getText(R.string.create_checklist)
+							.toString(), R.drawable.note) };
+
+			ListAdapter adapter = new ArrayAdapter<AlertDialogListItem>(this,
+					android.R.layout.select_dialog_item, android.R.id.text1,
+					items) {
+				public View getView(int position, View convertView,
+						ViewGroup parent) {
+					// User super class to create the View
+					View v = super.getView(position, convertView, parent);
+					TextView tv = (TextView) v.findViewById(android.R.id.text1);
+
+					// Put the image on the TextView
+					tv.setCompoundDrawablesWithIntrinsicBounds(
+							items[position].icon, 0, 0, 0);
+
+					// Add margin between image and text (support various screen
+					// densities)
+					int dp5 = (int) (5 * getResources().getDisplayMetrics().density + 0.5f);
+					tv.setCompoundDrawablePadding(dp5);
+
+					return v;
+				}
+			};
+
+			new AlertDialog.Builder(this)
+					.setTitle(getText(R.string.create_new))
+					.setAdapter(adapter, new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int item) {
+							Toast.makeText(getApplicationContext(),
+									getText(R.string.msg_not_implemented_yet),
+									Toast.LENGTH_SHORT).show();
+						}
+					}).show();
+
+			return true;
+
 		case R.id.explorer_options_settings:
 			Intent settings = new Intent(this, SettingsActivity.class);
 			startActivity(settings);
