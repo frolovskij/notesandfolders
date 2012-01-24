@@ -1,7 +1,6 @@
 package com.notesandfolders.dataaccess.test;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import com.notesandfolders.NodeType;
@@ -38,7 +37,7 @@ public class NodeHelperTest extends AndroidTestCase {
 
 	public void testGetRootFolder() {
 		assertNotNull(root);
-		assertEquals("ROOT", root.getName());
+		assertEquals("", root.getName());
 		assertEquals(0, root.getId());
 		assertEquals(1, fh.getNodesCount());
 	}
@@ -159,5 +158,17 @@ public class NodeHelperTest extends AndroidTestCase {
 
 		String tc = fh.getTextContentById(f1.getId());
 		assertEquals(expected, tc);
+	}
+
+	public void testGetFullPathById() {
+		Node f1 = fh.createFolder(root, "1");
+		Node f2 = fh.createFolder(f1, "2");
+		Node f3 = fh.createFolder(f2, "3");
+		Node f4 = fh.createFolder(f3, "4");
+
+		assertEquals("", fh.getFullPathById(-29384974));
+		assertEquals("/", fh.getFullPathById(root.getId()));
+		assertEquals("/1/", fh.getFullPathById(f1.getId()));
+		assertEquals("/1/2/3/4/", fh.getFullPathById(f4.getId()));
 	}
 }
