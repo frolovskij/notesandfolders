@@ -20,10 +20,13 @@ package com.notesandfolders;
 
 import java.util.List;
 import com.notesandfolders.dataaccess.NodeHelper;
+import com.tani.app.ui.IconContextMenu;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.ContextMenu;
@@ -33,18 +36,29 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.EditText;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class ExplorerActivity extends BaseActivity {
+public class ExplorerActivity extends BaseActivity implements
+		IconContextMenu.IconContextMenuOnClickListener {
+	private static final int CONTEXT_MENU_ID = 0;
+	private static final int MENU_PROPERTIES = 6;
+	private static final int MENU_DELETE = 5;
+	private static final int MENU_PASTE = 4;
+	private static final int MENU_CUT = 3;
+	private static final int MENU_COPY = 2;
+	private static final int MENU_RENAME = 1;
 	private NodeHelper nh;
 	private ListView lv;
 	private TextView path;
 	private List<Node> items;
 	private NodeAdapter adapter;
+	private IconContextMenu iconContextMenu = null;
 
 	/**
 	 * Id of the folder which items are currently being listed in explorer
@@ -66,11 +80,47 @@ public class ExplorerActivity extends BaseActivity {
 		setContentView(R.layout.explorer);
 
 		lv = (ListView) findViewById(R.id.explorer_listview);
+		lv.setOnItemLongClickListener(itemLongClickHandler);
+
 		path = (TextView) findViewById(R.id.explorer_path);
+
+		Resources res = getResources();
+
+		iconContextMenu = new IconContextMenu(this, CONTEXT_MENU_ID);
+		iconContextMenu.addItem(res, R.string.rename, R.drawable.rename, MENU_RENAME);
+		iconContextMenu.addItem(res, R.string.copy, R.drawable.copy, MENU_COPY);
+		iconContextMenu.addItem(res, R.string.cut, R.drawable.cut, MENU_CUT);
+		iconContextMenu.addItem(res, R.string.paste, R.drawable.paste, MENU_PASTE);
+		iconContextMenu.addItem(res, R.string.delete, R.drawable.delete, MENU_DELETE);
+		iconContextMenu.addItem(res, R.string.properties, R.drawable.properties, MENU_PROPERTIES);
 
 		update();
 
-		registerForContextMenu(lv);
+		iconContextMenu.setOnClickListener(this);
+	}
+
+	private OnItemLongClickListener itemLongClickHandler = new OnItemLongClickListener() {
+		public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+			Node selected = (Node) lv.getItemAtPosition(position);
+			selectedNodeId = selected.getId();
+			Log.i("test", selected.toString());
+
+			showDialog(CONTEXT_MENU_ID);
+
+			return true;
+		}
+	};
+
+	/**
+	 * create context menu
+	 */
+	@Override
+	protected Dialog onCreateDialog(int id) {
+		if (id == CONTEXT_MENU_ID) {
+			return iconContextMenu.createMenu(getText(R.string.explorer_context_menu_title)
+					.toString());
+		}
+		return super.onCreateDialog(id);
 	}
 
 	@Override
@@ -99,18 +149,6 @@ public class ExplorerActivity extends BaseActivity {
 		default:
 			return super.onOptionsItemSelected(item);
 		}
-	}
-
-	@Override
-	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
-		super.onCreateContextMenu(menu, v, menuInfo);
-		MenuInflater inflater = getMenuInflater();
-		inflater.inflate(R.menu.explorer_context, menu);
-
-		Node selected = (Node) lv.getItemAtPosition(((AdapterContextMenuInfo) menuInfo).position);
-		selectedNodeId = selected.getId();
-
-		Log.i("test", selected.toString());
 	}
 
 	public void update() {
@@ -193,5 +231,10 @@ public class ExplorerActivity extends BaseActivity {
 
 					}
 				}).show();
+	}
+
+	public void onClick(int menuId) {
+		// TODO Auto-generated method stub
+
 	}
 }
