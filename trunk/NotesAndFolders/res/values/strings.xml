@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <string name="msg_not_implemented_yet">Not implemented yet</string>
     <string name="app_name">Notes &amp; Folders</string>
     <string name="password_prompt">Password</string>
     <string name="password_incorrect">Wrong password</string>
@@ -8,5 +9,11 @@
     <string name="login_button">OK</string>
     <string name="msg_wrong_password">Wrong password</string>
     <string name="msg_password_confirmation_do_not_match">The password and confirmation do not match</string>
+
+    <!-- Alert Dialog that pop-ups when user chooses "New" from Explorer's options menu -->
+    <string name="create_new">New</string>
+    <string name="create_folder">Folder</string>
+    <string name="create_note">Note</string>
+    <string name="create_checklist">Checklist</string>
 
 </resources>

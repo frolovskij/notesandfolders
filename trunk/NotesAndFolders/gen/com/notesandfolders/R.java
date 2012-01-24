@@ -44,13 +44,20 @@ public final class R {
         public static final int explorer_options=0x7f060000;
     }
     public static final class string {
-        public static final int app_name=0x7f050000;
-        public static final int login_button=0x7f050004;
-        public static final int msg_password_confirmation_do_not_match=0x7f050006;
-        public static final int msg_wrong_password=0x7f050005;
-        public static final int password_hint=0x7f050003;
-        public static final int password_incorrect=0x7f050002;
-        public static final int password_prompt=0x7f050001;
+        public static final int app_name=0x7f050001;
+        public static final int create_checklist=0x7f05000b;
+        public static final int create_folder=0x7f050009;
+        /**  Alert Dialog that pop-ups when user chooses "Add" from Explorer's options menu 
+         */
+        public static final int create_new=0x7f050008;
+        public static final int create_note=0x7f05000a;
+        public static final int login_button=0x7f050005;
+        public static final int msg_not_implemented_yet=0x7f050000;
+        public static final int msg_password_confirmation_do_not_match=0x7f050007;
+        public static final int msg_wrong_password=0x7f050006;
+        public static final int password_hint=0x7f050004;
+        public static final int password_incorrect=0x7f050003;
+        public static final int password_prompt=0x7f050002;
     }
     public static final class xml {
         public static final int preferences=0x7f040000;
