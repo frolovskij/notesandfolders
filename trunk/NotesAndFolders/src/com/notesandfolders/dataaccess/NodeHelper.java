@@ -42,16 +42,14 @@ public class NodeHelper {
 		// decrypting key with password
 		try {
 			Settings s = new Settings(context);
-			String encryptedKey = s.getString(Settings.SETTINGS_ENCRYPTED_KEY,
-					"");
+			String encryptedKey = s.getString(Settings.SETTINGS_ENCRYPTED_KEY, "");
 			this.key = SimpleCrypto.decrypt(password, encryptedKey);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
-	public Node createNode(Node parent, String name, String textContent,
-			NodeType type) {
+	public Node createNode(Node parent, String name, String textContent, NodeType type) {
 		if (parent == null) {
 			Log.i("createNode", "parent is null");
 			return null;
@@ -109,6 +107,24 @@ public class NodeHelper {
 		}
 
 		return f;
+	}
+
+	public String getFullPathById(long id) {
+		StringBuffer path = new StringBuffer();
+
+		Node current = getNodeById(id);
+		if (current == null) {
+			return "";
+		}
+
+		path.append(current.getName());
+		path.append("/");
+
+		if (current.getParentId() != -1) {
+			path.insert(0, getFullPathById(current.getParentId()));
+		}
+
+		return path.toString();
 	}
 
 	public Node getNodeById(long id) {
@@ -170,8 +186,7 @@ public class NodeHelper {
 			c = db.rawQuery("select id from data where parent_id = ?",
 					new String[] { Long.toString(id) });
 
-			for (boolean hasItem = c.moveToFirst(); hasItem; hasItem = c
-					.moveToNext()) {
+			for (boolean hasItem = c.moveToFirst(); hasItem; hasItem = c.moveToNext()) {
 				childrenIds.add(c.getLong(0));
 			}
 		} catch (Exception ex) {
@@ -355,10 +370,8 @@ public class NodeHelper {
 		SQLiteDatabase db = dbOpenHelper.getWritableDatabase();
 
 		try {
-			db.execSQL(
-					"update data set text_content = ? where id = ?",
-					new String[] { SimpleCrypto.encrypt(key, textContent),
-							Long.toString(id) });
+			db.execSQL("update data set text_content = ? where id = ?",
+					new String[] { SimpleCrypto.encrypt(key, textContent), Long.toString(id) });
 		} catch (Exception ex) {
 			Log.i("setTextContentById", ex.toString());
 		} finally {

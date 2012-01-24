@@ -36,11 +36,13 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class ExplorerActivity extends BaseActivity {
 	private NodeHelper nh;
 	private ListView lv;
+	private TextView path;
 	private List<Node> items;
 	private NodeAdapter adapter;
 
@@ -62,6 +64,9 @@ public class ExplorerActivity extends BaseActivity {
 		currentFolderId = 0;
 
 		setContentView(R.layout.explorer);
+
+		lv = (ListView) findViewById(R.id.explorer_listview);
+		path = (TextView) findViewById(R.id.explorer_path);
 
 		update();
 
@@ -97,98 +102,77 @@ public class ExplorerActivity extends BaseActivity {
 	}
 
 	@Override
-	public void onCreateContextMenu(ContextMenu menu, View v,
-			ContextMenuInfo menuInfo) {
+	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
 		super.onCreateContextMenu(menu, v, menuInfo);
 		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.explorer_context, menu);
 
-		Node selected = (Node) lv
-				.getItemAtPosition(((AdapterContextMenuInfo) menuInfo).position);
+		Node selected = (Node) lv.getItemAtPosition(((AdapterContextMenuInfo) menuInfo).position);
 		selectedNodeId = selected.getId();
 
 		Log.i("test", selected.toString());
 	}
 
 	public void update() {
-		lv = (ListView) findViewById(R.id.explorer_listview);
 		items = nh.getChildrenById(currentFolderId);
 		adapter = new NodeAdapter(this, R.layout.explorer_item, items);
 		lv.setAdapter(adapter);
+
+		path.setText(nh.getFullPathById(currentFolderId));
 	}
 
 	public void onNewFolder() {
 		final EditText input = new EditText(this);
 
-		new AlertDialog.Builder(this)
-				.setTitle(R.string.explorer_newfolder_title)
-				.setMessage(R.string.explorer_newfolder_prompt)
-				.setView(input)
-				.setPositiveButton(R.string.ok,
-						new DialogInterface.OnClickListener() {
-							public void onClick(DialogInterface dialog,
-									int whichButton) {
-								String folderName = input.getText().toString();
+		new AlertDialog.Builder(this).setTitle(R.string.explorer_newfolder_title)
+				.setMessage(R.string.explorer_newfolder_prompt).setView(input)
+				.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int whichButton) {
+						String folderName = input.getText().toString();
 
-								Node parent = nh.getNodeById(currentFolderId);
-								if ((parent != null)
-										&& parent.getType() == NodeType.FOLDER) {
-									nh.createFolder(parent, folderName);
-									update();
-								}
-							}
-						})
-				.setNegativeButton(R.string.cancel,
-						new DialogInterface.OnClickListener() {
-							public void onClick(DialogInterface dialog,
-									int whichButton) {
-								// Do nothing.
-							}
-						}).show();
+						Node parent = nh.getNodeById(currentFolderId);
+						if ((parent != null) && parent.getType() == NodeType.FOLDER) {
+							nh.createFolder(parent, folderName);
+							update();
+						}
+					}
+				}).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int whichButton) {
+						// Do nothing.
+					}
+				}).show();
 	}
 
 	public void onNewNote() {
 		final EditText input = new EditText(this);
 
-		new AlertDialog.Builder(this)
-				.setTitle(R.string.explorer_newnote_title)
-				.setMessage(R.string.explorer_newnote_prompt)
-				.setView(input)
-				.setPositiveButton(R.string.ok,
-						new DialogInterface.OnClickListener() {
-							public void onClick(DialogInterface dialog,
-									int whichButton) {
-								String noteName = input.getText().toString();
+		new AlertDialog.Builder(this).setTitle(R.string.explorer_newnote_title)
+				.setMessage(R.string.explorer_newnote_prompt).setView(input)
+				.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int whichButton) {
+						String noteName = input.getText().toString();
 
-								Node parent = nh.getNodeById(currentFolderId);
-								if ((parent != null)
-										&& parent.getType() == NodeType.FOLDER) {
-									nh.createNode(parent, noteName, "",
-											NodeType.NOTE);
-									update();
-								}
-							}
-						})
-				.setNegativeButton(R.string.cancel,
-						new DialogInterface.OnClickListener() {
-							public void onClick(DialogInterface dialog,
-									int whichButton) {
-								// Do nothing.
-							}
-						}).show();
+						Node parent = nh.getNodeById(currentFolderId);
+						if ((parent != null) && parent.getType() == NodeType.FOLDER) {
+							nh.createNode(parent, noteName, "", NodeType.NOTE);
+							update();
+						}
+					}
+				}).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int whichButton) {
+						// Do nothing.
+					}
+				}).show();
 	}
 
 	public void onNew() {
 		final IconListItem[] items = {
-				new IconListItem(getText(R.string.create_folder).toString(),
-						R.drawable.folder),
-				new IconListItem(getText(R.string.create_note).toString(),
-						R.drawable.note),
-				new IconListItem(getText(R.string.create_checklist).toString(),
-						R.drawable.note) };
+				new IconListItem(getText(R.string.create_folder).toString(), R.drawable.folder),
+				new IconListItem(getText(R.string.create_note).toString(), R.drawable.note),
+				new IconListItem(getText(R.string.create_checklist).toString(), R.drawable.note) };
 
-		ListAdapter adapter = new IconListItemAdapter(this,
-				android.R.layout.select_dialog_item, items);
+		ListAdapter adapter = new IconListItemAdapter(this, android.R.layout.select_dialog_item,
+				items);
 
 		new AlertDialog.Builder(this).setTitle(getText(R.string.create_new))
 				.setAdapter(adapter, new DialogInterface.OnClickListener() {
@@ -202,8 +186,8 @@ public class ExplorerActivity extends BaseActivity {
 							break;
 						case 2:
 							Toast.makeText(getApplicationContext(),
-									getText(R.string.msg_not_implemented_yet),
-									Toast.LENGTH_SHORT).show();
+									getText(R.string.msg_not_implemented_yet), Toast.LENGTH_SHORT)
+									.show();
 							break;
 						}
 
