@@ -25,9 +25,14 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.ContextMenu;
+import android.view.ContextMenu.ContextMenuInfo;
+import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.ListAdapter;
 import android.widget.ListView;
@@ -39,7 +44,15 @@ public class ExplorerActivity extends BaseActivity {
 	private List<Node> items;
 	private NodeAdapter adapter;
 
+	/**
+	 * Id of the folder which items are currently being listed in explorer
+	 */
 	private long currentFolderId;
+
+	/**
+	 * Id of the node context menu is shown for
+	 */
+	private long selectedNodeId;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -51,6 +64,8 @@ public class ExplorerActivity extends BaseActivity {
 		setContentView(R.layout.explorer);
 
 		update();
+
+		registerForContextMenu(lv);
 	}
 
 	@Override
@@ -79,6 +94,20 @@ public class ExplorerActivity extends BaseActivity {
 		default:
 			return super.onOptionsItemSelected(item);
 		}
+	}
+
+	@Override
+	public void onCreateContextMenu(ContextMenu menu, View v,
+			ContextMenuInfo menuInfo) {
+		super.onCreateContextMenu(menu, v, menuInfo);
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.explorer_context, menu);
+
+		Node selected = (Node) lv
+				.getItemAtPosition(((AdapterContextMenuInfo) menuInfo).position);
+		selectedNodeId = selected.getId();
+
+		Log.i("test", selected.toString());
 	}
 
 	public void update() {
