@@ -9,9 +9,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="left"
+        android:paddingBottom="5dip"
         android:paddingLeft="5dip"
         android:paddingTop="5dip"
-        android:paddingBottom="5dip"
         android:src="@drawable/folder" />
 
     <TextView
@@ -22,7 +22,6 @@
         android:layout_weight="0.5"
         android:paddingLeft="5dip"
         android:text="bin"
-        android:textSize="20dip"
-        android:textColor="#000000"/>
+        android:textSize="20dip" />
 
 </LinearLayout>

@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <!-- Common -->
+    <string name="ok">Ok</string>
+    <string name="cancel">Cancel</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+
+    <!--  -->
     <string name="msg_not_implemented_yet">Not implemented yet</string>
     <string name="app_name">Notes &amp; Folders</string>
     <string name="password_prompt">Password</string>
@@ -8,6 +15,14 @@
     <string name="password_hint"></string>
     <string name="login_button">OK</string>
     <string name="msg_password_confirmation_do_not_match">The password and confirmation do not match</string>
+
+    <!-- New folder alert dialog -->
+    <string name="explorer_newfolder_title">New folder</string>
+    <string name="explorer_newfolder_prompt">Enter name of new folder</string>
+
+    <!-- New note alert dialog -->
+    <string name="explorer_newnote_title">New note</string>
+    <string name="explorer_newnote_prompt">Enter name of new note</string>
 
     <!-- Settings activity -->
     <string name="settings_title">Settings</string>

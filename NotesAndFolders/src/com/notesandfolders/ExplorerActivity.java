@@ -28,28 +28,29 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.EditText;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
 public class ExplorerActivity extends BaseActivity {
-	NodeHelper fh;
-	ListView lv;
-	List<Node> items;
-	NodeAdapter adapter;
+	private NodeHelper nh;
+	private ListView lv;
+	private List<Node> items;
+	private NodeAdapter adapter;
+
+	private long currentFolderId;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		fh = new NodeHelper(this, getIntent().getExtras().getString("password"));
+		nh = new NodeHelper(this, getIntent().getExtras().getString("password"));
+		currentFolderId = 0;
 
 		setContentView(R.layout.explorer);
 
-		lv = (ListView) findViewById(R.id.explorer_listview);
-		items = fh.getChildrenById(0);
-		adapter = new NodeAdapter(this, R.layout.explorer_item, items);
-		lv.setAdapter(adapter);
+		update();
 	}
 
 	@Override
@@ -80,6 +81,74 @@ public class ExplorerActivity extends BaseActivity {
 		}
 	}
 
+	public void update() {
+		lv = (ListView) findViewById(R.id.explorer_listview);
+		items = nh.getChildrenById(currentFolderId);
+		adapter = new NodeAdapter(this, R.layout.explorer_item, items);
+		lv.setAdapter(adapter);
+	}
+
+	public void onNewFolder() {
+		final EditText input = new EditText(this);
+
+		new AlertDialog.Builder(this)
+				.setTitle(R.string.explorer_newfolder_title)
+				.setMessage(R.string.explorer_newfolder_prompt)
+				.setView(input)
+				.setPositiveButton(R.string.ok,
+						new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog,
+									int whichButton) {
+								String folderName = input.getText().toString();
+
+								Node parent = nh.getNodeById(currentFolderId);
+								if ((parent != null)
+										&& parent.getType() == NodeType.FOLDER) {
+									nh.createFolder(parent, folderName);
+									update();
+								}
+							}
+						})
+				.setNegativeButton(R.string.cancel,
+						new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog,
+									int whichButton) {
+								// Do nothing.
+							}
+						}).show();
+	}
+
+	public void onNewNote() {
+		final EditText input = new EditText(this);
+
+		new AlertDialog.Builder(this)
+				.setTitle(R.string.explorer_newnote_title)
+				.setMessage(R.string.explorer_newnote_prompt)
+				.setView(input)
+				.setPositiveButton(R.string.ok,
+						new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog,
+									int whichButton) {
+								String noteName = input.getText().toString();
+
+								Node parent = nh.getNodeById(currentFolderId);
+								if ((parent != null)
+										&& parent.getType() == NodeType.FOLDER) {
+									nh.createNode(parent, noteName, "",
+											NodeType.NOTE);
+									update();
+								}
+							}
+						})
+				.setNegativeButton(R.string.cancel,
+						new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog,
+									int whichButton) {
+								// Do nothing.
+							}
+						}).show();
+	}
+
 	public void onNew() {
 		final IconListItem[] items = {
 				new IconListItem(getText(R.string.create_folder).toString(),
@@ -95,11 +164,21 @@ public class ExplorerActivity extends BaseActivity {
 		new AlertDialog.Builder(this).setTitle(getText(R.string.create_new))
 				.setAdapter(adapter, new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int item) {
-						Toast.makeText(getApplicationContext(),
-								getText(R.string.msg_not_implemented_yet),
-								Toast.LENGTH_SHORT).show();
+						switch (item) {
+						case 0:
+							onNewFolder();
+							break;
+						case 1:
+							onNewNote();
+							break;
+						case 2:
+							Toast.makeText(getApplicationContext(),
+									getText(R.string.msg_not_implemented_yet),
+									Toast.LENGTH_SHORT).show();
+							break;
+						}
+
 					}
 				}).show();
 	}
-
 }
