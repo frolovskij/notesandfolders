@@ -18,6 +18,7 @@ This file is a part of Notes & Folders project.
 
 package com.notesandfolders;
 
+import net.sf.andhsli.hotspotlogin.SimpleCrypto;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -37,15 +38,47 @@ public class Settings {
 	}
 
 	public String getPasswordSha1Hash() {
-		return getString(Settings.SETTINGS_PASSWORD_SHA1_HASH, EMPTY_PASSWORD_SHA1_HASH);
+		return getString(Settings.SETTINGS_PASSWORD_SHA1_HASH,
+				EMPTY_PASSWORD_SHA1_HASH);
 	}
 
-	public void setPassword(String password) {
-		if (password == null) {
-			password = "";
+	/**
+	 * Sets the new password and re-encrypts the key with it
+	 * 
+	 * @param newPassword
+	 * @param oldPassword
+	 */
+	public boolean setPassword(String newPassword, String oldPassword) {
+		if (newPassword == null) {
+			newPassword = "";
 		}
 
-		setString(Settings.SETTINGS_PASSWORD_SHA1_HASH, Login.getSha1Digest(password));
+		boolean result = true;
+
+		try {
+			String currentPassword = oldPassword;
+			String encryptedOldKeyHex = getString(
+					Settings.SETTINGS_ENCRYPTED_KEY, "");
+			String oldKey = SimpleCrypto.decrypt(currentPassword,
+					encryptedOldKeyHex);
+			String encryptedNewKeyHex = SimpleCrypto.encrypt(newPassword,
+					oldKey);
+
+			setString(Settings.SETTINGS_PASSWORD_SHA1_HASH,
+					Login.getSha1Digest(newPassword));
+			setString(Settings.SETTINGS_ENCRYPTED_KEY, encryptedNewKeyHex);
+
+		} catch (Exception e) {
+			// TODO: if something goes wrong here - need to get back the old
+			// password
+			// and key
+
+			result = false;
+
+			e.printStackTrace();
+		}
+
+		return result;
 	}
 
 	private Object getData(String name, Object defaultValue) {
@@ -56,7 +89,8 @@ public class Settings {
 
 		Cursor c = null;
 		try {
-			c = db.rawQuery("select value from settings where name = ?", new String[] { name });
+			c = db.rawQuery("select value from settings where name = ?",
+					new String[] { name });
 			if (c.getCount() != 0) {
 				c.moveToFirst();
 
@@ -92,7 +126,8 @@ public class Settings {
 		SQLiteDatabase db = dbOpenHelper.getWritableDatabase();
 
 		try {
-			db.execSQL("INSERT OR REPLACE INTO 'settings' ('name', 'value') VALUES (?, ?)",
+			db.execSQL(
+					"INSERT OR REPLACE INTO 'settings' ('name', 'value') VALUES (?, ?)",
 					new String[] { name, value.toString() });
 		} finally {
 			db.close();

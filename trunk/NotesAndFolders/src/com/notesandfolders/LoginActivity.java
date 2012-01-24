@@ -38,6 +38,8 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
 		// if going back from explorer && no password is set
 		if (login.isEmptyPassword()) {
 			this.finish();
+		} else {
+			password.setText("");
 		}
 	}
 
