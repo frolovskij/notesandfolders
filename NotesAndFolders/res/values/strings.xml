@@ -7,8 +7,23 @@
     <string name="password_incorrect">Wrong password</string>
     <string name="password_hint"></string>
     <string name="login_button">OK</string>
-    <string name="msg_wrong_password">Wrong password</string>
     <string name="msg_password_confirmation_do_not_match">The password and confirmation do not match</string>
+
+    <!-- Settings activity -->
+    <string name="settings_title">Settings</string>
+    <string name="settings_security">Security</string>
+    <string name="settings_password">Password</string>
+    <string name="settings_password_summary">If set empty it won\'t be prompted at start. Default password is empty</string>
+
+    <!-- Password settings activity -->
+    <string name="password_edit_title">Changing password</string>
+    <string name="password_edit_current">Current password</string>
+    <string name="password_edit_new">New password</string>
+    <string name="password_edit_confirmation">Confirmation</string>
+    <string name="password_edit_save_button">Save</string>
+    <string name="password_msg_password_was_saved">Password was saved</string>
+    <string name="password_msg_wrong_password">Wrong current password</string>
+    <string name="password_msg_save_error">Password wasn\'t saved because of internal error</string>
 
     <!-- Alert Dialog that pop-ups when user chooses "New" from Explorer's options menu -->
     <string name="create_new">New</string>

@@ -32,7 +32,7 @@ import android.util.Log;
 
 public class DbOpenHelper extends SQLiteOpenHelper {
 	private static final int DB_VERSION = 1;
-	private static final String DB_NAME = "foldersandnotes.db";
+	private static final String DB_NAME = "notesandfolders.db";
 
 	private static final String SQL_PRAGMA = "PRAGMA foreign_keys=ON;";
 
