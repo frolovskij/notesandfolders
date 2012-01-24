@@ -67,7 +67,7 @@ public class DbOpenHelper extends SQLiteOpenHelper {
 		// Root folder
 		db.execSQL(
 				"INSERT INTO 'data' ('id', 'parent_id', 'name', 'date_created', 'date_modified', 'type') VALUES (?, ?, ?, ?, ?, ?)",
-				new String[] { "0", "-1", "ROOT", Long.toString(now),
+				new String[] { "0", "-1", "", Long.toString(now),
 						Long.toString(now), "0" });
 
 		// default password (empty, "")
