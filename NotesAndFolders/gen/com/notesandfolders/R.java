@@ -47,7 +47,7 @@ public final class R {
         public static final int app_name=0x7f050001;
         public static final int create_checklist=0x7f05000b;
         public static final int create_folder=0x7f050009;
-        /**  Alert Dialog that pop-ups when user chooses "Add" from Explorer's options menu 
+        /**  Alert Dialog that pop-ups when user chooses "New" from Explorer's options menu 
          */
         public static final int create_new=0x7f050008;
         public static final int create_note=0x7f05000a;

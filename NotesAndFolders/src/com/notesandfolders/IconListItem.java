@@ -1,10 +1,10 @@
 package com.notesandfolders;
 
-public class AlertDialogListItem {
+public class IconListItem {
 	public final String text;
 	public final int icon;
 
-	public AlertDialogListItem(String text, Integer icon) {
+	public IconListItem(String text, Integer icon) {
 		this.text = text;
 		this.icon = icon;
 	}
