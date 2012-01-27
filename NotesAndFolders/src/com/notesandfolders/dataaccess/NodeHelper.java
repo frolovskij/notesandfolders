@@ -42,14 +42,16 @@ public class NodeHelper {
 		// decrypting key with password
 		try {
 			Settings s = new Settings(context);
-			String encryptedKey = s.getString(Settings.SETTINGS_ENCRYPTED_KEY, "");
+			String encryptedKey = s.getString(Settings.SETTINGS_ENCRYPTED_KEY,
+					"");
 			this.key = SimpleCrypto.decrypt(password, encryptedKey);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
-	public Node createNode(Node parent, String name, String textContent, NodeType type) {
+	public Node createNode(Node parent, String name, String textContent,
+			NodeType type) {
 		if (parent == null) {
 			Log.i("createNode", "parent is null");
 			return null;
@@ -186,7 +188,8 @@ public class NodeHelper {
 			c = db.rawQuery("select id from data where parent_id = ?",
 					new String[] { Long.toString(id) });
 
-			for (boolean hasItem = c.moveToFirst(); hasItem; hasItem = c.moveToNext()) {
+			for (boolean hasItem = c.moveToFirst(); hasItem; hasItem = c
+					.moveToNext()) {
 				childrenIds.add(c.getLong(0));
 			}
 		} catch (Exception ex) {
@@ -205,6 +208,20 @@ public class NodeHelper {
 
 	public List<Node> getChildrenById(long id) {
 		List<Node> children = new ArrayList<Node>();
+
+		Node here = getNodeById(id);
+		if (here == null) {
+			return children;
+		}
+
+		// adds ".." pseudo-directory to the listing
+		if (here.getParentId() != -1) {
+			Node parent = getNodeById(here.getParentId());
+			if (parent != null) {
+				parent.setName("..");
+				children.add(parent);
+			}
+		}
 
 		for (long childId : getChildrenIdsById(id)) {
 			Node child = getNodeById(childId);
@@ -370,8 +387,10 @@ public class NodeHelper {
 		SQLiteDatabase db = dbOpenHelper.getWritableDatabase();
 
 		try {
-			db.execSQL("update data set text_content = ? where id = ?",
-					new String[] { SimpleCrypto.encrypt(key, textContent), Long.toString(id) });
+			db.execSQL(
+					"update data set text_content = ? where id = ?",
+					new String[] { SimpleCrypto.encrypt(key, textContent),
+							Long.toString(id) });
 		} catch (Exception ex) {
 			Log.i("setTextContentById", ex.toString());
 		} finally {
