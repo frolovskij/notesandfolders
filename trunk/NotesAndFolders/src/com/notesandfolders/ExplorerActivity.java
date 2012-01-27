@@ -24,13 +24,19 @@ import java.util.Stack;
 import com.notesandfolders.dataaccess.NodeHelper;
 import com.tani.app.ui.IconContextMenu;
 
+import de.marcreichelt.android.RealViewSwitcher;
+
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -69,6 +75,18 @@ public class ExplorerActivity extends BaseActivity implements
 	 */
 	private Stack<Long> nodeIdStack;
 
+	private final RealViewSwitcher.OnScreenSwitchListener onScreenSwitchListener = new RealViewSwitcher.OnScreenSwitchListener() {
+
+		public void onScreenSwitched(int screen) {
+			// this method is executed if a screen has been activated, i.e. the
+			// screen is completely visible
+			// and the animation has stopped (might be useful for removing /
+			// adding new views)
+			Log.d("RealViewSwitcher", "switched to screen: " + screen);
+		}
+
+	};
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -76,17 +94,32 @@ public class ExplorerActivity extends BaseActivity implements
 		nh = new NodeHelper(this, getIntent().getExtras().getString("password"));
 		nodeIdStack = new Stack<Long>();
 
-		setContentView(R.layout.explorer);
+		LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-		path = (TextView) findViewById(R.id.explorer_path);
-		lv = (ListView) findViewById(R.id.explorer_listview);
+		View view = inflater.inflate(R.layout.explorer, null);
+		path = (TextView) view.findViewById(R.id.explorer_path);
+		lv = (ListView) view.findViewById(R.id.explorer_listview);
 
 		lv.setOnItemLongClickListener(itemLongClickHandler);
 		lv.setOnItemClickListener(this);
+		lv.setClickable(true);
+		
 
 		createContextMenu();
 
 		openDir(0L);
+
+		// create the view switcher
+		RealViewSwitcher realViewSwitcher = new RealViewSwitcher(
+				getApplicationContext());
+
+		realViewSwitcher.addView(view);
+
+		// set as content view
+		setContentView(realViewSwitcher);
+
+		// OPTIONAL: listen for screen changes
+		realViewSwitcher.setOnScreenSwitchListener(onScreenSwitchListener);
 	}
 
 	public void createContextMenu() {
