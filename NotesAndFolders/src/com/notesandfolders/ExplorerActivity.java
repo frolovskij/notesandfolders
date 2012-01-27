@@ -252,6 +252,33 @@ public class ExplorerActivity extends BaseActivity implements
 
 	}
 
+	public void onDelete() {
+		final EditText input = new EditText(this);
+		input.setText(selectedNode.getName());
+
+		new AlertDialog.Builder(this)
+				.setTitle(R.string.explorer_delete_title)
+				.setMessage(R.string.explorer_delete_prompt)
+				.setPositiveButton(R.string.yes,
+						new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog,
+									int whichButton) {
+								if (selectedNode != null) {
+									nh.deleteNodeById(selectedNode.getId());
+
+									update();
+								}
+							}
+						})
+				.setNegativeButton(R.string.no,
+						new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog,
+									int whichButton) {
+								// Do nothing.
+							}
+						}).show();
+	}
+
 	public void onNewNote() {
 		final EditText input = new EditText(this);
 
@@ -320,12 +347,12 @@ public class ExplorerActivity extends BaseActivity implements
 		switch (menuId) {
 		case MENU_RENAME:
 			onRename();
+			break;
 
+		case MENU_DELETE:
+			onDelete();
 			break;
 		}
-		// context menu
-		// TODO Auto-generated method stub
-
 	}
 
 	public void onItemClick(AdapterView<?> parentView, View childView,
