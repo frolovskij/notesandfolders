@@ -67,6 +67,7 @@ public class ExplorerActivity extends BaseActivity implements
 	private List<Node> items;
 	private NodeAdapter adapter;
 	private IconContextMenu iconContextMenu = null;
+	private Node selectedNode = null;
 
 	/**
 	 * This stack holds ids of items being opened
@@ -125,7 +126,7 @@ public class ExplorerActivity extends BaseActivity implements
 	private OnItemLongClickListener itemLongClickHandler = new OnItemLongClickListener() {
 		public boolean onItemLongClick(AdapterView<?> parent, View view,
 				int position, long id) {
-			Node selected = (Node) lv.getItemAtPosition(position);
+			selectedNode = (Node) lv.getItemAtPosition(position);
 
 			showDialog(CONTEXT_MENU_ID);
 
@@ -220,6 +221,37 @@ public class ExplorerActivity extends BaseActivity implements
 						}).show();
 	}
 
+	public void onRename() {
+
+		final EditText input = new EditText(this);
+		input.setText(selectedNode.getName());
+
+		new AlertDialog.Builder(this)
+				.setTitle(R.string.explorer_rename_title)
+				.setMessage(R.string.explorer_rename_prompt)
+				.setView(input)
+				.setPositiveButton(R.string.ok,
+						new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog,
+									int whichButton) {
+								if (selectedNode != null) {
+									nh.renameNodeById(selectedNode.getId(),
+											input.getText().toString());
+
+									update();
+								}
+							}
+						})
+				.setNegativeButton(R.string.cancel,
+						new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog,
+									int whichButton) {
+								// Do nothing.
+							}
+						}).show();
+
+	}
+
 	public void onNewNote() {
 		final EditText input = new EditText(this);
 
@@ -285,6 +317,12 @@ public class ExplorerActivity extends BaseActivity implements
 	}
 
 	public void onClick(int menuId) {
+		switch (menuId) {
+		case MENU_RENAME:
+			onRename();
+
+			break;
+		}
 		// context menu
 		// TODO Auto-generated method stub
 

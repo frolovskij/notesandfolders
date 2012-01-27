@@ -388,11 +388,32 @@ public class NodeHelper {
 
 		try {
 			db.execSQL(
-					"update data set text_content = ? where id = ?",
+					"update data set text_content = ?, date_modified = ? where id = ?",
 					new String[] { SimpleCrypto.encrypt(key, textContent),
+							Long.toString(new Date().getTime()),
 							Long.toString(id) });
 		} catch (Exception ex) {
 			Log.i("setTextContentById", ex.toString());
+		} finally {
+			if (db != null) {
+				db.close();
+			}
+		}
+	}
+
+	public void renameNodeById(long id, String newName) {
+		// name policies go here
+		DbOpenHelper dbOpenHelper = new DbOpenHelper(context);
+		SQLiteDatabase db = dbOpenHelper.getWritableDatabase();
+
+		try {
+			db.execSQL(
+					"update data set name = ?, date_modified = ? where id = ?",
+					new String[] { newName,
+							Long.toString(new Date().getTime()),
+							Long.toString(id) });
+		} catch (Exception ex) {
+			Log.i("renameNodeById", ex.toString());
 		} finally {
 			if (db != null) {
 				db.close();

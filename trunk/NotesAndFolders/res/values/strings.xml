@@ -35,6 +35,10 @@
     <string name="explorer_newnote_title">New note</string>
     <string name="explorer_newnote_prompt">Enter name of new note</string>
 
+    <!-- Rename alert dialog -->
+    <string name="explorer_rename_title">Renaming</string>
+    <string name="explorer_rename_prompt">Enter new name</string>
+
     <!-- Settings activity -->
     <string name="settings_title">Settings</string>
     <string name="settings_security">Security</string>
