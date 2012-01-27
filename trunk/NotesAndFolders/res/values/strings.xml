@@ -39,6 +39,10 @@
     <string name="explorer_rename_title">Renaming</string>
     <string name="explorer_rename_prompt">Enter new name</string>
 
+    <!-- Delete alert dialog -->
+    <string name="explorer_delete_title">Deleting</string>
+    <string name="explorer_delete_prompt">Are you sure you want to delete it?</string>
+
     <!-- Settings activity -->
     <string name="settings_title">Settings</string>
     <string name="settings_security">Security</string>
