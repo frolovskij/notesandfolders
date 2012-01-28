@@ -153,7 +153,7 @@ public class NodeHelperTest extends AndroidTestCase {
 
 	public void testCreateNodeTextContent() {
 		String expected = "ololo";
-		Node f1 = fh.createNode(root, "test", expected, NodeType.NOTE);
+		Node f1 = fh.createNote(root, "test", expected);
 
 		String tc = fh.getTextContentById(f1.getId());
 		assertEquals(expected, tc);
@@ -170,9 +170,9 @@ public class NodeHelperTest extends AndroidTestCase {
 		assertEquals("/1/", fh.getFullPathById(f1.getId()));
 		assertEquals("/1/2/3/4/", fh.getFullPathById(f4.getId()));
 
-		Node n1 = fh.createNode(root, "test.txt", "", NodeType.NOTE);
-		Node n2 = fh.createNode(f1, "test2.txt", "", NodeType.NOTE);
-		Node n3 = fh.createNode(f2, "test3.txt", "", NodeType.NOTE);
+		Node n1 = fh.createNote(root, "test.txt", "");
+		Node n2 = fh.createNote(f1, "test2.txt", "");
+		Node n3 = fh.createNote(f2, "test3.txt", "");
 
 		assertEquals("/test.txt", fh.getFullPathById(n1.getId()));
 		assertEquals("/1/test2.txt", fh.getFullPathById(n2.getId()));
