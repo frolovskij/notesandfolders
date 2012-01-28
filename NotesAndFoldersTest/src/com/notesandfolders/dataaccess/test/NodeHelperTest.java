@@ -10,7 +10,6 @@ import com.notesandfolders.dataaccess.DbOpenHelper;
 import com.notesandfolders.dataaccess.NodeHelper;
 import android.database.sqlite.SQLiteDatabase;
 import android.test.AndroidTestCase;
-import android.util.Log;
 
 public class NodeHelperTest extends AndroidTestCase {
 	Settings s;
@@ -62,8 +61,8 @@ public class NodeHelperTest extends AndroidTestCase {
 	public void testCreateFoldersTree() {
 		Node f1 = fh.createFolder(root, "1");
 		Node f2 = fh.createFolder(root, "2");
-		Node f1_1 = fh.createFolder(f1, "1.1");
-		Node f2_1 = fh.createFolder(f2, "2.1");
+		fh.createFolder(f1, "1.1");
+		fh.createFolder(f2, "2.1");
 
 		assertEquals(5, fh.getNodesCount());
 	}
@@ -108,7 +107,7 @@ public class NodeHelperTest extends AndroidTestCase {
 		Node f2 = fh.createFolder(f1, "2");
 		Node f3 = fh.createFolder(f2, "3");
 		Node f4 = fh.createFolder(f3, "4");
-		Node f5 = fh.createFolder(f4, "4");
+		fh.createFolder(f4, "4");
 
 		fh.deleteNodeById(f1.getId());
 		assertEquals(1, fh.getNodesCount());
