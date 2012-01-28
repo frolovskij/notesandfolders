@@ -74,7 +74,8 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
 				startActivity(explorer);
 
 			} else {
-				showAlert(R.string.login_msg_password_incorrect);
+				// showAlert(R.string.login_msg_password_incorrect);
+				password.setText("");
 			}
 		}
 	}

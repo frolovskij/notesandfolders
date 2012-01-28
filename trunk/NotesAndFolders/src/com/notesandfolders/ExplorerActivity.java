@@ -95,15 +95,6 @@ public class ExplorerActivity extends BaseActivity implements
 		iconContextMenu.setOnClickListener(this);
 	}
 
-	public void openDir(long id) {
-		Node node = nh.getNodeById(id);
-
-		if (node.getType() == NodeType.FOLDER) {
-			currentFolderId = id;
-			update();
-		}
-	}
-
 	private OnItemLongClickListener itemLongClickHandler = new OnItemLongClickListener() {
 		public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
 			selectedId = ((Node) lv.getItemAtPosition(position)).getId();
@@ -169,12 +160,35 @@ public class ExplorerActivity extends BaseActivity implements
 		path.setText(nh.getFullPathById(currentFolderId));
 	}
 
+	public void openDir(long id) {
+		Node node = nh.getNodeById(id);
+
+		if (node.getType() == NodeType.FOLDER) {
+			currentFolderId = id;
+			update();
+		}
+	}
+
+	public void openNote(long id) {
+		Intent editor = new Intent(this, NotesEditorActivity.class);
+		editor.putExtra("note_id", id);
+		editor.putExtra("password", getIntent().getExtras().getString("password"));
+		startActivity(editor);
+	}
+
 	public void onOpen() {
 		Node node = nh.getNodeById(currentFolderId);
-		if (node.getType() == NodeType.FOLDER) {
+
+		switch (node.getType()) {
+		case FOLDER:
 			openDir(node.getId());
-		} else {
-			// open note
+			break;
+		case NOTE:
+			openNote(node.getId());
+			break;
+		case CHECKLIST:
+			showAlert(R.string.msg_not_implemented_yet);
+			break;
 		}
 	}
 
@@ -257,7 +271,7 @@ public class ExplorerActivity extends BaseActivity implements
 
 						Node parent = nh.getNodeById(currentFolderId);
 						if ((parent != null) && parent.getType() == NodeType.FOLDER) {
-							nh.createNode(parent, noteName, "", NodeType.NOTE);
+							nh.createNote(parent, noteName, "");
 							update();
 						}
 					}

@@ -64,5 +64,8 @@
     <string name="create_folder">Folder</string>
     <string name="create_note">Note</string>
     <string name="create_checklist">Checklist</string>
+    
+    <!-- Notes editor -->
+    <string name="noteseditor_title">Notes editor</string>
 
 </resources>

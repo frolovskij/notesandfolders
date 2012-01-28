@@ -30,6 +30,10 @@
             android:name=".PasswordActivity"
             android:label="@string/password_edit_title" >
         </activity>
+        <activity
+            android:name=".NotesEditorActivity"
+            android:label="@string/noteseditor_title" >
+        </activity>
     </application>
 
 </manifest>
