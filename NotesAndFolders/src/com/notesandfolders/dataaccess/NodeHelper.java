@@ -42,16 +42,14 @@ public class NodeHelper {
 		// decrypting key with password
 		try {
 			Settings s = new Settings(context);
-			String encryptedKey = s.getString(Settings.SETTINGS_ENCRYPTED_KEY,
-					"");
+			String encryptedKey = s.getString(Settings.SETTINGS_ENCRYPTED_KEY, "");
 			this.key = SimpleCrypto.decrypt(password, encryptedKey);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
-	public Node createNode(Node parent, String name, String textContent,
-			NodeType type) {
+	private Node createNode(Node parent, String name, String textContent, NodeType type) {
 		if (parent == null) {
 			Log.i("createNode", "parent is null");
 			return null;
@@ -108,6 +106,8 @@ public class NodeHelper {
 			}
 		}
 
+		Log.i("createNode()", f.toString());
+
 		return f;
 	}
 
@@ -120,7 +120,9 @@ public class NodeHelper {
 		}
 
 		path.append(current.getName());
-		path.append("/");
+		if (current.getType() == NodeType.FOLDER) {
+			path.append("/");
+		}
 
 		if (current.getParentId() != -1) {
 			path.insert(0, getFullPathById(current.getParentId()));
@@ -188,8 +190,7 @@ public class NodeHelper {
 			c = db.rawQuery("select id from data where parent_id = ?",
 					new String[] { Long.toString(id) });
 
-			for (boolean hasItem = c.moveToFirst(); hasItem; hasItem = c
-					.moveToNext()) {
+			for (boolean hasItem = c.moveToFirst(); hasItem; hasItem = c.moveToNext()) {
 				childrenIds.add(c.getLong(0));
 			}
 		} catch (Exception ex) {
@@ -318,35 +319,12 @@ public class NodeHelper {
 		return createNode(parent, name, null, NodeType.FOLDER);
 	}
 
-	public Node getRootFolder() {
-		return getNodeById(0);
+	public Node createNote(Node parent, String name, String textContent) {
+		return createNode(parent, name, textContent, NodeType.NOTE);
 	}
 
-	public void insertNode(Node node) {
-		if (node == null) {
-			return;
-		}
-
-		DbOpenHelper dbOpenHelper = new DbOpenHelper(context);
-		SQLiteDatabase db = dbOpenHelper.getWritableDatabase();
-
-		ContentValues cv = new ContentValues();
-		cv.put("id", node.getId());
-		cv.put("parent_id", node.getParentId());
-		cv.put("name", node.getName());
-		cv.put("date_created", node.getDateCreated().getTime());
-		cv.put("date_modified", node.getDateModified().getTime());
-		cv.put("type", node.getType().getType());
-		cv.put("text_content", node.getTextContent());
-
-		try {
-			db.insert("data", null, cv);
-		} catch (Exception ex) {
-		} finally {
-			if (db != null) {
-				db.close();
-			}
-		}
+	public Node getRootFolder() {
+		return getNodeById(0);
 	}
 
 	public String getTextContentById(long id) {
@@ -390,8 +368,7 @@ public class NodeHelper {
 			db.execSQL(
 					"update data set text_content = ?, date_modified = ? where id = ?",
 					new String[] { SimpleCrypto.encrypt(key, textContent),
-							Long.toString(new Date().getTime()),
-							Long.toString(id) });
+							Long.toString(new Date().getTime()), Long.toString(id) });
 		} catch (Exception ex) {
 			Log.i("setTextContentById", ex.toString());
 		} finally {
@@ -407,11 +384,8 @@ public class NodeHelper {
 		SQLiteDatabase db = dbOpenHelper.getWritableDatabase();
 
 		try {
-			db.execSQL(
-					"update data set name = ?, date_modified = ? where id = ?",
-					new String[] { newName,
-							Long.toString(new Date().getTime()),
-							Long.toString(id) });
+			db.execSQL("update data set name = ?, date_modified = ? where id = ?", new String[] {
+					newName, Long.toString(new Date().getTime()), Long.toString(id) });
 		} catch (Exception ex) {
 			Log.i("renameNodeById", ex.toString());
 		} finally {
