@@ -18,7 +18,6 @@ This file is a part of Notes & Folders project.
 
 package com.notesandfolders;
 
-import net.sf.andhsli.hotspotlogin.SimpleCrypto;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
@@ -52,31 +51,28 @@ public class PasswordActivity extends BaseActivity implements OnClickListener {
 			Settings s = new Settings(this);
 
 			String realCurrentPasswordHash = s.getPasswordSha1Hash();
-			String currentPasswordHash = Login
-					.getSha1Digest(currentPasswordEdit.getText().toString());
+			String currentPasswordHash = Login.getSha1Digest(currentPasswordEdit.getText()
+					.toString());
 			String newPassword = newPasswordEdit.getText().toString();
-			String newPasswordConfirmation = newPasswordConfirmationEdit
-					.getText().toString();
+			String newPasswordConfirmation = newPasswordConfirmationEdit.getText().toString();
 
 			if (!realCurrentPasswordHash.equals(currentPasswordHash)) {
 				showAlert(R.string.password_msg_wrong_password);
 			} else {
 				if (!newPassword.equals(newPasswordConfirmation)) {
-					showAlert(R.string.msg_password_confirmation_do_not_match);
+					showAlert(R.string.password_msg_password_confirmation_do_not_match);
 				} else {
-					boolean result = s.setPassword(newPassword,
-							currentPasswordEdit.getText().toString());
+					boolean result = s.setPassword(newPassword, currentPasswordEdit.getText()
+							.toString());
 
 					if (false == result) {
 						Toast toast = Toast.makeText(getApplicationContext(),
-								R.string.password_msg_save_error,
-								Toast.LENGTH_SHORT);
+								R.string.password_msg_save_error, Toast.LENGTH_SHORT);
 						toast.setGravity(Gravity.CENTER, 0, 0);
 						toast.show();
 					} else {
 						Toast toast = Toast.makeText(getApplicationContext(),
-								R.string.password_msg_password_was_saved,
-								Toast.LENGTH_SHORT);
+								R.string.password_msg_password_was_saved, Toast.LENGTH_SHORT);
 						toast.setGravity(Gravity.CENTER, 0, 0);
 						toast.show();
 						finish();
