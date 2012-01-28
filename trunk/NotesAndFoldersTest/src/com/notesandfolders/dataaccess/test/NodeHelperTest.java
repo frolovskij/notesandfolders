@@ -169,5 +169,13 @@ public class NodeHelperTest extends AndroidTestCase {
 		assertEquals("/", fh.getFullPathById(root.getId()));
 		assertEquals("/1/", fh.getFullPathById(f1.getId()));
 		assertEquals("/1/2/3/4/", fh.getFullPathById(f4.getId()));
+
+		Node n1 = fh.createNode(root, "test.txt", "", NodeType.NOTE);
+		Node n2 = fh.createNode(f1, "test2.txt", "", NodeType.NOTE);
+		Node n3 = fh.createNode(f2, "test3.txt", "", NodeType.NOTE);
+
+		assertEquals("/test.txt", fh.getFullPathById(n1.getId()));
+		assertEquals("/1/test2.txt", fh.getFullPathById(n2.getId()));
+		assertEquals("/1/2/test3.txt", fh.getFullPathById(n3.getId()));
 	}
 }
