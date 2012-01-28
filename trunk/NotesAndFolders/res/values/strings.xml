@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <string name="app_name">Notes &amp; Folders</string>
+    <string name="msg_not_implemented_yet">Not implemented yet</string>
+
     <!-- Common -->
     <string name="ok">Ok</string>
     <string name="cancel">Cancel</string>
@@ -18,14 +21,10 @@
     <string name="rename">Rename</string>
     <string name="properties">Properties</string>
 
-    <!--  -->
-    <string name="msg_not_implemented_yet">Not implemented yet</string>
-    <string name="app_name">Notes &amp; Folders</string>
-    <string name="password_prompt">Password</string>
-    <string name="password_incorrect">Wrong password</string>
-    <string name="password_hint"></string>
+    <!-- Login activity -->
+    <string name="login_prompt">Password</string>
+    <string name="login_msg_password_incorrect">Wrong password</string>
     <string name="login_button">OK</string>
-    <string name="msg_password_confirmation_do_not_match">The password and confirmation do not match</string>
 
     <!-- New folder alert dialog -->
     <string name="explorer_newfolder_title">New folder</string>
@@ -58,6 +57,7 @@
     <string name="password_msg_password_was_saved">Password was saved</string>
     <string name="password_msg_wrong_password">Wrong current password</string>
     <string name="password_msg_save_error">Password wasn\'t saved because of internal error</string>
+    <string name="password_msg_password_confirmation_do_not_match">The password and confirmation do not match</string>
 
     <!-- Alert Dialog that pop-ups when user chooses "New" from Explorer's options menu -->
     <string name="create_new">New</string>

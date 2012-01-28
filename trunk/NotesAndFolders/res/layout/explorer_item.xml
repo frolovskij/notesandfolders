@@ -21,7 +21,7 @@
         android:layout_gravity="center"
         android:layout_weight="0.5"
         android:paddingLeft="5dip"
-        android:text="bin"
+        android:text=""
         android:textSize="20dip" />
 
 </LinearLayout>

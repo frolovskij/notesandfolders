@@ -47,7 +47,7 @@
             <TextView
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/password_prompt" />
+                android:text="@string/login_prompt" />
 
             <!-- Password -->
 
@@ -56,6 +56,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dip"
+                android:inputType="number|textPassword"
                 android:password="true"
                 android:singleLine="true" />
 

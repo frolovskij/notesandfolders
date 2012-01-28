@@ -13,14 +13,11 @@ public class SettingsActivity extends PreferenceActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		Settings s = new Settings(this);
 		addPreferencesFromResource(R.layout.preferences);
-
 	}
 
 	@Override
-	public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen,
-			Preference preference) {
+	public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen, Preference preference) {
 
 		if (preference != null && preference.getKey().equals("password")) {
 			Intent password = new Intent(this, PasswordActivity.class);
