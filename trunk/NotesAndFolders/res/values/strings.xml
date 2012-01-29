@@ -3,6 +3,7 @@
 
     <string name="app_name">Notes &amp; Folders</string>
     <string name="msg_not_implemented_yet">Not implemented yet</string>
+    <string name="filesystemexplorer_title">File system</string>
 
     <!-- Common -->
     <string name="ok">Ok</string>
@@ -20,6 +21,7 @@
     <string name="delete">Delete</string>
     <string name="rename">Rename</string>
     <string name="properties">Properties</string>
+    <string name="fsimp">Import</string>
 
     <!-- Login activity -->
     <string name="login_prompt">Password</string>
@@ -64,7 +66,7 @@
     <string name="create_folder">Folder</string>
     <string name="create_note">Note</string>
     <string name="create_checklist">Checklist</string>
-    
+
     <!-- Notes editor -->
     <string name="noteseditor_title">Notes editor</string>
 
