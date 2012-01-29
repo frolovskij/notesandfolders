@@ -5,19 +5,31 @@
         android:id="@+id/explorer_options_add"
         android:enabled="true"
         android:icon="@android:drawable/ic_menu_add"
-        android:title="New">
+        android:title="@string/menu_new">
+    </item>
+    <item
+        android:id="@+id/explorer_options_find"
+        android:enabled="true"
+        android:icon="@android:drawable/ic_menu_search"
+        android:title="@string/menu_search">
+    </item>
+    <item
+        android:id="@+id/explorer_options_import"
+        android:enabled="true"
+        android:icon="@android:drawable/ic_menu_upload"
+        android:title="@string/menu_import">
     </item>
     <item
         android:id="@+id/explorer_options_settings"
         android:enabled="true"
         android:icon="@android:drawable/ic_menu_preferences"
-        android:title="Settings">
+        android:title="@string/menu_settings">
     </item>
     <item
         android:id="@+id/explorer_options_close"
         android:enabled="true"
         android:icon="@android:drawable/ic_menu_close_clear_cancel"
-        android:title="Close">
+        android:title="@string/menu_close">
     </item>
 
 </menu>

@@ -11,6 +11,13 @@
     <string name="yes">Yes</string>
     <string name="no">No</string>
 
+    <!-- Explorer options menu -->
+    <string name="menu_new">New</string>
+    <string name="menu_search">Search</string>
+    <string name="menu_import">Import</string>
+    <string name="menu_settings">Settings</string>
+    <string name="menu_close">Close</string>
+
     <!-- Context menu operations on folders, files & checklists -->
     <string name="explorer_context_menu_title">Actions</string>
     <string name="open">Open</string>

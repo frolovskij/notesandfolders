@@ -147,6 +147,17 @@ public class ExplorerActivity extends BaseActivity implements
 			finish();
 			return true;
 
+		case R.id.explorer_options_import:
+			Intent fsexplorer = new Intent(this, FileSystemExplorerActivity.class);
+			fsexplorer.putExtra("path", "/");
+			fsexplorer.putExtra("password", getIntent().getExtras().getString("password"));
+			startActivity(fsexplorer);
+			return true;
+
+		case R.id.explorer_options_find:
+			showAlert(R.string.msg_not_implemented_yet);
+			return true;
+
 		default:
 			return super.onOptionsItemSelected(item);
 		}
