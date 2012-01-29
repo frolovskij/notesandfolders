@@ -106,8 +106,6 @@ public class NodeHelper {
 			}
 		}
 
-		Log.i("createNode()", f.toString());
-
 		return f;
 	}
 

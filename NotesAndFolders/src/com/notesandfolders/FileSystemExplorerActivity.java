@@ -22,11 +22,13 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.notesandfolders.dataaccess.NodeHelper;
 import com.tani.app.ui.IconContextMenu;
 
 import android.app.Dialog;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
@@ -48,7 +50,9 @@ public class FileSystemExplorerActivity extends BaseActivity implements
 	private IconContextMenu iconContextMenu = null;
 
 	private File directory;
+	private File selectedFile;
 	private String path;
+	private String password;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -58,6 +62,8 @@ public class FileSystemExplorerActivity extends BaseActivity implements
 		if (path == null) {
 			path = "/";
 		}
+
+		password = getIntent().getExtras().getString("password");
 
 		setContentView(R.layout.fsexplorer);
 		location = (TextView) findViewById(R.id.fsexplorer_path);
@@ -83,7 +89,7 @@ public class FileSystemExplorerActivity extends BaseActivity implements
 
 	private OnItemLongClickListener itemLongClickHandler = new OnItemLongClickListener() {
 		public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-			File selectedFile = ((File) lv.getItemAtPosition(position));
+			selectedFile = ((File) lv.getItemAtPosition(position));
 
 			createContextMenu();
 			showDialog(CONTEXT_MENU_ID);
@@ -117,6 +123,15 @@ public class FileSystemExplorerActivity extends BaseActivity implements
 	}
 
 	public void onChoose() {
+		NodeHelper nh = new NodeHelper(this, password);
+		Node importRoot = nh.createFolder(nh.getRootFolder(), "Imported");
+
+		List<Node> nodes = FileImporter.getFiles(selectedFile.getAbsolutePath(),
+				nh.getLastId() + 1, importRoot.getId());
+
+		for (Node n : nodes) {
+			Log.i("test", n.toString());
+		}
 
 	}
 

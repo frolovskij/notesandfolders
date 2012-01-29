@@ -80,8 +80,7 @@ public class FileImporter {
 			if (child.isDirectory()) {
 				processPath(child, list, root.getId());
 			} else {
-				if (getFileNameExtension(child.getName()).equalsIgnoreCase(
-						"txt")) {
+				if (getFileNameExtension(child.getName()).equalsIgnoreCase("txt")) {
 					Node n = new Node();
 					n.setId(nextId());
 					n.setParentId(root.getId());
@@ -92,9 +91,8 @@ public class FileImporter {
 
 					StringBuffer sb = new StringBuffer();
 					try {
-						BufferedReader br = new BufferedReader(
-								new InputStreamReader(
-										new FileInputStream(child), "UTF-8"));
+						BufferedReader br = new BufferedReader(new InputStreamReader(
+								new FileInputStream(child), "UTF-8"));
 						try {
 							String s;
 							while ((s = br.readLine()) != null) {
@@ -122,10 +120,10 @@ public class FileImporter {
 	}
 
 	// should pass the id of folder where the imported data would go
-	public static List<Node> getFiles(String path, long startId) {
+	public static List<Node> getFiles(String path, long startId, long parentId) {
 		setId(startId);
 		ArrayList<Node> files = new ArrayList<Node>();
-		processPath(new File(path), files, 0);
+		processPath(new File(path), files, parentId);
 		return files;
 	}
 }
