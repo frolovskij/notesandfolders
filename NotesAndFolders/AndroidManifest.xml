@@ -34,6 +34,10 @@
             android:name=".NotesEditorActivity"
             android:label="@string/noteseditor_title" >
         </activity>
-    </application>
+        <activity
+            android:name=".FileSystemExplorerActivity"
+            android:label="@string/filesystemexplorer_title" >
+        </activity>
+        </application>
 
 </manifest>
