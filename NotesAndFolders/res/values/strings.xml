@@ -3,6 +3,7 @@
 
     <string name="app_name">Notes &amp; Folders</string>
     <string name="msg_not_implemented_yet">Not implemented yet</string>
+    <string name="msg_importing_files">Importing files. Please wait...</string>
     <string name="filesystemexplorer_title">File system</string>
 
     <!-- Common -->

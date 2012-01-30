@@ -19,6 +19,7 @@ This file is a part of Notes & Folders project.
 package com.notesandfolders;
 
 import java.io.File;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,9 +27,13 @@ import com.notesandfolders.dataaccess.NodeHelper;
 import com.tani.app.ui.IconContextMenu;
 
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.os.AsyncTask;
+import android.os.Message;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
@@ -123,16 +128,28 @@ public class FileSystemExplorerActivity extends BaseActivity implements
 	}
 
 	public void onChoose() {
-		NodeHelper nh = new NodeHelper(this, password);
-		Node importRoot = nh.createFolder(nh.getRootFolder(), "Imported");
+		final ProgressDialog scanProgressDialog = new ProgressDialog(
+				FileSystemExplorerActivity.this);
+		scanProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+		scanProgressDialog.setMessage(getText(R.string.msg_importing_files));
+		scanProgressDialog.setCancelable(false);
+		scanProgressDialog.show();
 
-		List<Node> nodes = FileImporter.getFiles(selectedFile.getAbsolutePath(),
-				nh.getLastId() + 1, importRoot.getId());
+		new Thread() {
+			public void run() {
+				final NodeHelper nh = new NodeHelper(FileSystemExplorerActivity.this, password);
+				Node importRoot = nh.createFolder(nh.getRootFolder(), "Imported");
 
-		for (Node n : nodes) {
-			nh.insertNode(n);
-		}
+				final List<Node> nodes = FileImporter.getFiles(selectedFile.getAbsolutePath(),
+						nh.getLastId() + 1, importRoot.getId());
 
+				for (Node n : nodes) {
+					nh.insertNode(n);
+				}
+
+				scanProgressDialog.dismiss();
+			}
+		}.start();
 	}
 
 	public void onClick(int menuId) {
