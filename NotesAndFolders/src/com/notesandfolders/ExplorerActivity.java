@@ -57,10 +57,16 @@ public class ExplorerActivity extends BaseActivity implements
 	private List<Node> items;
 	private NodeAdapter adapter;
 	private IconContextMenu iconContextMenu = null;
-	// private Node selectedNode = null;
 
 	private long currentFolderId;
 	private long selectedId;
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+
+		openDir(currentFolderId);
+	}
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -78,8 +84,6 @@ public class ExplorerActivity extends BaseActivity implements
 
 		currentFolderId = 0;
 		selectedId = -1;
-
-		openDir(0L);
 	}
 
 	public void createContextMenu() {

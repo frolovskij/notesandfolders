@@ -130,7 +130,7 @@ public class FileSystemExplorerActivity extends BaseActivity implements
 				nh.getLastId() + 1, importRoot.getId());
 
 		for (Node n : nodes) {
-			Log.i("test", n.toString());
+			nh.insertNode(n);
 		}
 
 	}

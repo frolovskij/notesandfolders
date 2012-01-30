@@ -392,4 +392,33 @@ public class NodeHelper {
 			}
 		}
 	}
+
+	public void insertNode(Node node) {
+		if (node == null) {
+			return;
+		}
+
+		DbOpenHelper dbOpenHelper = new DbOpenHelper(context);
+		SQLiteDatabase db = dbOpenHelper.getWritableDatabase();
+
+		ContentValues cv = new ContentValues();
+		cv.put("id", node.getId());
+		cv.put("parent_id", node.getParentId());
+		cv.put("name", node.getName());
+		cv.put("date_created", node.getDateCreated().getTime());
+		cv.put("date_modified", node.getDateModified().getTime());
+		cv.put("type", node.getType().getType());
+
+		try {
+			db.insert("data", null, cv);
+		} catch (Exception ex) {
+		} finally {
+			if (db != null) {
+				db.close();
+			}
+		}
+
+		setTextContentById(node.getId(), node.getTextContent());
+	}
+
 }

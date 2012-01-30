@@ -29,6 +29,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.ArrayList;
 
+import android.util.Log;
+
 public class FileImporter {
 
 	private static long _id = 0;
@@ -46,7 +48,32 @@ public class FileImporter {
 		return (dot == -1) ? "" : fileName.substring(dot + 1);
 	}
 
-	public static void processPath(File file, List<Node> list, long parentId) {
+	private static String getFileContents(File f) {
+		StringBuffer sb = new StringBuffer();
+		try {
+			BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(f),
+					"UTF-8"));
+			try {
+				String s;
+				while ((s = br.readLine()) != null) {
+					sb.append(s);
+					sb.append(String.format("%n"));
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+
+		return sb.toString();
+
+	}
+
+	private static void processPath(File file, List<Node> list, long parentId) {
 		if (!file.exists()) {
 			return;
 		}
@@ -59,6 +86,7 @@ public class FileImporter {
 			f.setDateModified(new Date(file.lastModified()));
 			f.setDateCreated(f.getDateModified()); // can't know
 			f.setType(NodeType.NOTE);
+			f.setTextContent(getFileContents(file));
 
 			list.add(f);
 			return;
@@ -89,41 +117,19 @@ public class FileImporter {
 					n.setDateCreated(n.getDateModified());
 					n.setType(NodeType.NOTE);
 
-					StringBuffer sb = new StringBuffer();
-					try {
-						BufferedReader br = new BufferedReader(new InputStreamReader(
-								new FileInputStream(child), "UTF-8"));
-						try {
-							String s;
-							while ((s = br.readLine()) != null) {
-								sb.append(s);
-								sb.append(String.format("%n"));
-							}
-						} catch (IOException e) {
-							e.printStackTrace();
-						}
-
-					} catch (FileNotFoundException e) {
-						e.printStackTrace();
-					} catch (UnsupportedEncodingException e) {
-						e.printStackTrace();
-					}
-
-					n.setTextContent(sb.toString());
+					n.setTextContent(getFileContents(child));
 
 					list.add(n);
 				}
 			}
 		}
-
-		return;
 	}
 
-	// should pass the id of folder where the imported data would go
 	public static List<Node> getFiles(String path, long startId, long parentId) {
 		setId(startId);
 		ArrayList<Node> files = new ArrayList<Node>();
 		processPath(new File(path), files, parentId);
+
 		return files;
 	}
 }
