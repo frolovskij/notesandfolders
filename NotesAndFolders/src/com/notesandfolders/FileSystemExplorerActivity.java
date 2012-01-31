@@ -31,6 +31,7 @@ import android.app.ProgressDialog;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.AsyncTask;
+import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -128,12 +129,11 @@ public class FileSystemExplorerActivity extends BaseActivity implements
 	}
 
 	public void onChoose() {
-		final ProgressDialog scanProgressDialog = new ProgressDialog(
-				FileSystemExplorerActivity.this);
-		scanProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-		scanProgressDialog.setMessage(getText(R.string.msg_importing_files));
-		scanProgressDialog.setCancelable(false);
-		scanProgressDialog.show();
+		final ProgressDialog pd = new ProgressDialog(FileSystemExplorerActivity.this);
+		pd.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+		pd.setMessage(getText(R.string.msg_importing_files));
+		pd.setCancelable(false);
+		pd.show();
 
 		new Thread() {
 			public void run() {
@@ -143,11 +143,32 @@ public class FileSystemExplorerActivity extends BaseActivity implements
 				final List<Node> nodes = FileImporter.getFiles(selectedFile.getAbsolutePath(),
 						nh.getLastId() + 1, importRoot.getId());
 
-				for (Node n : nodes) {
-					nh.insertNode(n);
+				try {
+					Thread.sleep(5000);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
 
-				scanProgressDialog.dismiss();
+				int nodesCount = nodes.size();
+
+				pd.setMax(nodesCount);
+
+				for (int i = 0; i < nodesCount; i++) {
+					Node n = nodes.get(i);
+
+					nh.insertNode(n);
+					pd.setProgress(i + 1);
+
+					try {
+						Thread.sleep(1000);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+
+				pd.dismiss();
 			}
 		}.start();
 	}

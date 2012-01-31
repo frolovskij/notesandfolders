@@ -38,8 +38,7 @@ public class DbOpenHelper extends SQLiteOpenHelper {
 
 	private static final String SQL_DROP_TABLE_SETTINGS = "DROP TABLE IF EXISTS 'settings';";
 	private static final String SQL_CREATE_TABLE_SETTINGS = "CREATE TABLE 'settings' (\r\n"
-			+ "	'id' INTEGER PRIMARY KEY,\r\n"
-			+ "	'name' TEXT UNIQUE NOT NULL,\r\n"
+			+ "	'id' INTEGER PRIMARY KEY,\r\n" + "	'name' TEXT UNIQUE NOT NULL,\r\n"
 			+ "	'value' NONE NOT NULL\r\n" + ");\r\n" + "";
 
 	private static final String SQL_DROP_TABLE_DATA = "DROP TABLE IF EXISTS 'data';";
@@ -67,13 +66,11 @@ public class DbOpenHelper extends SQLiteOpenHelper {
 		// Root folder
 		db.execSQL(
 				"INSERT INTO 'data' ('id', 'parent_id', 'name', 'date_created', 'date_modified', 'type') VALUES (?, ?, ?, ?, ?, ?)",
-				new String[] { "0", "-1", "", Long.toString(now),
-						Long.toString(now), "0" });
+				new String[] { "0", "-1", "", Long.toString(now), Long.toString(now), "0" });
 
 		// default password (empty, "")
-		db.execSQL("INSERT INTO 'settings' ('name', 'value') VALUES (?, ?)",
-				new String[] { Settings.SETTINGS_PASSWORD_SHA1_HASH,
-						Settings.EMPTY_PASSWORD_SHA1_HASH });
+		db.execSQL("INSERT INTO 'settings' ('name', 'value') VALUES (?, ?)", new String[] {
+				Settings.SETTINGS_PASSWORD_SHA1_HASH, Settings.EMPTY_PASSWORD_SHA1_HASH });
 
 		// encryption key, encrypted by password
 		try {
@@ -81,10 +78,8 @@ public class DbOpenHelper extends SQLiteOpenHelper {
 			String key = KeyGenerator.getRandomKey();
 			String encryptedKeyHex = SimpleCrypto.encrypt(password, key);
 
-			db.execSQL(
-					"INSERT INTO 'settings' ('name', 'value') VALUES (?, ?)",
-					new String[] { Settings.SETTINGS_ENCRYPTED_KEY,
-							encryptedKeyHex });
+			db.execSQL("INSERT INTO 'settings' ('name', 'value') VALUES (?, ?)", new String[] {
+					Settings.SETTINGS_ENCRYPTED_KEY, encryptedKeyHex });
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -122,8 +117,8 @@ public class DbOpenHelper extends SQLiteOpenHelper {
 
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-		Log.i("SQLite", "Upgrading database from version " + oldVersion
-				+ " to " + newVersion + ", which will destroy all old data");
+		Log.i("SQLite", "Upgrading database from version " + oldVersion + " to " + newVersion
+				+ ", which will destroy all old data");
 		dropAllTables(db);
 		onCreate(db);
 	}

@@ -38,6 +38,6 @@
             android:name=".FileSystemExplorerActivity"
             android:label="@string/filesystemexplorer_title" >
         </activity>
-        </application>
+    </application>
 
 </manifest>
