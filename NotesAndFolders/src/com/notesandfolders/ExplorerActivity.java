@@ -185,10 +185,10 @@ public class ExplorerActivity extends BaseActivity implements
 	}
 
 	public void openNote(long id) {
-		Intent editor = new Intent(this, NotesEditorActivity.class);
-		editor.putExtra("note_id", id);
-		editor.putExtra("password", getIntent().getExtras().getString("password"));
-		startActivity(editor);
+		Intent viewer = new Intent(this, NotesViewerActivity.class);
+		viewer.putExtra("note_id", id);
+		viewer.putExtra("password", getIntent().getExtras().getString("password"));
+		startActivity(viewer);
 	}
 
 	public void onOpen() {

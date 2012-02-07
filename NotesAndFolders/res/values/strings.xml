@@ -30,7 +30,8 @@
     <string name="rename">Rename</string>
     <string name="properties">Properties</string>
     <string name="fsimp">Import</string>
-
+    <string name="save">Save</string>
+    
     <!-- Login activity -->
     <string name="login_prompt">Password</string>
     <string name="login_msg_password_incorrect">Wrong password</string>
