@@ -5,6 +5,7 @@
     <string name="msg_not_implemented_yet">Not implemented yet</string>
     <string name="msg_importing_files">Importing files. Please wait...</string>
     <string name="filesystemexplorer_title">File system</string>
+    <string name="insert_date_time">Insert date &amp; time</string>
 
     <!-- Common -->
     <string name="ok">Ok</string>
@@ -31,7 +32,7 @@
     <string name="properties">Properties</string>
     <string name="fsimp">Import</string>
     <string name="save">Save</string>
-    
+
     <!-- Login activity -->
     <string name="login_prompt">Password</string>
     <string name="login_msg_password_incorrect">Wrong password</string>
