@@ -1,10 +1,10 @@
 #summary TODO list
 
- = Things to do before release =
+= Things to do before release =
 
 == Major features ==
 
-# Implement copy/cut & paste
+ # Implement copy/cut & paste
 
 == Fixes & minor features ==
 
