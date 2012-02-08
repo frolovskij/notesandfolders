@@ -83,6 +83,8 @@ public class ExplorerActivity extends BaseActivity implements OnItemClickListene
 	protected void onResume() {
 		super.onResume();
 
+		Log.i(getClass().getName(), "onResume()");
+
 		openDir(getCurrentFolderId());
 	}
 
@@ -103,6 +105,7 @@ public class ExplorerActivity extends BaseActivity implements OnItemClickListene
 		selectedId = -1;
 
 		input = new EditText(this);
+		input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
 		input.setInputType(InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
 		registerForContextMenu(input);
 	}
@@ -209,7 +212,7 @@ public class ExplorerActivity extends BaseActivity implements OnItemClickListene
 		return false; // super.onOptionsItemSelected(item);
 	}
 
-	public void refresh() {
+	private void refresh() {
 		items = nh.getChildrenById(getCurrentFolderId());
 		Collections.sort(items, new NaturalOrderNodesComparator());
 
@@ -219,7 +222,9 @@ public class ExplorerActivity extends BaseActivity implements OnItemClickListene
 		path.setText(nh.getFullPathById(getCurrentFolderId()));
 	}
 
-	public void openDir(long id) {
+	private void openDir(long id) {
+		Log.i(getClass().getName(), "openDir() " + id);
+
 		Node node = nh.getNodeById(id);
 
 		if (node.getType() == NodeType.FOLDER) {
@@ -228,15 +233,15 @@ public class ExplorerActivity extends BaseActivity implements OnItemClickListene
 		}
 	}
 
-	public void openNote(long id) {
+	private void openNote(long id) {
 		Intent viewer = new Intent(this, NotesViewerActivity.class);
 		viewer.putExtra("note_id", id);
 		viewer.putExtra("password", getIntent().getExtras().getString("password"));
 		startActivity(viewer);
 	}
 
-	public void onOpen() {
-		Node node = nh.getNodeById(getCurrentFolderId());
+	private void onOpen(long id) {
+		Node node = nh.getNodeById(id);
 
 		switch (node.getType()) {
 		case FOLDER:
@@ -251,7 +256,7 @@ public class ExplorerActivity extends BaseActivity implements OnItemClickListene
 		}
 	}
 
-	public void onNewFolder() {
+	private void onNewFolder() {
 		if (input.getParent() != null) {
 			((ViewGroup) input.getParent()).removeView(input);
 			input.setText("");
@@ -276,7 +281,7 @@ public class ExplorerActivity extends BaseActivity implements OnItemClickListene
 				}).show();
 	}
 
-	public void onNewNote() {
+	private void onNewNote() {
 		if (input.getParent() != null) {
 			((ViewGroup) input.getParent()).removeView(input);
 			input.setText("");
@@ -319,7 +324,7 @@ public class ExplorerActivity extends BaseActivity implements OnItemClickListene
 		super.onCreateContextMenu(menu, view, menuInfo);
 	}
 
-	public void onRename() {
+	private void onRename() {
 		final Node selectedNode = nh.getNodeById(selectedId);
 		if (input.getParent() != null) {
 			((ViewGroup) input.getParent()).removeView(input);
@@ -344,7 +349,7 @@ public class ExplorerActivity extends BaseActivity implements OnItemClickListene
 
 	}
 
-	public void onDelete() {
+	private void onDelete() {
 		final Node selectedNode = nh.getNodeById(selectedId);
 
 		new AlertDialog.Builder(this).setTitle(R.string.explorer_delete_title)
@@ -364,7 +369,7 @@ public class ExplorerActivity extends BaseActivity implements OnItemClickListene
 				}).show();
 	}
 
-	public void onNew() {
+	private void onNew() {
 		final IconListItem[] items = {
 				new IconListItem(getText(R.string.create_folder).toString(), R.drawable.folder),
 				new IconListItem(getText(R.string.create_note).toString(), R.drawable.note),
@@ -398,7 +403,6 @@ public class ExplorerActivity extends BaseActivity implements OnItemClickListene
 
 	public void onItemClick(AdapterView<?> parentView, View childView, int position, long id) {
 		Node selected = (Node) lv.getItemAtPosition(position);
-		setCurrentFolderId(selected.getId());
-		onOpen();
+		onOpen(selected.getId());
 	}
 }
