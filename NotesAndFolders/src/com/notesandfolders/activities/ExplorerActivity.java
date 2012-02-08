@@ -18,7 +18,10 @@ This file is a part of Notes & Folders project.
 
 package com.notesandfolders.activities;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 import com.notesandfolders.IconListItem;
@@ -28,11 +31,6 @@ import com.notesandfolders.Node;
 import com.notesandfolders.NodeAdapter;
 import com.notesandfolders.NodeType;
 import com.notesandfolders.R;
-import com.notesandfolders.R.drawable;
-import com.notesandfolders.R.id;
-import com.notesandfolders.R.layout;
-import com.notesandfolders.R.menu;
-import com.notesandfolders.R.string;
 import com.notesandfolders.dataaccess.NodeHelper;
 import com.tani.app.ui.IconContextMenu;
 
@@ -42,10 +40,15 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.text.InputType;
+import android.util.Log;
+import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MenuItem.OnMenuItemClickListener;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
@@ -74,6 +77,8 @@ public class ExplorerActivity extends BaseActivity implements
 	private long currentFolderId;
 	private long selectedId;
 
+	private EditText input;
+
 	@Override
 	protected void onResume() {
 		super.onResume();
@@ -97,6 +102,10 @@ public class ExplorerActivity extends BaseActivity implements
 
 		currentFolderId = 0;
 		selectedId = -1;
+
+		input = new EditText(this);
+		input.setInputType(InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
+		registerForContextMenu(input);
 	}
 
 	public void createContextMenu() {
@@ -174,10 +183,8 @@ public class ExplorerActivity extends BaseActivity implements
 		case R.id.explorer_options_find:
 			showAlert(R.string.msg_not_implemented_yet);
 			return true;
-
-		default:
-			return super.onOptionsItemSelected(item);
 		}
+		return false; // super.onOptionsItemSelected(item);
 	}
 
 	public void update() {
@@ -223,7 +230,10 @@ public class ExplorerActivity extends BaseActivity implements
 	}
 
 	public void onNewFolder() {
-		final EditText input = new EditText(this);
+		if (input.getParent() != null) {
+			((ViewGroup) input.getParent()).removeView(input);
+			input.setText("");
+		}
 
 		new AlertDialog.Builder(this).setTitle(R.string.explorer_newfolder_title)
 				.setMessage(R.string.explorer_newfolder_prompt).setView(input)
@@ -244,10 +254,29 @@ public class ExplorerActivity extends BaseActivity implements
 				}).show();
 	}
 
-	public void onRename() {
+	@Override
+	public void onCreateContextMenu(ContextMenu menu, View view,
+			ContextMenu.ContextMenuInfo menuInfo) {
+		if (view == input) {
+			menu.add(Menu.NONE, Menu.NONE, Menu.NONE, R.string.insert_date_time)
+					.setOnMenuItemClickListener(new OnMenuItemClickListener() {
+						public boolean onMenuItemClick(MenuItem item) {
+							Log.v(getClass().getName(), "Insert date+time" + item);
+							input.append(new SimpleDateFormat("yyyy.MM.dd HH:mm:ss")
+									.format(new Date()));
+							return false;
+						}
+					});
+		}
 
-		final EditText input = new EditText(this);
+		super.onCreateContextMenu(menu, view, menuInfo);
+	}
+
+	public void onRename() {
 		final Node selectedNode = nh.getNodeById(selectedId);
+		if (input.getParent() != null) {
+			((ViewGroup) input.getParent()).removeView(input);
+		}
 		input.setText(selectedNode.getName());
 
 		new AlertDialog.Builder(this).setTitle(R.string.explorer_rename_title)
@@ -269,9 +298,7 @@ public class ExplorerActivity extends BaseActivity implements
 	}
 
 	public void onDelete() {
-		final EditText input = new EditText(this);
 		final Node selectedNode = nh.getNodeById(selectedId);
-		input.setText(selectedNode.getName());
 
 		new AlertDialog.Builder(this).setTitle(R.string.explorer_delete_title)
 				.setMessage(R.string.explorer_delete_prompt)
@@ -291,7 +318,10 @@ public class ExplorerActivity extends BaseActivity implements
 	}
 
 	public void onNewNote() {
-		final EditText input = new EditText(this);
+		if (input.getParent() != null) {
+			((ViewGroup) input.getParent()).removeView(input);
+			input.setText("");
+		}
 
 		new AlertDialog.Builder(this).setTitle(R.string.explorer_newnote_title)
 				.setMessage(R.string.explorer_newnote_prompt).setView(input)
