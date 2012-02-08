@@ -24,3 +24,4 @@
  # Implement options
  # Implement exporting
  # Implement color schemes
+ # Implement checklists
