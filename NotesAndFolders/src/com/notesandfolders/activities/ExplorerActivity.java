@@ -32,6 +32,7 @@ import com.notesandfolders.NodeType;
 import com.notesandfolders.R;
 import com.notesandfolders.dataaccess.NodeHelper;
 import com.tani.app.ui.IconContextMenu;
+import com.tani.app.ui.IconContextMenu.IconContextMenuOnClickListener;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -57,8 +58,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class ExplorerActivity extends BaseActivity implements
-		IconContextMenu.IconContextMenuOnClickListener, OnItemClickListener {
+public class ExplorerActivity extends BaseActivity implements OnItemClickListener {
 	private static final int CONTEXT_MENU_ID = 0;
 	private static final int MENU_PROPERTIES = 6;
 	private static final int MENU_DELETE = 5;
@@ -76,13 +76,13 @@ public class ExplorerActivity extends BaseActivity implements
 	// private long currentFolderId;
 	private long selectedId;
 
+	// used in new & rename alert dialogs
 	private EditText input;
 
 	@Override
 	protected void onResume() {
 		super.onResume();
 
-		// this return 0L if not set
 		openDir(getCurrentFolderId());
 	}
 
@@ -107,6 +107,21 @@ public class ExplorerActivity extends BaseActivity implements
 		registerForContextMenu(input);
 	}
 
+	// context menu listener for nodes
+	final IconContextMenuOnClickListener contextMenuListener = new IconContextMenuOnClickListener() {
+		public void onClick(int menuId) {
+			switch (menuId) {
+			case MENU_RENAME:
+				onRename();
+				break;
+
+			case MENU_DELETE:
+				onDelete();
+				break;
+			}
+		}
+	};
+
 	public void createContextMenu() {
 		Resources res = getResources();
 
@@ -117,7 +132,7 @@ public class ExplorerActivity extends BaseActivity implements
 		iconContextMenu.addItem(res, R.string.paste, R.drawable.paste, MENU_PASTE);
 		iconContextMenu.addItem(res, R.string.delete, R.drawable.delete, MENU_DELETE);
 		iconContextMenu.addItem(res, R.string.properties, R.drawable.properties, MENU_PROPERTIES);
-		iconContextMenu.setOnClickListener(this);
+		iconContextMenu.setOnClickListener(contextMenuListener);
 	}
 
 	private long getCurrentFolderId() {
@@ -194,7 +209,7 @@ public class ExplorerActivity extends BaseActivity implements
 		return false; // super.onOptionsItemSelected(item);
 	}
 
-	public void update() {
+	public void refresh() {
 		items = nh.getChildrenById(getCurrentFolderId());
 		Collections.sort(items, new NaturalOrderNodesComparator());
 
@@ -209,7 +224,7 @@ public class ExplorerActivity extends BaseActivity implements
 
 		if (node.getType() == NodeType.FOLDER) {
 			setCurrentFolderId(id);
-			update();
+			refresh();
 		}
 	}
 
@@ -251,7 +266,32 @@ public class ExplorerActivity extends BaseActivity implements
 						Node parent = nh.getNodeById(getCurrentFolderId());
 						if ((parent != null) && parent.getType() == NodeType.FOLDER) {
 							nh.createFolder(parent, folderName);
-							update();
+							refresh();
+						}
+					}
+				}).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int whichButton) {
+						// Do nothing.
+					}
+				}).show();
+	}
+
+	public void onNewNote() {
+		if (input.getParent() != null) {
+			((ViewGroup) input.getParent()).removeView(input);
+			input.setText("");
+		}
+
+		new AlertDialog.Builder(this).setTitle(R.string.explorer_newnote_title)
+				.setMessage(R.string.explorer_newnote_prompt).setView(input)
+				.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int whichButton) {
+						String noteName = input.getText().toString();
+
+						Node parent = nh.getNodeById(getCurrentFolderId());
+						if ((parent != null) && parent.getType() == NodeType.FOLDER) {
+							nh.createNote(parent, noteName, "");
+							refresh();
 						}
 					}
 				}).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
@@ -293,7 +333,7 @@ public class ExplorerActivity extends BaseActivity implements
 						if (selectedNode != null) {
 							nh.renameNodeById(selectedNode.getId(), input.getText().toString());
 
-							update();
+							refresh();
 						}
 					}
 				}).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
@@ -314,35 +354,10 @@ public class ExplorerActivity extends BaseActivity implements
 						if (selectedNode != null) {
 							nh.deleteNodeById(selectedNode.getId());
 
-							update();
+							refresh();
 						}
 					}
 				}).setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int whichButton) {
-						// Do nothing.
-					}
-				}).show();
-	}
-
-	public void onNewNote() {
-		if (input.getParent() != null) {
-			((ViewGroup) input.getParent()).removeView(input);
-			input.setText("");
-		}
-
-		new AlertDialog.Builder(this).setTitle(R.string.explorer_newnote_title)
-				.setMessage(R.string.explorer_newnote_prompt).setView(input)
-				.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int whichButton) {
-						String noteName = input.getText().toString();
-
-						Node parent = nh.getNodeById(getCurrentFolderId());
-						if ((parent != null) && parent.getType() == NodeType.FOLDER) {
-							nh.createNote(parent, noteName, "");
-							update();
-						}
-					}
-				}).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int whichButton) {
 						// Do nothing.
 					}
@@ -379,18 +394,6 @@ public class ExplorerActivity extends BaseActivity implements
 
 					}
 				}).show();
-	}
-
-	public void onClick(int menuId) {
-		switch (menuId) {
-		case MENU_RENAME:
-			onRename();
-			break;
-
-		case MENU_DELETE:
-			onDelete();
-			break;
-		}
 	}
 
 	public void onItemClick(AdapterView<?> parentView, View childView, int position, long id) {
