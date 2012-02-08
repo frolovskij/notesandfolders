@@ -1,6 +1,6 @@
 #summary TODO list
 
-= Things to do before release =
+ = Things to do before release =
 
 == Major features ==
 
