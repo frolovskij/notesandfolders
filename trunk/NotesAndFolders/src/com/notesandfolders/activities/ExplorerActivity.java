@@ -18,7 +18,6 @@ This file is a part of Notes & Folders project.
 
 package com.notesandfolders.activities;
 
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Collections;
 import java.util.Date;
@@ -74,7 +73,7 @@ public class ExplorerActivity extends BaseActivity implements
 	private NodeAdapter adapter;
 	private IconContextMenu iconContextMenu = null;
 
-	private long currentFolderId;
+	// private long currentFolderId;
 	private long selectedId;
 
 	private EditText input;
@@ -83,7 +82,8 @@ public class ExplorerActivity extends BaseActivity implements
 	protected void onResume() {
 		super.onResume();
 
-		openDir(currentFolderId);
+		// this return 0L if not set
+		openDir(getCurrentFolderId());
 	}
 
 	@Override
@@ -100,7 +100,6 @@ public class ExplorerActivity extends BaseActivity implements
 		lv.setOnItemLongClickListener(itemLongClickHandler);
 		lv.setOnItemClickListener(this);
 
-		currentFolderId = 0;
 		selectedId = -1;
 
 		input = new EditText(this);
@@ -121,12 +120,20 @@ public class ExplorerActivity extends BaseActivity implements
 		iconContextMenu.setOnClickListener(this);
 	}
 
+	private long getCurrentFolderId() {
+		return getIntent().getLongExtra("current_folder", 0L);
+	}
+
+	private void setCurrentFolderId(long id) {
+		getIntent().putExtra("current_folder", id);
+	}
+
 	private OnItemLongClickListener itemLongClickHandler = new OnItemLongClickListener() {
 		public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
 			selectedId = ((Node) lv.getItemAtPosition(position)).getId();
 
 			// Not showing context menu for ..'s
-			Node current = nh.getNodeById(currentFolderId);
+			Node current = nh.getNodeById(getCurrentFolderId());
 			boolean showMenu = (selectedId != current.getParentId());
 
 			if (showMenu) {
@@ -188,20 +195,20 @@ public class ExplorerActivity extends BaseActivity implements
 	}
 
 	public void update() {
-		items = nh.getChildrenById(currentFolderId);
+		items = nh.getChildrenById(getCurrentFolderId());
 		Collections.sort(items, new NaturalOrderNodesComparator());
 
 		adapter = new NodeAdapter(this, R.layout.explorer_item, items);
 		lv.setAdapter(adapter);
 
-		path.setText(nh.getFullPathById(currentFolderId));
+		path.setText(nh.getFullPathById(getCurrentFolderId()));
 	}
 
 	public void openDir(long id) {
 		Node node = nh.getNodeById(id);
 
 		if (node.getType() == NodeType.FOLDER) {
-			currentFolderId = id;
+			setCurrentFolderId(id);
 			update();
 		}
 	}
@@ -214,7 +221,7 @@ public class ExplorerActivity extends BaseActivity implements
 	}
 
 	public void onOpen() {
-		Node node = nh.getNodeById(currentFolderId);
+		Node node = nh.getNodeById(getCurrentFolderId());
 
 		switch (node.getType()) {
 		case FOLDER:
@@ -241,7 +248,7 @@ public class ExplorerActivity extends BaseActivity implements
 					public void onClick(DialogInterface dialog, int whichButton) {
 						String folderName = input.getText().toString();
 
-						Node parent = nh.getNodeById(currentFolderId);
+						Node parent = nh.getNodeById(getCurrentFolderId());
 						if ((parent != null) && parent.getType() == NodeType.FOLDER) {
 							nh.createFolder(parent, folderName);
 							update();
@@ -329,7 +336,7 @@ public class ExplorerActivity extends BaseActivity implements
 					public void onClick(DialogInterface dialog, int whichButton) {
 						String noteName = input.getText().toString();
 
-						Node parent = nh.getNodeById(currentFolderId);
+						Node parent = nh.getNodeById(getCurrentFolderId());
 						if ((parent != null) && parent.getType() == NodeType.FOLDER) {
 							nh.createNote(parent, noteName, "");
 							update();
@@ -388,7 +395,7 @@ public class ExplorerActivity extends BaseActivity implements
 
 	public void onItemClick(AdapterView<?> parentView, View childView, int position, long id) {
 		Node selected = (Node) lv.getItemAtPosition(position);
-		currentFolderId = selected.getId();
+		setCurrentFolderId(selected.getId());
 		onOpen();
 	}
 }
