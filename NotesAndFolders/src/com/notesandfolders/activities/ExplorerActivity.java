@@ -16,10 +16,23 @@ limitations under the License.
 This file is a part of Notes & Folders project.
  */
 
-package com.notesandfolders;
+package com.notesandfolders.activities;
 
+import java.util.Collections;
 import java.util.List;
 
+import com.notesandfolders.IconListItem;
+import com.notesandfolders.IconListItemAdapter;
+import com.notesandfolders.NaturalOrderNodesComparator;
+import com.notesandfolders.Node;
+import com.notesandfolders.NodeAdapter;
+import com.notesandfolders.NodeType;
+import com.notesandfolders.R;
+import com.notesandfolders.R.drawable;
+import com.notesandfolders.R.id;
+import com.notesandfolders.R.layout;
+import com.notesandfolders.R.menu;
+import com.notesandfolders.R.string;
 import com.notesandfolders.dataaccess.NodeHelper;
 import com.tani.app.ui.IconContextMenu;
 
@@ -169,6 +182,8 @@ public class ExplorerActivity extends BaseActivity implements
 
 	public void update() {
 		items = nh.getChildrenById(currentFolderId);
+		Collections.sort(items, new NaturalOrderNodesComparator());
+
 		adapter = new NodeAdapter(this, R.layout.explorer_item, items);
 		lv.setAdapter(adapter);
 
@@ -301,7 +316,9 @@ public class ExplorerActivity extends BaseActivity implements
 		final IconListItem[] items = {
 				new IconListItem(getText(R.string.create_folder).toString(), R.drawable.folder),
 				new IconListItem(getText(R.string.create_note).toString(), R.drawable.note),
-				new IconListItem(getText(R.string.create_checklist).toString(), R.drawable.note) };
+		// new IconListItem(getText(R.string.create_checklist).toString(),
+		// R.drawable.note)
+		};
 
 		ListAdapter adapter = new IconListItemAdapter(this, android.R.layout.select_dialog_item,
 				items);
