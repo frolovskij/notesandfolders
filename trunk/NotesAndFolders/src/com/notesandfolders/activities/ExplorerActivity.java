@@ -106,7 +106,7 @@ public class ExplorerActivity extends BaseActivity implements OnItemClickListene
 
 		input = new EditText(this);
 		input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
-		input.setInputType(InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
+
 		registerForContextMenu(input);
 	}
 
