@@ -1,0 +1,25 @@
+#summary TODO list
+
+= Things to do before releasing Notes & Folders on Android market =
+
+== Major features
+
+# Implement copy/cut & paste
+
+== Fixes & minor features
+
+# Ask before exiting editor if the text was changed
+# Insert date & time in editor
+# Include current date & time in the folder where imported data goes
+# Set focus on newly created item
+# When going back from viewer set focus on item that was opened
+# Send new password to child activities after it was changed
+
+= Another things to do (maybe later) =
+
+== Major features
+
+# Implement search
+# Implement options
+# Implement exporting
+# Implement color schemes
