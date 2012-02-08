@@ -16,7 +16,14 @@ limitations under the License.
 This file is a part of Notes & Folders project.
  */
 
-package com.notesandfolders;
+package com.notesandfolders.activities;
+
+import com.notesandfolders.Login;
+import com.notesandfolders.R;
+import com.notesandfolders.Settings;
+import com.notesandfolders.R.id;
+import com.notesandfolders.R.layout;
+import com.notesandfolders.R.string;
 
 import android.os.Bundle;
 import android.view.Gravity;

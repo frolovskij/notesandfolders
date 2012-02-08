@@ -10,7 +10,7 @@
         android:icon="@drawable/icon"
         android:label="@string/app_name" >
         <activity
-            android:name=".LoginActivity"
+            android:name=".activities.LoginActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -19,27 +19,27 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ExplorerActivity"
+            android:name=".activities.ExplorerActivity"
             android:label="@string/app_name" >
         </activity>
         <activity
-            android:name=".SettingsActivity"
+            android:name=".activities.SettingsActivity"
             android:label="@string/settings_title" >
         </activity>
         <activity
-            android:name=".PasswordActivity"
+            android:name=".activities.PasswordActivity"
             android:label="@string/password_edit_title" >
         </activity>
         <activity
-            android:name=".NotesViewerActivity"
+            android:name=".activities.NotesViewerActivity"
             android:label="@string/noteseditor_title" >
         </activity>
         <activity
-            android:name=".NotesEditorActivity"
+            android:name=".activities.NotesEditorActivity"
             android:label="@string/noteseditor_title" >
         </activity>
         <activity
-            android:name=".FileSystemExplorerActivity"
+            android:name=".activities.FileSystemExplorerActivity"
             android:label="@string/filesystemexplorer_title" >
         </activity>
     </application>

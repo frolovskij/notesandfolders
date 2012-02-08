@@ -16,13 +16,21 @@ limitations under the License.
 This file is a part of Notes & Folders project.
  */
 
-package com.notesandfolders;
+package com.notesandfolders.activities;
 
 import java.io.File;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import com.notesandfolders.FileAdapter;
+import com.notesandfolders.FileImporter;
+import com.notesandfolders.Node;
+import com.notesandfolders.R;
+import com.notesandfolders.R.drawable;
+import com.notesandfolders.R.id;
+import com.notesandfolders.R.layout;
+import com.notesandfolders.R.string;
 import com.notesandfolders.dataaccess.NodeHelper;
 import com.tani.app.ui.IconContextMenu;
 
@@ -143,13 +151,6 @@ public class FileSystemExplorerActivity extends BaseActivity implements
 				final List<Node> nodes = FileImporter.getFiles(selectedFile.getAbsolutePath(),
 						nh.getLastId() + 1, importRoot.getId());
 
-				try {
-					Thread.sleep(5000);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-
 				int nodesCount = nodes.size();
 
 				pd.setMax(nodesCount);
@@ -159,13 +160,6 @@ public class FileSystemExplorerActivity extends BaseActivity implements
 
 					nh.insertNode(n);
 					pd.setProgress(i + 1);
-
-					try {
-						Thread.sleep(1000);
-					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
 				}
 
 				pd.dismiss();

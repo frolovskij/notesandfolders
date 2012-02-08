@@ -16,8 +16,11 @@ limitations under the License.
 This file is a part of Notes & Folders project.
  */
 
-package com.notesandfolders;
+package com.notesandfolders.activities;
 
+import com.notesandfolders.R;
+import com.notesandfolders.R.id;
+import com.notesandfolders.R.layout;
 import com.notesandfolders.dataaccess.NodeHelper;
 
 import android.content.Intent;
@@ -25,49 +28,43 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
-public class NotesViewerActivity extends BaseActivity {
+public class NotesEditorActivity extends BaseActivity {
 	private NodeHelper nh;
-	private TextView textContent;
+	private EditText textContent;
 	private TextView name;
-	private Button editButton;
-
+	private Button saveButton;
 	private long id;
 
-	final private OnClickListener editButtonOnClickListener = new OnClickListener() {
+	final private OnClickListener saveButtonOnClickListener = new OnClickListener() {
 		public void onClick(View v) {
-			if (v != null && v == editButton) {
-				Intent editor = new Intent(NotesViewerActivity.this, NotesEditorActivity.class);
-				editor.putExtra("note_id", id);
-				editor.putExtra("password", getIntent().getExtras().getString("password"));
-				startActivity(editor);
+			if (v != null && v == saveButton) {
+				nh.setTextContentById(id, textContent.getText().toString());
+				finish();
 			}
 		}
 	};
 
-	@Override
-	public void onResume() {
-		super.onRestart();
-
-		String tc = nh.getTextContentById(id);
-		textContent.setText(tc);
-	}
-
+	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.notesviewer);
+		setContentView(R.layout.noteseditor);
 
 		nh = new NodeHelper(this, getIntent().getExtras().getString("password"));
+
 		id = getIntent().getExtras().getLong("note_id");
+		String tc = nh.getTextContentById(id);
 
-		textContent = (TextView) findViewById(R.id.notesviewer_note_text_view);
+		textContent = (EditText) findViewById(R.id.noteseditor_note_text);
+		textContent.setText(tc);
 
-		name = (TextView) findViewById(R.id.notesviewer_name);
+		name = (TextView) findViewById(R.id.noteseditor_name);
 		name.setText(nh.getFullPathById(id));
 
-		editButton = (Button) findViewById(R.id.notesviewer_edit_button);
-		editButton.setOnClickListener(editButtonOnClickListener);
+		saveButton = (Button) findViewById(R.id.noteseditor_save_button);
+		saveButton.setOnClickListener(saveButtonOnClickListener);
 	}
 }
