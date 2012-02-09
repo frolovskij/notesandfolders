@@ -132,9 +132,8 @@ public class ExplorerActivity extends BaseActivity implements OnItemClickListene
 		iconContextMenu.addItem(res, R.string.rename, R.drawable.rename, MENU_RENAME);
 		iconContextMenu.addItem(res, R.string.copy, R.drawable.copy, MENU_COPY);
 		iconContextMenu.addItem(res, R.string.cut, R.drawable.cut, MENU_CUT);
-		iconContextMenu.addItem(res, R.string.paste, R.drawable.paste, MENU_PASTE);
 		iconContextMenu.addItem(res, R.string.delete, R.drawable.delete, MENU_DELETE);
-		iconContextMenu.addItem(res, R.string.properties, R.drawable.properties, MENU_PROPERTIES);
+//		iconContextMenu.addItem(res, R.string.properties, R.drawable.properties, MENU_PROPERTIES);
 		iconContextMenu.setOnClickListener(contextMenuListener);
 	}
 
