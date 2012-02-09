@@ -20,12 +20,18 @@ public final class R {
         public static final int fsfolder=0x7f020006;
         public static final int fsfolder_locked=0x7f020007;
         public static final int fsimp=0x7f020008;
-        public static final int icon=0x7f020009;
-        public static final int note=0x7f02000a;
-        public static final int paste=0x7f02000b;
-        public static final int properties=0x7f02000c;
-        public static final int rename=0x7f02000d;
-        public static final int up=0x7f02000e;
+        public static final int ic_menu_add=0x7f020009;
+        public static final int ic_menu_close_clear_cancel=0x7f02000a;
+        public static final int ic_menu_goto=0x7f02000b;
+        public static final int ic_menu_preferences=0x7f02000c;
+        public static final int ic_menu_search=0x7f02000d;
+        public static final int ic_menu_upload=0x7f02000e;
+        public static final int icon=0x7f02000f;
+        public static final int note=0x7f020010;
+        public static final int paste=0x7f020011;
+        public static final int properties=0x7f020012;
+        public static final int rename=0x7f020013;
+        public static final int up=0x7f020014;
     }
     public static final class id {
         public static final int btnLogin=0x7f06000e;
@@ -33,10 +39,11 @@ public final class R {
         public static final int explorer_file_name=0x7f060004;
         public static final int explorer_listview=0x7f060002;
         public static final int explorer_options_add=0x7f06001b;
-        public static final int explorer_options_close=0x7f06001f;
-        public static final int explorer_options_find=0x7f06001c;
-        public static final int explorer_options_import=0x7f06001d;
-        public static final int explorer_options_settings=0x7f06001e;
+        public static final int explorer_options_close=0x7f060020;
+        public static final int explorer_options_find=0x7f06001d;
+        public static final int explorer_options_import=0x7f06001e;
+        public static final int explorer_options_paste=0x7f06001c;
+        public static final int explorer_options_settings=0x7f06001f;
         public static final int explorer_path=0x7f060000;
         public static final int fsexplorer_file_icon=0x7f060008;
         public static final int fsexplorer_file_name=0x7f060009;
@@ -78,19 +85,19 @@ public final class R {
     public static final class string {
         public static final int app_name=0x7f040000;
         public static final int cancel=0x7f040006;
-        public static final int copy=0x7f040011;
+        public static final int copy=0x7f040012;
         public static final int create_checklist=0x7f040034;
         public static final int create_folder=0x7f040032;
         /**  Alert Dialog that pop-ups when user chooses "New" from Explorer's options menu 
          */
         public static final int create_new=0x7f040031;
         public static final int create_note=0x7f040033;
-        public static final int cut=0x7f040012;
+        public static final int cut=0x7f040013;
         public static final int delete=0x7f040014;
-        public static final int edit=0x7f040010;
+        public static final int edit=0x7f040011;
         /**  Context menu operations on folders, files & checklists 
          */
-        public static final int explorer_context_menu_title=0x7f04000e;
+        public static final int explorer_context_menu_title=0x7f04000f;
         public static final int explorer_delete_prompt=0x7f040023;
         /**  Delete alert dialog 
          */
@@ -120,6 +127,7 @@ public final class R {
         /**  Explorer options menu 
          */
         public static final int menu_new=0x7f040009;
+        public static final int menu_paste=0x7f04000e;
         public static final int menu_search=0x7f04000a;
         public static final int menu_settings=0x7f04000c;
         public static final int msg_importing_files=0x7f040002;
@@ -131,7 +139,7 @@ public final class R {
         /**  Common 
          */
         public static final int ok=0x7f040005;
-        public static final int open=0x7f04000f;
+        public static final int open=0x7f040010;
         public static final int password_edit_confirmation=0x7f04002b;
         public static final int password_edit_current=0x7f040029;
         public static final int password_edit_new=0x7f04002a;
@@ -143,7 +151,6 @@ public final class R {
         public static final int password_msg_password_was_saved=0x7f04002d;
         public static final int password_msg_save_error=0x7f04002f;
         public static final int password_msg_wrong_password=0x7f04002e;
-        public static final int paste=0x7f040013;
         public static final int properties=0x7f040016;
         public static final int rename=0x7f040015;
         public static final int save=0x7f040018;

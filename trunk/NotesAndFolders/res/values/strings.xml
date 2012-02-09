@@ -19,14 +19,14 @@
     <string name="menu_import">Import</string>
     <string name="menu_settings">Settings</string>
     <string name="menu_close">Close</string>
-
+    <string name="menu_paste">Paste</string>
+    
     <!-- Context menu operations on folders, files & checklists -->
     <string name="explorer_context_menu_title">Actions</string>
     <string name="open">Open</string>
     <string name="edit">Edit</string>
     <string name="copy">Copy</string>
     <string name="cut">Cut</string>
-    <string name="paste">Paste</string>
     <string name="delete">Delete</string>
     <string name="rename">Rename</string>
     <string name="properties">Properties</string>
