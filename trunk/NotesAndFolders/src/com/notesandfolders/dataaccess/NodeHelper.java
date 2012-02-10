@@ -421,4 +421,37 @@ public class NodeHelper {
 		setTextContentById(node.getId(), node.getTextContent());
 	}
 
+	/**
+	 * Moves node to another folder
+	 * 
+	 * @param id
+	 *            id of node to move
+	 * @param newParentId
+	 *            id of the folder that is a new parent
+	 */
+	public void move(long id, long newParentId) {
+		Node node = getNodeById(id);
+		Node newParent = getNodeById(newParentId);
+
+		if (node == null || newParent == null || node.getParentId() == newParentId
+				|| newParent.getType() != NodeType.FOLDER) {
+			return;
+		}
+
+		DbOpenHelper dbOpenHelper = new DbOpenHelper(context);
+		SQLiteDatabase db = dbOpenHelper.getWritableDatabase();
+
+		try {
+			db.execSQL("update data set parent_id = ?, date_modified = ? where id = ?",
+					new String[] { Long.toString(newParentId), Long.toString(new Date().getTime()),
+							Long.toString(id) });
+		} catch (Exception ex) {
+			Log.i("move", ex.toString());
+		} finally {
+			if (db != null) {
+				db.close();
+			}
+		}
+	}
+
 }
