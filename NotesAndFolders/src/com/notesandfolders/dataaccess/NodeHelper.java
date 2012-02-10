@@ -422,6 +422,40 @@ public class NodeHelper {
 	}
 
 	/**
+	 * Returns a list of parents' ids over a node
+	 * 
+	 * For example, if a full path for node is \some\dir\node.txt and some has
+	 * id 1 and dir has id 2 then the parents list for node.txt should be {0, 1,
+	 * 2} (0 for root folder).
+	 * 
+	 * @param id
+	 *            id of the node which parents list should be returned
+	 * @return list of parents' ids
+	 */
+	public List<Long> getParentsListById(long id) {
+		List<Long> parents = new ArrayList<Long>();
+
+		long currentId = id;
+
+		while (true) {
+			Node node = getNodeById(currentId);
+			if (node == null) {
+				break;
+			}
+			currentId = node.getParentId();
+
+			// parent of root has id -1, don't add it
+			if (currentId == -1) {
+				break;
+			}
+
+			parents.add(currentId);
+		}
+
+		return parents;
+	}
+
+	/**
 	 * Moves node to another folder
 	 * 
 	 * @param id
@@ -435,6 +469,20 @@ public class NodeHelper {
 
 		if (node == null || newParent == null || node.getParentId() == newParentId
 				|| newParent.getType() != NodeType.FOLDER) {
+			return;
+		}
+
+		// Prevents copying into itself
+		if (id == newParentId) {
+			return;
+		}
+
+		/**
+		 * Prevent copying a node into it's children E.g., if we have \1\2\3\4
+		 * tree then 2 won't be copied into 4
+		 */
+		List<Long> parents = getParentsListById(newParentId);
+		if (parents.contains(id)) {
 			return;
 		}
 
@@ -517,6 +565,18 @@ public class NodeHelper {
 		Node newParent = getNodeById(newParentId);
 
 		if (node == null || newParent == null) {
+			return;
+		}
+
+		// Prevents copying into itself
+		if (id == newParentId) {
+			return;
+		}
+
+		// If it would be proven to be slow then all copying would go into
+		// copy0() without this check
+		List<Long> parents = getParentsListById(newParentId);
+		if (parents.contains(id)) {
 			return;
 		}
 
