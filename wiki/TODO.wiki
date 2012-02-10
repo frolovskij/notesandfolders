@@ -4,7 +4,7 @@
 
 == Major features ==
 
- # Implement copy/cut & paste
+ # ~~Implement copy/cut & paste~~
 
 == Fixes & minor features ==
 
@@ -25,3 +25,4 @@
  # Implement exporting
  # Implement color schemes
  # Implement checklists
+ # Multiple selection for copy/cut operations
