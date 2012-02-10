@@ -207,4 +207,41 @@ public class NodeHelperTest extends AndroidTestCase {
 		assertEquals(root.getId(), sameN1.getParentId());
 	}
 
+	public void testCloneNodeById() {
+		Node node = fh.createNote(root, "test", "text");
+		long cloneId = fh.cloneNodeById(node.getId());
+		Node clone = fh.getNodeById(cloneId);
+
+		assertEquals(node.getName(), clone.getName());
+		assertEquals(node.getParentId(), clone.getParentId());
+		assertEquals(node.getType(), clone.getType());
+		assertEquals(node.getDateCreated(), clone.getDateCreated());
+		assertTrue(node.getId() != clone.getId());
+		assertTrue(clone.getDateModified().getTime() >= node.getDateModified().getTime());
+
+		assertEquals(fh.getTextContentById(node.getId()), fh.getTextContentById(clone.getId()));
+	}
+
+	public void testCopySingleNode() {
+		Node f1 = fh.createFolder(root, "1");
+		Node f2 = fh.createFolder(root, "2");
+
+		Node node = fh.createNote(f1, "test", "text");
+		fh.copy(node.getId(), f2.getId());
+
+		List<Long> childrenIds = fh.getChildrenIdsById(f2.getId());
+		assertEquals(1, childrenIds.size());
+	}
+	
+	public void testCopyTree() {
+		Node f1 = fh.createFolder(root, "1");
+		Node f2 = fh.createFolder(root, "2");
+
+		Node node = fh.createNote(f1, "test", "text");
+		fh.copy(f1.getId(), f2.getId());
+
+		List<Long> childrenIds = fh.getChildrenIdsById(f2.getId());
+		assertEquals(1, childrenIds.size());
+	}
+
 }
