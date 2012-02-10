@@ -178,4 +178,33 @@ public class NodeHelperTest extends AndroidTestCase {
 		assertEquals("/1/test2.txt", fh.getFullPathById(n2.getId()));
 		assertEquals("/1/2/test3.txt", fh.getFullPathById(n3.getId()));
 	}
+
+	public void testMoveToExistingFolder() {
+		Node f1 = fh.createFolder(root, "1");
+		Node f2 = fh.createFolder(root, "2");
+
+		Node n = fh.createNote(f1, "test", "");
+		fh.move(n.getId(), f2.getId());
+
+		Node sameN = fh.getNodeById(n.getId());
+		assertEquals(f2.getId(), sameN.getParentId());
+	}
+
+	public void testMoveToNotExisting() {
+		Node n = fh.createNote(root, "test", "");
+		fh.move(n.getId(), 123123);
+
+		Node sameN = fh.getNodeById(n.getId());
+		assertEquals(root.getId(), sameN.getParentId());
+	}
+
+	public void testMoveToNote() {
+		Node n1 = fh.createNote(root, "test", "");
+		Node n2 = fh.createNote(root, "test2", "");
+		fh.move(n1.getId(), n2.getId());
+
+		Node sameN1 = fh.getNodeById(n1.getId());
+		assertEquals(root.getId(), sameN1.getParentId());
+	}
+
 }
