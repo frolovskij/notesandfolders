@@ -25,4 +25,11 @@
  # Implement exporting
  # Implement color schemes
  # Implement checklists
+ # Help page
  # Multiple selection for copy/cut operations
+ # Translations
+
+== Fixes & minor features ==
+
+ # Progress bars when copying files
+ # Show messages when can't paste node
