@@ -76,14 +76,16 @@ public class ExplorerActivity extends BaseActivity implements OnItemClickListene
 	// private long currentFolderId;
 	private long selectedId;
 
+	private long idToCopy;
+
+	private long idToMove;
+
 	// used in new & rename alert dialogs
 	private EditText input;
 
 	@Override
 	protected void onResume() {
 		super.onResume();
-
-		Log.i(getClass().getName(), "onResume()");
 
 		openDir(getCurrentFolderId());
 	}
@@ -103,6 +105,8 @@ public class ExplorerActivity extends BaseActivity implements OnItemClickListene
 		lv.setOnItemClickListener(this);
 
 		selectedId = -1;
+		idToCopy = -1;
+		idToMove = -1;
 
 		input = new EditText(this);
 		input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
@@ -121,6 +125,16 @@ public class ExplorerActivity extends BaseActivity implements OnItemClickListene
 			case MENU_DELETE:
 				onDelete();
 				break;
+
+			case MENU_COPY:
+				idToCopy = selectedId;
+				idToMove = -1;
+				break;
+
+			case MENU_CUT:
+				idToCopy = -1;
+				idToMove = selectedId;
+				break;
 			}
 		}
 	};
@@ -133,7 +147,8 @@ public class ExplorerActivity extends BaseActivity implements OnItemClickListene
 		iconContextMenu.addItem(res, R.string.copy, R.drawable.copy, MENU_COPY);
 		iconContextMenu.addItem(res, R.string.cut, R.drawable.cut, MENU_CUT);
 		iconContextMenu.addItem(res, R.string.delete, R.drawable.delete, MENU_DELETE);
-//		iconContextMenu.addItem(res, R.string.properties, R.drawable.properties, MENU_PROPERTIES);
+		// iconContextMenu.addItem(res, R.string.properties,
+		// R.drawable.properties, MENU_PROPERTIES);
 		iconContextMenu.setOnClickListener(contextMenuListener);
 	}
 
@@ -175,6 +190,15 @@ public class ExplorerActivity extends BaseActivity implements OnItemClickListene
 	}
 
 	@Override
+	public boolean onPrepareOptionsMenu(Menu menu) {
+		boolean enablePaste = (idToCopy != -1 || idToMove != -1);
+		MenuItem item = menu.findItem(R.id.explorer_options_paste);
+		item.setVisible(enablePaste);
+
+		return true;
+	}
+
+	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.explorer_options, menu);
@@ -186,6 +210,19 @@ public class ExplorerActivity extends BaseActivity implements OnItemClickListene
 		switch (item.getItemId()) {
 		case R.id.explorer_options_add:
 			onNew();
+			return true;
+
+		case R.id.explorer_options_paste:
+			if (idToCopy != -1) {
+				nh.copy(idToCopy, getCurrentFolderId());
+				refresh();
+			} else if (idToMove != -1) {
+				nh.move(idToMove, getCurrentFolderId());
+				refresh();
+			}
+
+			idToCopy = -1;
+			idToMove = -1;
 			return true;
 
 		case R.id.explorer_options_settings:
@@ -222,8 +259,6 @@ public class ExplorerActivity extends BaseActivity implements OnItemClickListene
 	}
 
 	private void openDir(long id) {
-		Log.i(getClass().getName(), "openDir() " + id);
-
 		Node node = nh.getNodeById(id);
 
 		if (node.getType() == NodeType.FOLDER) {
