@@ -232,7 +232,7 @@ public class NodeHelperTest extends AndroidTestCase {
 		List<Long> childrenIds = fh.getChildrenIdsById(f2.getId());
 		assertEquals(1, childrenIds.size());
 	}
-	
+
 	public void testCopyTree() {
 		Node f1 = fh.createFolder(root, "1");
 		Node f2 = fh.createFolder(root, "2");
@@ -244,4 +244,61 @@ public class NodeHelperTest extends AndroidTestCase {
 		assertEquals(1, childrenIds.size());
 	}
 
+	public void testGetParentsListById() {
+		Node f1 = fh.createFolder(root, "1");
+		Node f2 = fh.createFolder(f1, "2");
+		Node f3 = fh.createFolder(f2, "3");
+		Node n = fh.createNote(f3, "test.txt", "test");
+
+		List<Long> parents = fh.getParentsListById(n.getId());
+
+		assertEquals(4, parents.size());
+		assertTrue(parents.contains(root.getId()));
+		assertTrue(parents.contains(f1.getId()));
+		assertTrue(parents.contains(f2.getId()));
+		assertTrue(parents.contains(f3.getId()));
+	}
+
+	public void testCopyIntoItself() {
+		Node f1 = fh.createFolder(root, "1");
+
+		long nodesCount = fh.getNodesCount();
+		fh.copy(f1.getId(), f1.getId());
+
+		assertEquals(nodesCount, fh.getNodesCount());
+	}
+
+	public void testCopyIntoItself2() {
+		Node f1 = fh.createFolder(root, "1");
+		Node f2 = fh.createFolder(f1, "2");
+		Node f3 = fh.createFolder(f2, "3");
+		Node n = fh.createNote(f3, "test.txt", "test");
+
+		long nodesCount = fh.getNodesCount();
+
+		// trying to copy 1 to 3
+		fh.copy(f1.getId(), f3.getId());
+
+		assertEquals(nodesCount, fh.getNodesCount());
+	}
+
+	public void testMoveIntoItself() {
+		Node f1 = fh.createFolder(root, "1");
+
+		fh.move(f1.getId(), f1.getId());
+
+		assertEquals(root.getId(), f1.getParentId());
+	}
+
+	public void testMoveIntoItself2() {
+		Node f1 = fh.createFolder(root, "1");
+		Node f2 = fh.createFolder(f1, "2");
+		Node f3 = fh.createFolder(f2, "3");
+		Node n = fh.createNote(f3, "test.txt", "test");
+
+		// trying to move 1 to 3
+		fh.move(f1.getId(), f3.getId());
+
+		assertEquals(root.getId(), f1.getParentId());
+	}
 }
