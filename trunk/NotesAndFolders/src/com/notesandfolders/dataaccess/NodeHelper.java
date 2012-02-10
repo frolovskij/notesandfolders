@@ -454,4 +454,81 @@ public class NodeHelper {
 		}
 	}
 
+	/**
+	 * Clones a single node and puts it in the same directory
+	 * 
+	 * @param id
+	 *            id of the node to clone
+	 * 
+	 * @return id of the cloned node
+	 */
+	public long cloneNodeById(long id) {
+		DbOpenHelper dbOpenHelper = new DbOpenHelper(context);
+		SQLiteDatabase db = dbOpenHelper.getWritableDatabase();
+
+		Cursor c = null;
+		try {
+			c = db.rawQuery(
+					"select name, parent_id, date_created, date_modified, type, text_content from data where id = ?",
+					new String[] { Long.toString(id) });
+
+			if (c.moveToFirst()) {
+				ContentValues cv = new ContentValues();
+				cv.put("name", c.getString(0));
+				cv.put("parent_id", c.getLong(1));
+				cv.put("date_created", c.getLong(2));
+				cv.put("date_modified", new Date().getTime());
+				cv.put("type", c.getInt(4));
+				cv.put("text_content", c.getString(5));
+
+				long cloneId = db.insertOrThrow("data", null, cv);
+
+				return cloneId;
+
+			} else {
+				Log.i("clone", "Cursor is empty");
+			}
+		} catch (Exception ex) {
+			Log.i("clone", ex.toString());
+		} finally {
+			if (c != null) {
+				c.close();
+			}
+			if (db != null) {
+				db.close();
+			}
+		}
+
+		return -1;
+	}
+
+	/**
+	 * Makes a copy of node and its children
+	 * 
+	 * @param id
+	 *            id of the node to copy
+	 * @param newParentId
+	 *            id of the folder where the copy should go
+	 */
+	public void copy(long id, long newParentId) {
+		// TODO: need to prevent copying/moving to the node's subfolder!
+
+		Node node = getNodeById(id);
+		Node newParent = getNodeById(newParentId);
+
+		if (node == null || newParent == null) {
+			return;
+		}
+
+		long cloneId = cloneNodeById(id);
+		move(cloneId, newParentId);
+
+		if (node.getType() == NodeType.FOLDER) {
+			List<Long> children = getChildrenIdsById(id);
+			for (Long childId : children) {
+				copy(childId, cloneId);
+			}
+		}
+	}
+
 }
