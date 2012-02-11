@@ -20,7 +20,7 @@
     <string name="menu_settings">Settings</string>
     <string name="menu_close">Close</string>
     <string name="menu_paste">Paste</string>
-    
+
     <!-- Context menu operations on folders, files & checklists -->
     <string name="explorer_context_menu_title">Actions</string>
     <string name="open">Open</string>
@@ -79,5 +79,6 @@
 
     <!-- Notes editor -->
     <string name="noteseditor_title">Notes editor</string>
+    <string name="noteseditor_msg_save_before_exit">Save changes?</string>
 
 </resources>

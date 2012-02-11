@@ -133,6 +133,7 @@ public final class R {
         public static final int msg_importing_files=0x7f040002;
         public static final int msg_not_implemented_yet=0x7f040001;
         public static final int no=0x7f040008;
+        public static final int noteseditor_msg_save_before_exit=0x7f040036;
         /**  Notes editor 
          */
         public static final int noteseditor_title=0x7f040035;
