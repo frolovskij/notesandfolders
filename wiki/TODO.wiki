@@ -8,7 +8,7 @@
 
 == Fixes & minor features ==
 
- # ~~Ask before exiting editor if the text was changed~~ r61
+ # ~~Ask before exiting editor if the text was changed~~ r60
  # ~~Insert date & time in editor~~ r61
  # Include current date & time in the folder where imported data goes
  # Set focus on newly created item
