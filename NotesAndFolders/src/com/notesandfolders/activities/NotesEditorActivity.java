@@ -21,6 +21,8 @@ package com.notesandfolders.activities;
 import com.notesandfolders.R;
 import com.notesandfolders.dataaccess.NodeHelper;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -33,16 +35,55 @@ public class NotesEditorActivity extends BaseActivity {
 	private EditText textContent;
 	private TextView name;
 	private Button saveButton;
+	private String initialText;
 	private long id;
+
+	public void save() {
+		nh.setTextContentById(id, textContent.getText().toString());
+	}
 
 	final private OnClickListener saveButtonOnClickListener = new OnClickListener() {
 		public void onClick(View v) {
 			if (v != null && v == saveButton) {
-				nh.setTextContentById(id, textContent.getText().toString());
+				save();
 				finish();
 			}
 		}
 	};
+
+	public void superOnBackPressed() {
+		super.onBackPressed();
+	}
+
+	@Override
+	public void onBackPressed() {
+		if (textContent.getText().toString().equals(initialText)) {
+			// if text wasn't changed
+			superOnBackPressed();
+		} else {
+			// if was changed
+			new AlertDialog.Builder(this).setTitle(R.string.noteseditor_title)
+					.setMessage(R.string.noteseditor_msg_save_before_exit)
+					.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int whichButton) {
+							save();
+							superOnBackPressed();
+						}
+					}).setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int whichButton) {
+							superOnBackPressed();
+						}
+					}).
+					// setNeutralButton(R.string.cancel, new
+					// DialogInterface.OnClickListener() {
+					// public void onClick(DialogInterface dialog, int
+					// whichButton) {
+					// dialog.cancel();
+					// }
+					// }).
+					show();
+		}
+	}
 
 	/** Called when the activity is first created. */
 	@Override
@@ -53,10 +94,10 @@ public class NotesEditorActivity extends BaseActivity {
 		nh = new NodeHelper(this, getIntent().getExtras().getString("password"));
 
 		id = getIntent().getExtras().getLong("note_id");
-		String tc = nh.getTextContentById(id);
+		initialText = nh.getTextContentById(id);
 
 		textContent = (EditText) findViewById(R.id.noteseditor_note_text);
-		textContent.setText(tc);
+		textContent.setText(initialText);
 
 		name = (TextView) findViewById(R.id.noteseditor_name);
 		name.setText(nh.getFullPathById(id));
