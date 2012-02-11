@@ -4,12 +4,12 @@
 
 == Major features ==
 
- # ~~Implement copy/cut & paste~~
+ # ~~Implement copy/cut & paste~~ r55
 
 == Fixes & minor features ==
 
- # ~~Ask before exiting editor if the text was changed~~
- # ~~Insert date & time in editor~~
+ # ~~Ask before exiting editor if the text was changed~~ r61
+ # ~~Insert date & time in editor~~ r61
  # Include current date & time in the folder where imported data goes
  # Set focus on newly created item
  # When going back from viewer set focus on item that was opened
