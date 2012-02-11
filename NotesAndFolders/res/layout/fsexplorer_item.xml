@@ -9,6 +9,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="left"
+        android:contentDescription="@string/filesystemexplorer_icon"
         android:paddingBottom="5dip"
         android:paddingLeft="5dip"
         android:paddingTop="5dip"
@@ -16,7 +17,7 @@
 
     <TextView
         android:id="@+id/fsexplorer_file_name"
-        android:layout_width="wrap_content"
+        android:layout_width="0dip"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_weight="0.5"

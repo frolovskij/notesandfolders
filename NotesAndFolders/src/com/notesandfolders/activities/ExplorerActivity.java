@@ -60,9 +60,8 @@ import android.widget.Toast;
 
 public class ExplorerActivity extends BaseActivity implements OnItemClickListener {
 	private static final int CONTEXT_MENU_ID = 0;
-	private static final int MENU_PROPERTIES = 6;
+//	private static final int MENU_PROPERTIES = 6;
 	private static final int MENU_DELETE = 5;
-	private static final int MENU_PASTE = 4;
 	private static final int MENU_CUT = 3;
 	private static final int MENU_COPY = 2;
 	private static final int MENU_RENAME = 1;

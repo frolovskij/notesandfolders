@@ -19,8 +19,6 @@ This file is a part of Notes & Folders project.
 package com.notesandfolders.activities;
 
 import com.notesandfolders.R;
-import com.notesandfolders.R.id;
-import com.notesandfolders.R.layout;
 import com.notesandfolders.dataaccess.NodeHelper;
 
 import android.content.Intent;

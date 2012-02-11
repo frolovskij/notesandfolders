@@ -29,8 +29,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.ArrayList;
 
-import android.util.Log;
-
 public class FileImporter {
 
 	private static long _id = 0;

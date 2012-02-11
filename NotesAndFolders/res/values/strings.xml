@@ -3,9 +3,13 @@
 
     <string name="app_name">Notes &amp; Folders</string>
     <string name="msg_not_implemented_yet">Not implemented yet</string>
-    <string name="msg_importing_files">Importing files. Please wait...</string>
-    <string name="filesystemexplorer_title">File system</string>
+    <string name="msg_importing_files">Importing files. Please wait …</string>
     <string name="insert_date_time">Insert date &amp; time</string>
+
+    <!-- FileSystemExplorer -->
+    <string name="filesystemexplorer_title">File system</string>
+    <string name="filesystemexplorer_go_back">Go to the upper folder</string>
+    <string name="filesystemexplorer_icon">Icon</string>
 
     <!-- Common -->
     <string name="ok">Ok</string>
@@ -37,6 +41,7 @@
     <string name="login_prompt">Password</string>
     <string name="login_msg_password_incorrect">Wrong password</string>
     <string name="login_button">OK</string>
+    <string name="login_logo">Logo</string>
 
     <!-- New folder alert dialog -->
     <string name="explorer_newfolder_title">New folder</string>

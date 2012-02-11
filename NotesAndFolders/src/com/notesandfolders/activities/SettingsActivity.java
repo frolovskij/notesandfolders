@@ -2,7 +2,6 @@ package com.notesandfolders.activities;
 
 import com.notesandfolders.R;
 import com.notesandfolders.Settings;
-import com.notesandfolders.R.layout;
 
 import android.content.Intent;
 import android.os.Bundle;
