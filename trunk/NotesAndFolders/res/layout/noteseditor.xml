@@ -27,13 +27,13 @@
 
     <ScrollView
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+        android:layout_height="0dip"
         android:layout_weight="1" >
 
         <EditText
             android:id="@+id/noteseditor_note_text"
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
+            android:layout_height="wrap_content"
             android:inputType="textMultiLine|textCapSentences" >
 
             <requestFocus />
