@@ -278,6 +278,9 @@ public class ExplorerActivity extends BaseActivity implements OnItemClickListene
 	}
 
 	private void openNote(long id) {
+		// when going back from viewer/editor this item will be focused
+		idToSetFocusTo = id;
+
 		Intent viewer = new Intent(this, NotesViewerActivity.class);
 		viewer.putExtra("note_id", id);
 		viewer.putExtra("password", getIntent().getExtras().getString("password"));
