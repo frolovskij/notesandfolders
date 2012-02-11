@@ -18,12 +18,19 @@ This file is a part of Notes & Folders project.
 
 package com.notesandfolders.activities;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import com.notesandfolders.R;
 import com.notesandfolders.dataaccess.NodeHelper;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.view.ContextMenu;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.MenuItem.OnMenuItemClickListener;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -98,11 +105,29 @@ public class NotesEditorActivity extends BaseActivity {
 
 		textContent = (EditText) findViewById(R.id.noteseditor_note_text);
 		textContent.setText(initialText);
+		registerForContextMenu(textContent);
 
 		name = (TextView) findViewById(R.id.noteseditor_name);
 		name.setText(nh.getFullPathById(id));
 
 		saveButton = (Button) findViewById(R.id.noteseditor_save_button);
 		saveButton.setOnClickListener(saveButtonOnClickListener);
+	}
+
+	@Override
+	public void onCreateContextMenu(ContextMenu menu, View view,
+			ContextMenu.ContextMenuInfo menuInfo) {
+		if (view == textContent) {
+			menu.add(Menu.NONE, Menu.NONE, Menu.NONE, R.string.insert_date_time)
+					.setOnMenuItemClickListener(new OnMenuItemClickListener() {
+						public boolean onMenuItemClick(MenuItem item) {
+							textContent.append(new SimpleDateFormat("yyyy.MM.dd HH:mm:ss")
+									.format(new Date()));
+							return false;
+						}
+					});
+		}
+
+		super.onCreateContextMenu(menu, view, menuInfo);
 	}
 }

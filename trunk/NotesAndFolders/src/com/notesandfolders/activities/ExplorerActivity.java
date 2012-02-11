@@ -183,7 +183,6 @@ public class ExplorerActivity extends BaseActivity implements OnItemClickListene
 	 */
 	@Override
 	protected Dialog onCreateDialog(int id) {
-		Log.i("", "onCreateDialog");
 		if (id == CONTEXT_MENU_ID) {
 			return iconContextMenu.createMenu(getText(R.string.explorer_context_menu_title)
 					.toString());
