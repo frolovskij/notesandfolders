@@ -60,7 +60,7 @@ import android.widget.Toast;
 
 public class ExplorerActivity extends BaseActivity implements OnItemClickListener {
 	private static final int CONTEXT_MENU_ID = 0;
-//	private static final int MENU_PROPERTIES = 6;
+	// private static final int MENU_PROPERTIES = 6;
 	private static final int MENU_DELETE = 5;
 	private static final int MENU_CUT = 3;
 	private static final int MENU_COPY = 2;
@@ -78,6 +78,9 @@ public class ExplorerActivity extends BaseActivity implements OnItemClickListene
 	private long idToCopy;
 
 	private long idToMove;
+
+	// refresh would set list's focus to the node with this id
+	private long idToSetFocusTo;
 
 	// used in new & rename alert dialogs
 	private EditText input;
@@ -111,7 +114,7 @@ public class ExplorerActivity extends BaseActivity implements OnItemClickListene
 		input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
 
 		registerForContextMenu(input);
-		
+
 		createContextMenu();
 	}
 
@@ -255,6 +258,13 @@ public class ExplorerActivity extends BaseActivity implements OnItemClickListene
 		adapter = new NodeAdapter(this, R.layout.explorer_item, items);
 		lv.setAdapter(adapter);
 
+		for (int i = 0; i < adapter.getCount(); i++) {
+			Node n = adapter.getItem(i);
+			if (n != null && n.getId() == idToSetFocusTo) {
+				lv.setSelection(i);
+			}
+		}
+
 		path.setText(nh.getFullPathById(getCurrentFolderId()));
 	}
 
@@ -304,7 +314,10 @@ public class ExplorerActivity extends BaseActivity implements OnItemClickListene
 
 						Node parent = nh.getNodeById(getCurrentFolderId());
 						if ((parent != null) && parent.getType() == NodeType.FOLDER) {
-							nh.createFolder(parent, folderName);
+							Node created = nh.createFolder(parent, folderName);
+							if (created != null) {
+								ExplorerActivity.this.idToSetFocusTo = created.getId();
+							}
 							refresh();
 						}
 					}
@@ -329,7 +342,11 @@ public class ExplorerActivity extends BaseActivity implements OnItemClickListene
 
 						Node parent = nh.getNodeById(getCurrentFolderId());
 						if ((parent != null) && parent.getType() == NodeType.FOLDER) {
-							nh.createNote(parent, noteName, "");
+							Node created = nh.createNote(parent, noteName, "");
+							if (created != null) {
+								ExplorerActivity.this.idToSetFocusTo = created.getId();
+							}
+
 							refresh();
 						}
 					}
