@@ -112,6 +112,8 @@ public class ExplorerActivity extends BaseActivity implements OnItemClickListene
 		input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
 
 		registerForContextMenu(input);
+		
+		createContextMenu();
 	}
 
 	// context menu listener for nodes
@@ -169,7 +171,6 @@ public class ExplorerActivity extends BaseActivity implements OnItemClickListene
 			boolean showMenu = (selectedId != current.getParentId());
 
 			if (showMenu) {
-				createContextMenu();
 				showDialog(CONTEXT_MENU_ID);
 			}
 
@@ -182,6 +183,7 @@ public class ExplorerActivity extends BaseActivity implements OnItemClickListene
 	 */
 	@Override
 	protected Dialog onCreateDialog(int id) {
+		Log.i("", "onCreateDialog");
 		if (id == CONTEXT_MENU_ID) {
 			return iconContextMenu.createMenu(getText(R.string.explorer_context_menu_title)
 					.toString());
