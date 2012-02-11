@@ -11,10 +11,11 @@
  # ~~Ask before exiting editor if the text was changed~~ r60
  # ~~Insert date & time in editor~~ r61
  # Include current date & time in the folder where imported data goes
- # Set focus on newly created item
- # When going back from viewer set focus on item that was opened
+ # ~~Set focus on newly created item~~ r66
+ # ~~When going back from viewer set focus on item that was opened~~ r67
  # Send new password to child activities after it was changed
  # Fix failure when rotating screen with icon context menu on top
+ # Persist idToCopy, idToPaste, idToFocusTo between screen rotations
 
 = Another things to do (maybe later) =
 
