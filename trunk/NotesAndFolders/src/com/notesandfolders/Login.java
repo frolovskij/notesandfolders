@@ -21,13 +21,16 @@ package com.notesandfolders;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+
+import android.content.Context;
+import android.content.SharedPreferences;
 import net.sf.andhsli.hotspotlogin.SimpleCrypto;
 
 public class Login {
-	String passwordSha1Hash;
+	Settings settings;
 
 	public Login(Settings settings) {
-		passwordSha1Hash = settings.getPasswordSha1Hash();
+		this.settings = settings;
 	}
 
 	public static String getSha1Digest(String text) {
@@ -48,10 +51,36 @@ public class Login {
 	}
 
 	public boolean isPasswordValid(String password) {
+		String passwordSha1Hash = settings.getPasswordSha1Hash();
 		return getSha1Digest(password).equals(passwordSha1Hash);
 	}
 
 	public boolean isEmptyPassword() {
+		String passwordSha1Hash = settings.getPasswordSha1Hash();
 		return passwordSha1Hash.equals(Settings.EMPTY_PASSWORD_SHA1_HASH);
+	}
+
+	/**
+	 * As different activities need plain text password we have to store it
+	 * somewhere. Previously it was passed in intent's extras, but for now it is
+	 * stored in shared preferences. Should be cleared on exit.
+	 */
+	public static String getPlainTextPasswordFromTempStorage(Context c) {
+		SharedPreferences settings = c.getSharedPreferences("password", 0);
+		return settings.getString("password", Settings.EMPTY_PASSWORD);
+	}
+
+	public static void setPasswordInTempStorage(Context c, String password) {
+		SharedPreferences settings = c.getSharedPreferences("password", 0);
+		SharedPreferences.Editor editor = settings.edit();
+		editor.putString("password", password);
+		editor.commit();
+	}
+
+	public static void clearPasswordInTempStorage(Context c) {
+		SharedPreferences settings = c.getSharedPreferences("password", 0);
+		SharedPreferences.Editor editor = settings.edit();
+		editor.remove("password");
+		editor.commit();
 	}
 }

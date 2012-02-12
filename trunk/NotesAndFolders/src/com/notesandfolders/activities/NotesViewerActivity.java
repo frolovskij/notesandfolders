@@ -18,6 +18,7 @@ This file is a part of Notes & Folders project.
 
 package com.notesandfolders.activities;
 
+import com.notesandfolders.Login;
 import com.notesandfolders.R;
 import com.notesandfolders.dataaccess.NodeHelper;
 
@@ -41,7 +42,6 @@ public class NotesViewerActivity extends BaseActivity {
 			if (v != null && v == editButton) {
 				Intent editor = new Intent(NotesViewerActivity.this, NotesEditorActivity.class);
 				editor.putExtra("note_id", id);
-				editor.putExtra("password", getIntent().getExtras().getString("password"));
 				startActivity(editor);
 			}
 		}
@@ -60,7 +60,7 @@ public class NotesViewerActivity extends BaseActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.notesviewer);
 
-		nh = new NodeHelper(this, getIntent().getExtras().getString("password"));
+		nh = new NodeHelper(this, Login.getPlainTextPasswordFromTempStorage(this));
 		id = getIntent().getExtras().getLong("note_id");
 
 		textContent = (TextView) findViewById(R.id.notesviewer_note_text_view);

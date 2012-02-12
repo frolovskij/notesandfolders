@@ -21,6 +21,7 @@ package com.notesandfolders.activities;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import com.notesandfolders.Login;
 import com.notesandfolders.R;
 import com.notesandfolders.dataaccess.NodeHelper;
 
@@ -98,7 +99,7 @@ public class NotesEditorActivity extends BaseActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.noteseditor);
 
-		nh = new NodeHelper(this, getIntent().getExtras().getString("password"));
+		nh = new NodeHelper(this, Login.getPlainTextPasswordFromTempStorage(this));
 
 		id = getIntent().getExtras().getLong("note_id");
 		initialText = nh.getTextContentById(id);

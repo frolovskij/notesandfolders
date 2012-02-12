@@ -75,6 +75,8 @@ public class PasswordActivity extends BaseActivity implements OnClickListener {
 						toast.setGravity(Gravity.CENTER, 0, 0);
 						toast.show();
 					} else {
+						Login.setPasswordInTempStorage(this, newPassword);
+
 						Toast toast = Toast.makeText(getApplicationContext(),
 								R.string.password_msg_password_was_saved, Toast.LENGTH_SHORT);
 						toast.setGravity(Gravity.CENTER, 0, 0);
