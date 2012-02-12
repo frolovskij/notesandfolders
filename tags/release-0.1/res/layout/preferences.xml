@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <PreferenceCategory android:title="@string/settings_security" >
+
+        <Preference
+            android:key="password"
+            android:summary="@string/settings_password_summary"
+            android:title="@string/settings_password" />
+    </PreferenceCategory>
+
+</PreferenceScreen>
