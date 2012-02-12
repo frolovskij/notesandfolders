@@ -14,8 +14,8 @@
  # ~~Set focus on newly created item~~ r66
  # ~~When going back from viewer set focus on item that was opened~~ r67
  # Send new password to child activities after it was changed
- # Fix failure when rotating screen with icon context menu on top
- # Persist idToCopy, idToPaste, idToFocusTo between screen rotations
+ # ~~Fix failure when rotating screen with icon context menu on top~~ r69
+ # ~~Persist idToCopy, idToPaste, idToFocusTo between screen rotations~~ r69
 
 = Another things to do (maybe later) =
 
