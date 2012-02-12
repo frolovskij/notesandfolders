@@ -45,7 +45,7 @@ public class NodeHelper {
 			String encryptedKey = s.getString(Settings.SETTINGS_ENCRYPTED_KEY, "");
 			this.key = SimpleCrypto.decrypt(password, encryptedKey);
 		} catch (Exception e) {
-			e.printStackTrace();
+			Log.i("NodeHelper", "Can't decrypt key with password '" + password + "'");
 		}
 	}
 

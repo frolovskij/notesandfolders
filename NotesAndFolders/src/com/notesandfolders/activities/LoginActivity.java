@@ -47,6 +47,13 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
 		}
 	}
 
+	@Override
+	public void onDestroy() {
+		super.onDestroy();
+
+		Login.clearPasswordInTempStorage(this);
+	}
+
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -58,7 +65,7 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
 		// Start automatically if password is empty
 		if (login.isEmptyPassword()) {
 			Intent explorer = new Intent(this, ExplorerActivity.class);
-			explorer.putExtra("password", Settings.EMPTY_PASSWORD);
+			Login.setPasswordInTempStorage(this, Settings.EMPTY_PASSWORD);
 			startActivity(explorer);
 		}
 
@@ -74,7 +81,7 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
 			if (login.isPasswordValid(password.getText().toString())) {
 
 				Intent explorer = new Intent(this, ExplorerActivity.class);
-				explorer.putExtra("password", password.getText().toString());
+				Login.setPasswordInTempStorage(this, password.getText().toString());
 				startActivity(explorer);
 
 			} else {

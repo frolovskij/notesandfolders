@@ -25,6 +25,7 @@ import java.util.List;
 
 import com.notesandfolders.IconListItem;
 import com.notesandfolders.IconListItemAdapter;
+import com.notesandfolders.Login;
 import com.notesandfolders.NaturalOrderNodesComparator;
 import com.notesandfolders.Node;
 import com.notesandfolders.NodeAdapter;
@@ -131,7 +132,8 @@ public class ExplorerActivity extends BaseActivity implements OnItemClickListene
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		nh = new NodeHelper(this, getIntent().getExtras().getString("password"));
+		Log.i("Explorer", Login.getPlainTextPasswordFromTempStorage(this));
+		nh = new NodeHelper(this, Login.getPlainTextPasswordFromTempStorage(this));
 
 		// set as content view
 		setContentView(R.layout.explorer);
@@ -263,7 +265,6 @@ public class ExplorerActivity extends BaseActivity implements OnItemClickListene
 		case R.id.explorer_options_import:
 			Intent fsexplorer = new Intent(this, FileSystemExplorerActivity.class);
 			fsexplorer.putExtra("path", "/");
-			fsexplorer.putExtra("password", getIntent().getExtras().getString("password"));
 			startActivity(fsexplorer);
 			return true;
 
@@ -306,7 +307,6 @@ public class ExplorerActivity extends BaseActivity implements OnItemClickListene
 
 		Intent viewer = new Intent(this, NotesViewerActivity.class);
 		viewer.putExtra("note_id", id);
-		viewer.putExtra("password", getIntent().getExtras().getString("password"));
 		startActivity(viewer);
 	}
 

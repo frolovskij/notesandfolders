@@ -25,6 +25,7 @@ import java.util.List;
 
 import com.notesandfolders.FileAdapter;
 import com.notesandfolders.FileImporter;
+import com.notesandfolders.Login;
 import com.notesandfolders.Node;
 import com.notesandfolders.R;
 import com.notesandfolders.dataaccess.NodeHelper;
@@ -32,6 +33,7 @@ import com.tani.app.ui.IconContextMenu;
 
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.View;
@@ -57,7 +59,6 @@ public class FileSystemExplorerActivity extends BaseActivity implements
 	private File directory;
 	private File selectedFile;
 	private String path;
-	private String password;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -67,8 +68,6 @@ public class FileSystemExplorerActivity extends BaseActivity implements
 		if (path == null) {
 			path = "/";
 		}
-
-		password = getIntent().getExtras().getString("password");
 
 		setContentView(R.layout.fsexplorer);
 		location = (TextView) findViewById(R.id.fsexplorer_path);
@@ -134,9 +133,12 @@ public class FileSystemExplorerActivity extends BaseActivity implements
 		pd.setCancelable(false);
 		pd.show();
 
+		final Context ctx = this;
+
 		new Thread() {
 			public void run() {
-				final NodeHelper nh = new NodeHelper(FileSystemExplorerActivity.this, password);
+				final NodeHelper nh = new NodeHelper(FileSystemExplorerActivity.this,
+						Login.getPlainTextPasswordFromTempStorage(ctx));
 				Node importRoot = nh.createFolder(nh.getRootFolder(), "Imported");
 
 				final List<Node> nodes = FileImporter.getFiles(selectedFile.getAbsolutePath(),
