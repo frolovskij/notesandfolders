@@ -10,7 +10,7 @@
 
  # ~~Ask before exiting editor if the text was changed~~ r60
  # ~~Insert date & time in editor~~ r61
- # Include current date & time in the folder where imported data goes
+ # ~~Include current date & time in the folder where imported data goes~~ r73
  # ~~Set focus on newly created item~~ r66
  # ~~When going back from viewer set focus on item that was opened~~ r67
  # ~~ Send new password to child activities after it was changed~~ r71
