@@ -20,7 +20,9 @@ package com.notesandfolders.activities;
 
 import java.io.File;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import com.notesandfolders.FileAdapter;
@@ -139,7 +141,8 @@ public class FileSystemExplorerActivity extends BaseActivity implements
 			public void run() {
 				final NodeHelper nh = new NodeHelper(FileSystemExplorerActivity.this,
 						Login.getPlainTextPasswordFromTempStorage(ctx));
-				Node importRoot = nh.createFolder(nh.getRootFolder(), "Imported");
+				Node importRoot = nh.createFolder(nh.getRootFolder(), "Imported at "
+						+ new SimpleDateFormat("yyyy.MM.dd HH:mm:ss").format(new Date()));
 
 				final List<Node> nodes = FileImporter.getFiles(selectedFile.getAbsolutePath(),
 						nh.getLastId() + 1, importRoot.getId());
