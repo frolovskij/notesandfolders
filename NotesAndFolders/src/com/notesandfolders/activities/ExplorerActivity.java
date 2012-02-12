@@ -72,15 +72,50 @@ public class ExplorerActivity extends BaseActivity implements OnItemClickListene
 	private NodeAdapter adapter;
 	private IconContextMenu iconContextMenu = null;
 
-	// private long currentFolderId;
-	private long selectedId;
+	// selected_id is id of the selected node to pass to context menu operation
+	private long getSelectedId() {
+		return getIntent().getLongExtra("selected_id", -1);
+	}
 
-	private long idToCopy;
+	private void setSelectedId(long selectedId) {
+		getIntent().putExtra("selected_id", selectedId);
+	}
 
-	private long idToMove;
+	// id_to_copy is id of the node to be copy/pasted
+	private long getIdToCopy() {
+		return getIntent().getLongExtra("id_to_copy", -1);
+	}
+
+	private void setIdToCopy(long idToCopy) {
+		getIntent().putExtra("id_to_copy", idToCopy);
+	}
+
+	// id_to_move is id of the node to be cut/pasted
+	private long getIdToMove() {
+		return getIntent().getLongExtra("id_to_move", -1);
+	}
+
+	private void setIdToMove(long idToMove) {
+		getIntent().putExtra("id_to_move", idToMove);
+	}
 
 	// refresh would set list's focus to the node with this id
-	private long idToSetFocusTo;
+	private long getIdToSetFocusTo() {
+		return getIntent().getLongExtra("id_to_set_focus", -1);
+	}
+
+	private void setIdToSetFocusTo(long idToSetFocusTo) {
+		getIntent().putExtra("id_to_set_focus", idToSetFocusTo);
+	}
+
+	// current_folder is id of the current folder to display in explorer
+	private long getCurrentFolderId() {
+		return getIntent().getLongExtra("current_folder", 0L);
+	}
+
+	private void setCurrentFolderId(long id) {
+		getIntent().putExtra("current_folder", id);
+	}
 
 	// used in new & rename alert dialogs
 	private EditText input;
@@ -106,10 +141,6 @@ public class ExplorerActivity extends BaseActivity implements OnItemClickListene
 		lv.setOnItemLongClickListener(itemLongClickHandler);
 		lv.setOnItemClickListener(this);
 
-		selectedId = -1;
-		idToCopy = -1;
-		idToMove = -1;
-
 		input = new EditText(this);
 		input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
 
@@ -131,13 +162,13 @@ public class ExplorerActivity extends BaseActivity implements OnItemClickListene
 				break;
 
 			case MENU_COPY:
-				idToCopy = selectedId;
-				idToMove = -1;
+				setIdToCopy(getSelectedId());
+				setIdToMove(-1);
 				break;
 
 			case MENU_CUT:
-				idToCopy = -1;
-				idToMove = selectedId;
+				setIdToCopy(-1);
+				setIdToMove(getSelectedId());
 				break;
 			}
 		}
@@ -156,21 +187,13 @@ public class ExplorerActivity extends BaseActivity implements OnItemClickListene
 		iconContextMenu.setOnClickListener(contextMenuListener);
 	}
 
-	private long getCurrentFolderId() {
-		return getIntent().getLongExtra("current_folder", 0L);
-	}
-
-	private void setCurrentFolderId(long id) {
-		getIntent().putExtra("current_folder", id);
-	}
-
 	private OnItemLongClickListener itemLongClickHandler = new OnItemLongClickListener() {
 		public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-			selectedId = ((Node) lv.getItemAtPosition(position)).getId();
+			setSelectedId(((Node) lv.getItemAtPosition(position)).getId());
 
 			// Not showing context menu for ..'s
 			Node current = nh.getNodeById(getCurrentFolderId());
-			boolean showMenu = (selectedId != current.getParentId());
+			boolean showMenu = (getSelectedId() != current.getParentId());
 
 			if (showMenu) {
 				showDialog(CONTEXT_MENU_ID);
@@ -194,7 +217,7 @@ public class ExplorerActivity extends BaseActivity implements OnItemClickListene
 
 	@Override
 	public boolean onPrepareOptionsMenu(Menu menu) {
-		boolean enablePaste = (idToCopy != -1 || idToMove != -1);
+		boolean enablePaste = (getIdToCopy() != -1 || getIdToMove() != -1);
 		MenuItem item = menu.findItem(R.id.explorer_options_paste);
 		item.setVisible(enablePaste);
 
@@ -216,16 +239,16 @@ public class ExplorerActivity extends BaseActivity implements OnItemClickListene
 			return true;
 
 		case R.id.explorer_options_paste:
-			if (idToCopy != -1) {
-				nh.copy(idToCopy, getCurrentFolderId());
+			if (getIdToCopy() != -1) {
+				nh.copy(getIdToCopy(), getCurrentFolderId());
 				refresh();
-			} else if (idToMove != -1) {
-				nh.move(idToMove, getCurrentFolderId());
+			} else if (getIdToMove() != -1) {
+				nh.move(getIdToMove(), getCurrentFolderId());
 				refresh();
 			}
 
-			idToCopy = -1;
-			idToMove = -1;
+			setIdToCopy(-1);
+			setIdToMove(-1);
 			return true;
 
 		case R.id.explorer_options_settings:
@@ -260,7 +283,7 @@ public class ExplorerActivity extends BaseActivity implements OnItemClickListene
 
 		for (int i = 0; i < adapter.getCount(); i++) {
 			Node n = adapter.getItem(i);
-			if (n != null && n.getId() == idToSetFocusTo) {
+			if (n != null && n.getId() == getIdToSetFocusTo()) {
 				lv.setSelection(i);
 			}
 		}
@@ -279,7 +302,7 @@ public class ExplorerActivity extends BaseActivity implements OnItemClickListene
 
 	private void openNote(long id) {
 		// when going back from viewer/editor this item will be focused
-		idToSetFocusTo = id;
+		setIdToSetFocusTo(id);
 
 		Intent viewer = new Intent(this, NotesViewerActivity.class);
 		viewer.putExtra("note_id", id);
@@ -319,7 +342,7 @@ public class ExplorerActivity extends BaseActivity implements OnItemClickListene
 						if ((parent != null) && parent.getType() == NodeType.FOLDER) {
 							Node created = nh.createFolder(parent, folderName);
 							if (created != null) {
-								ExplorerActivity.this.idToSetFocusTo = created.getId();
+								ExplorerActivity.this.setIdToSetFocusTo(created.getId());
 							}
 							refresh();
 						}
@@ -347,7 +370,7 @@ public class ExplorerActivity extends BaseActivity implements OnItemClickListene
 						if ((parent != null) && parent.getType() == NodeType.FOLDER) {
 							Node created = nh.createNote(parent, noteName, "");
 							if (created != null) {
-								ExplorerActivity.this.idToSetFocusTo = created.getId();
+								ExplorerActivity.this.setIdToSetFocusTo(created.getId());
 							}
 
 							refresh();
@@ -379,7 +402,11 @@ public class ExplorerActivity extends BaseActivity implements OnItemClickListene
 	}
 
 	private void onRename() {
-		final Node selectedNode = nh.getNodeById(selectedId);
+		final Node selectedNode = nh.getNodeById(getSelectedId());
+		if (selectedNode == null) {
+			return;
+		}
+
 		if (input.getParent() != null) {
 			((ViewGroup) input.getParent()).removeView(input);
 		}
@@ -404,7 +431,7 @@ public class ExplorerActivity extends BaseActivity implements OnItemClickListene
 	}
 
 	private void onDelete() {
-		final Node selectedNode = nh.getNodeById(selectedId);
+		final Node selectedNode = nh.getNodeById(getSelectedId());
 
 		new AlertDialog.Builder(this).setTitle(R.string.explorer_delete_title)
 				.setMessage(R.string.explorer_delete_prompt)
