@@ -74,7 +74,7 @@ public class DbOpenHelper extends SQLiteOpenHelper {
 
 		// encryption key, encrypted by password
 		try {
-			String password = ""; // default password
+			String password = Settings.EMPTY_PASSWORD;
 			String key = KeyGenerator.getRandomKey();
 			String encryptedKeyHex = SimpleCrypto.encrypt(password, key);
 
