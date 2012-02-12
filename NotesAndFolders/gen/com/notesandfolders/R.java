@@ -20,18 +20,13 @@ public final class R {
         public static final int fsfolder=0x7f020006;
         public static final int fsfolder_locked=0x7f020007;
         public static final int fsimp=0x7f020008;
-        public static final int ic_menu_add=0x7f020009;
-        public static final int ic_menu_close_clear_cancel=0x7f02000a;
-        public static final int ic_menu_goto=0x7f02000b;
-        public static final int ic_menu_preferences=0x7f02000c;
-        public static final int ic_menu_search=0x7f02000d;
-        public static final int ic_menu_upload=0x7f02000e;
-        public static final int icon=0x7f02000f;
-        public static final int note=0x7f020010;
-        public static final int paste=0x7f020011;
-        public static final int properties=0x7f020012;
-        public static final int rename=0x7f020013;
-        public static final int up=0x7f020014;
+        public static final int ic_menu_goto=0x7f020009;
+        public static final int icon=0x7f02000a;
+        public static final int note=0x7f02000b;
+        public static final int paste=0x7f02000c;
+        public static final int properties=0x7f02000d;
+        public static final int rename=0x7f02000e;
+        public static final int up=0x7f02000f;
     }
     public static final class id {
         public static final int btnLogin=0x7f06000e;
@@ -39,11 +34,9 @@ public final class R {
         public static final int explorer_file_name=0x7f060004;
         public static final int explorer_listview=0x7f060002;
         public static final int explorer_options_add=0x7f06001b;
-        public static final int explorer_options_close=0x7f060020;
-        public static final int explorer_options_find=0x7f06001d;
-        public static final int explorer_options_import=0x7f06001e;
+        public static final int explorer_options_import=0x7f06001d;
         public static final int explorer_options_paste=0x7f06001c;
-        public static final int explorer_options_settings=0x7f06001f;
+        public static final int explorer_options_settings=0x7f06001e;
         public static final int explorer_path=0x7f060000;
         public static final int fsexplorer_file_icon=0x7f060008;
         public static final int fsexplorer_file_name=0x7f060009;
