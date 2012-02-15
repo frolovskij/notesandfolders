@@ -23,6 +23,8 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
+import com.notesandfolders.CopyTask;
+import com.notesandfolders.FileImporter;
 import com.notesandfolders.IconListItem;
 import com.notesandfolders.IconListItemAdapter;
 import com.notesandfolders.Login;
@@ -37,6 +39,8 @@ import com.tani.app.ui.IconContextMenu.IconContextMenuOnClickListener;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -61,6 +65,7 @@ import android.widget.Toast;
 
 public class ExplorerActivity extends BaseActivity implements
 		OnItemClickListener {
+
 	private static final int CONTEXT_MENU_ID = 0;
 	// private static final int MENU_PROPERTIES = 6;
 	private static final int MENU_DELETE = 5;
@@ -238,6 +243,24 @@ public class ExplorerActivity extends BaseActivity implements
 		return true;
 	}
 
+	public void checkPasteResult(int result) {
+		switch (result) {
+		case NodeHelper.RESULT_CANT_PASTE_TO_ITSELF:
+			showToast(R.string.explorer_msg_destination_is_source);
+			break;
+
+		case NodeHelper.RESULT_CANT_PASTE_TO_OWN_SUBFOLDER:
+			showToast(R.string.explorer_msg_destination_is_subfolder);
+			break;
+
+		case NodeHelper.RESULT_OK:
+			setIdToCopy(-1);
+			setIdToMove(-1);
+			refresh();
+			break;
+		}
+	}
+
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
@@ -246,28 +269,15 @@ public class ExplorerActivity extends BaseActivity implements
 			return true;
 
 		case R.id.explorer_options_paste:
-			int result = NodeHelper.RESULT_OK;
-
 			if (getIdToCopy() != -1) {
-				result = nh.copy(getIdToCopy(), getCurrentFolderId());
+				CopyTask task = new CopyTask(this, nh, getIdToCopy(),
+						getCurrentFolderId());
+
+				task.execute((Void[]) null);
+
 			} else if (getIdToMove() != -1) {
-				result = nh.move(getIdToMove(), getCurrentFolderId());
-			}
-
-			switch (result) {
-			case NodeHelper.RESULT_CANT_PASTE_TO_ITSELF:
-				showToast(R.string.explorer_msg_destination_is_source);
-				break;
-
-			case NodeHelper.RESULT_CANT_PASTE_TO_OWN_SUBFOLDER:
-				showToast(R.string.explorer_msg_destination_is_subfolder);
-				break;
-
-			case NodeHelper.RESULT_OK:
-				setIdToCopy(-1);
-				setIdToMove(-1);
-				refresh();
-				break;
+				int result = nh.move(getIdToMove(), getCurrentFolderId());
+				checkPasteResult(result);
 			}
 
 			return true;
