@@ -49,8 +49,8 @@ public class FileImporter {
 	private static String getFileContents(File f) {
 		StringBuffer sb = new StringBuffer();
 		try {
-			BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(f),
-					"UTF-8"));
+			BufferedReader br = new BufferedReader(new InputStreamReader(
+					new FileInputStream(f), "UTF-8"));
 			try {
 				String s;
 				while ((s = br.readLine()) != null) {
@@ -72,6 +72,10 @@ public class FileImporter {
 	}
 
 	private static void processPath(File file, List<Node> list, long parentId) {
+		if (!file.canRead()) {
+			return;
+		}
+
 		if (!file.exists()) {
 			return;
 		}
@@ -103,10 +107,15 @@ public class FileImporter {
 		File[] children = file.listFiles();
 
 		for (File child : children) {
+			if (!child.canRead()) {
+				continue;
+			}
+
 			if (child.isDirectory()) {
 				processPath(child, list, root.getId());
 			} else {
-				if (getFileNameExtension(child.getName()).equalsIgnoreCase("txt")) {
+				if (getFileNameExtension(child.getName()).equalsIgnoreCase(
+						"txt")) {
 					Node n = new Node();
 					n.setId(nextId());
 					n.setParentId(root.getId());
