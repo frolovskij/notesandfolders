@@ -27,6 +27,11 @@ public class SettingsActivity extends PreferenceActivity {
 			startActivity(password);
 		}
 
+		if (preference != null && preference.getKey().equals("documentation")) {
+			Intent help = new Intent(this, HelpActivity.class);
+			startActivity(help);
+		}
+
 		return super.onPreferenceTreeClick(preferenceScreen, preference);
 	}
 

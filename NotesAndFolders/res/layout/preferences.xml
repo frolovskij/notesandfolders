@@ -9,4 +9,17 @@
             android:title="@string/settings_password" />
     </PreferenceCategory>
 
+    <PreferenceCategory android:title="@string/settings_information" >
+
+        <Preference
+            android:key="version"
+            android:summary="@string/app_version"
+            android:title="@string/app_name" />
+
+        <Preference
+            android:key="documentation"
+            android:summary="@string/settings_documentation_summary"
+            android:title="@string/settings_documentation_title" />
+    </PreferenceCategory>
+
 </PreferenceScreen>

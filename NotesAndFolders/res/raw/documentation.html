@@ -1,0 +1,103 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+<title>Notes & Folders</title>
+<style>
+</style>
+</head>
+<body>
+	<h1>1. Features</h1>
+
+	<p>Notes &amp; Folders is yet another notes application. It's not
+		the best one, but only here you can organize your notes by folders
+		just like in real file system.</p>
+
+	<p>Current key features are:</p>
+	<ul>
+		<li>Plain text notes and folders</li>
+		<li>Password protection and 128-bit AES encryption</li>
+		<li>Importing UTF-8 *.txt files</li>
+	</ul>
+
+	<p>I'm planning to implement these:</p>
+	<ul>
+		<li>Checklists</li>
+		<li>Searching</li>
+		<li>Exporting and sharing data</li>
+		<li>Color schemes</li>
+		<li>Multiple selection for copy/cut/paste</li>
+	</ul>
+
+	<p>And these features I don't want and won't implement because
+		there're already many powerful applications having them:</p>
+	<ul>
+		<li>Images, sounds, videos</li>
+		<li>Tags, links</li>
+		<li>Text formatting</li>
+		<li>Sharing and social networks integration</li>
+	</ul>
+
+	<p>
+		I wanted Notes &amp; Folders to be an Android clone of my old <a
+			href="http://mynotes.zx6.ru/">MyNotes</a> (which is a similar
+		application for Java ME).
+	</p>
+
+	<h1>2. Details</h1>
+
+	<h2>2.1. Encryption</h2>
+
+	<p>
+		Encryption algorithm is <a
+			href="http://en.wikipedia.org/wiki/Advanced_Encryption_Standard">AES</a>
+		with 128-bit key.
+	</p>
+
+	<p>
+		Your data is encrypted with key that is randomly generated at the
+		first start of application and that never changes. The key itself is
+		encrypted with password that you use to log in. The password in its
+		turn is hashed with <a href="http://en.wikipedia.org/wiki/SHA-1">SHA-1</a>
+		algorithm.
+	</p>
+
+	<p>Only text content of notes is encrypted. Names, dates and other
+		system information stay not encrypted.</p>
+
+	<h2>2.2 Data import</h2>
+
+	<p>
+		It is about importing *.txt files. Their text content is expected to
+		be in <a href="http://en.wikipedia.org/wiki/UTF-8">UTF-8</a> encoding.
+		If it's not there would probably be problems with reading notes.
+	</p>
+
+	<p>You can choose either a single *.txt file or a folder to import.</p>
+
+	<p>The imported data goes into the folder "Imported at YYYY.MM.DD
+		HH:MM:SS" that is created in the root folder. You have to manually
+		copy/move data from it to the place you want.</p>
+
+	<h1>3. License</h1>
+
+	<p>
+		It's licensed under <a
+			href="http://www.apache.org/licenses/LICENSE-2.0.html"> Apache
+			License 2.0</a> - it's free and it's distributed on "as is" basis without
+		warranties or conditions of any kind.
+	</p>
+
+	<p>Copyright (C) 2012 Фроловский Алексей</p>
+
+	<h1>4. Contacts</h1>
+
+	<ul>
+		<li>Email <a href="mailto:frolovskij+notesandfolders@gmail.com">frolovskij@gmail.com</a>
+		</li>
+		<li>Project page <a
+			href="http://code.google.com/p/notesandfolders/">http://code.google.com/p/mystats/</a>
+		</li>
+	</ul>
+
+</body>
+</html>

@@ -42,6 +42,10 @@
             android:name=".activities.FileSystemExplorerActivity"
             android:label="@string/filesystemexplorer_title" >
         </activity>
-    </application>
+        <activity
+            android:name=".activities.HelpActivity"
+            android:label="@string/documentation_title" >
+        </activity>
+        </application>
 
 </manifest>
