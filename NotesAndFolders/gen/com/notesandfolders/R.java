@@ -79,12 +79,12 @@ public final class R {
         public static final int app_name=0x7f040000;
         public static final int cancel=0x7f040009;
         public static final int copy=0x7f040015;
-        public static final int create_checklist=0x7f04003a;
-        public static final int create_folder=0x7f040038;
+        public static final int create_checklist=0x7f04003b;
+        public static final int create_folder=0x7f040039;
         /**  Alert Dialog that pop-ups when user chooses "New" from Explorer's options menu 
          */
-        public static final int create_new=0x7f040037;
-        public static final int create_note=0x7f040039;
+        public static final int create_new=0x7f040038;
+        public static final int create_note=0x7f04003a;
         public static final int cut=0x7f040016;
         public static final int delete=0x7f040017;
         public static final int edit=0x7f040014;
@@ -95,6 +95,7 @@ public final class R {
         /**  Delete alert dialog 
          */
         public static final int explorer_delete_title=0x7f040026;
+        public static final int explorer_msg_copying_files=0x7f04002a;
         public static final int explorer_msg_destination_is_source=0x7f040029;
         public static final int explorer_msg_destination_is_subfolder=0x7f040028;
         public static final int explorer_newfolder_prompt=0x7f040021;
@@ -134,34 +135,34 @@ public final class R {
         public static final int msg_importing_files=0x7f040002;
         public static final int msg_not_implemented_yet=0x7f040001;
         public static final int no=0x7f04000b;
-        public static final int noteseditor_msg_save_before_exit=0x7f04003c;
+        public static final int noteseditor_msg_save_before_exit=0x7f04003d;
         /**  Notes editor 
          */
-        public static final int noteseditor_title=0x7f04003b;
+        public static final int noteseditor_title=0x7f04003c;
         /**  Common 
          */
         public static final int ok=0x7f040008;
         public static final int open=0x7f040013;
-        public static final int password_edit_confirmation=0x7f040031;
-        public static final int password_edit_current=0x7f04002f;
-        public static final int password_edit_new=0x7f040030;
-        public static final int password_edit_save_button=0x7f040032;
+        public static final int password_edit_confirmation=0x7f040032;
+        public static final int password_edit_current=0x7f040030;
+        public static final int password_edit_new=0x7f040031;
+        public static final int password_edit_save_button=0x7f040033;
         /**  Password settings activity 
          */
-        public static final int password_edit_title=0x7f04002e;
-        public static final int password_msg_password_confirmation_do_not_match=0x7f040036;
-        public static final int password_msg_password_was_saved=0x7f040033;
-        public static final int password_msg_save_error=0x7f040035;
-        public static final int password_msg_wrong_password=0x7f040034;
+        public static final int password_edit_title=0x7f04002f;
+        public static final int password_msg_password_confirmation_do_not_match=0x7f040037;
+        public static final int password_msg_password_was_saved=0x7f040034;
+        public static final int password_msg_save_error=0x7f040036;
+        public static final int password_msg_wrong_password=0x7f040035;
         public static final int properties=0x7f040019;
         public static final int rename=0x7f040018;
         public static final int save=0x7f04001b;
-        public static final int settings_password=0x7f04002c;
-        public static final int settings_password_summary=0x7f04002d;
-        public static final int settings_security=0x7f04002b;
+        public static final int settings_password=0x7f04002d;
+        public static final int settings_password_summary=0x7f04002e;
+        public static final int settings_security=0x7f04002c;
         /**  Settings activity 
          */
-        public static final int settings_title=0x7f04002a;
+        public static final int settings_title=0x7f04002b;
         public static final int yes=0x7f04000a;
     }
 }
