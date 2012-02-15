@@ -58,7 +58,9 @@
     <!-- Delete alert dialog -->
     <string name="explorer_delete_title">Deleting</string>
     <string name="explorer_delete_prompt">Are you sure you want to delete it?</string>
-
+    <string name="explorer_msg_destination_is_subfolder">Can\'t paste here because this folder is a subfolder of the source folder</string>
+    <string name="explorer_msg_destination_is_source">Can\'t paste folder into itself</string>
+    
     <!-- Settings activity -->
     <string name="settings_title">Settings</string>
     <string name="settings_security">Security</string>
