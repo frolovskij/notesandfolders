@@ -24,7 +24,9 @@ import java.util.Date;
 import net.sf.andhsli.hotspotlogin.SimpleCrypto;
 import com.notesandfolders.Node;
 import com.notesandfolders.NodeType;
+import com.notesandfolders.R;
 import com.notesandfolders.Settings;
+
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -582,8 +584,6 @@ public class NodeHelper {
 	 * @return Result code
 	 */
 	public int copy(long id, long newParentId) {
-		// TODO: need to prevent copying/moving to the node's subfolder!
-
 		Node node = getNodeById(id);
 		Node newParent = getNodeById(newParentId);
 
@@ -608,6 +608,15 @@ public class NodeHelper {
 		}
 
 		long cloneId = cloneNodeById(id);
+
+		// rename if copy goes into the same folder
+		if (newParentId == node.getParentId()) {
+			renameNodeById(
+					cloneId,
+					node.getName()
+							+ context.getText(R.string.filename_copy_suffix));
+		}
+
 		move(cloneId, newParentId);
 
 		if (node.getType() == NodeType.FOLDER) {

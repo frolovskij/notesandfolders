@@ -133,7 +133,6 @@ public class ExplorerActivity extends BaseActivity implements
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		Log.i("Explorer", Login.getPlainTextPasswordFromTempStorage(this));
 		nh = new NodeHelper(this,
 				Login.getPlainTextPasswordFromTempStorage(this));
 
