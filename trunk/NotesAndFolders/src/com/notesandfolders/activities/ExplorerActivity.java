@@ -62,8 +62,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class ExplorerActivity extends BaseActivity implements
-		OnItemClickListener {
+public class ExplorerActivity extends BaseActivity implements OnItemClickListener {
 
 	private static final int CONTEXT_MENU_ID = 0;
 
@@ -143,8 +142,7 @@ public class ExplorerActivity extends BaseActivity implements
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		nh = new NodeHelper(this,
-				Login.getPlainTextPasswordFromTempStorage(this));
+		nh = new NodeHelper(this, Login.getPlainTextPasswordFromTempStorage(this));
 
 		// set as content view
 		setContentView(R.layout.explorer);
@@ -155,15 +153,14 @@ public class ExplorerActivity extends BaseActivity implements
 		lv.setOnItemClickListener(this);
 
 		input = new EditText(this);
-		input.setInputType(InputType.TYPE_CLASS_TEXT
-				| InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
+		input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
 
 		registerForContextMenu(input);
 
 		createContextMenu();
 
 		Object retained = getLastNonConfigurationInstance();
-		if (retained instanceof CopyTask) {
+		if (retained != null && retained instanceof CopyTask) {
 			copyTask = (CopyTask) retained;
 			copyTask.setActivity(this);
 		}
@@ -171,8 +168,12 @@ public class ExplorerActivity extends BaseActivity implements
 
 	@Override
 	public Object onRetainNonConfigurationInstance() {
-		copyTask.setActivity(null);
-		return copyTask;
+		if (copyTask != null) {
+			copyTask.setActivity(null);
+			return copyTask;
+		}
+
+		return null;
 	}
 
 	public void onCopyTaskCompleted(Integer result) {
@@ -210,20 +211,17 @@ public class ExplorerActivity extends BaseActivity implements
 		Resources res = getResources();
 
 		iconContextMenu = new IconContextMenu(this, CONTEXT_MENU_ID);
-		iconContextMenu.addItem(res, R.string.rename, R.drawable.rename,
-				MENU_RENAME);
+		iconContextMenu.addItem(res, R.string.rename, R.drawable.rename, MENU_RENAME);
 		iconContextMenu.addItem(res, R.string.copy, R.drawable.copy, MENU_COPY);
 		iconContextMenu.addItem(res, R.string.cut, R.drawable.cut, MENU_CUT);
-		iconContextMenu.addItem(res, R.string.delete, R.drawable.delete,
-				MENU_DELETE);
+		iconContextMenu.addItem(res, R.string.delete, R.drawable.delete, MENU_DELETE);
 		// iconContextMenu.addItem(res, R.string.properties,
 		// R.drawable.properties, MENU_PROPERTIES);
 		iconContextMenu.setOnClickListener(contextMenuListener);
 	}
 
 	private OnItemLongClickListener itemLongClickHandler = new OnItemLongClickListener() {
-		public boolean onItemLongClick(AdapterView<?> parent, View view,
-				int position, long id) {
+		public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
 			setSelectedId(((Node) lv.getItemAtPosition(position)).getId());
 
 			// Not showing context menu for ..'s
@@ -244,8 +242,8 @@ public class ExplorerActivity extends BaseActivity implements
 	@Override
 	protected Dialog onCreateDialog(int id) {
 		if (id == CONTEXT_MENU_ID) {
-			return iconContextMenu.createMenu(getText(
-					R.string.explorer_context_menu_title).toString());
+			return iconContextMenu.createMenu(getText(R.string.explorer_context_menu_title)
+					.toString());
 		}
 
 		if (id == COPYING_DIALOG_ID) {
@@ -311,8 +309,7 @@ public class ExplorerActivity extends BaseActivity implements
 
 		case R.id.explorer_options_paste:
 			if (getIdToCopy() != -1) {
-				copyTask = new CopyTask(this, nh, getIdToCopy(),
-						getCurrentFolderId());
+				copyTask = new CopyTask(this, nh, getIdToCopy(), getCurrentFolderId());
 				copyTask.execute();
 			} else if (getIdToMove() != -1) {
 				int result = nh.move(getIdToMove(), getCurrentFolderId());
@@ -327,8 +324,7 @@ public class ExplorerActivity extends BaseActivity implements
 			return true;
 
 		case R.id.explorer_options_import:
-			Intent fsexplorer = new Intent(this,
-					FileSystemExplorerActivity.class);
+			Intent fsexplorer = new Intent(this, FileSystemExplorerActivity.class);
 			fsexplorer.putExtra("path", "/");
 			startActivity(fsexplorer);
 			return true;
@@ -393,38 +389,26 @@ public class ExplorerActivity extends BaseActivity implements
 			input.setText("");
 		}
 
-		new AlertDialog.Builder(this)
-				.setTitle(R.string.explorer_newfolder_title)
-				.setMessage(R.string.explorer_newfolder_prompt)
-				.setView(input)
-				.setPositiveButton(R.string.ok,
-						new DialogInterface.OnClickListener() {
-							public void onClick(DialogInterface dialog,
-									int whichButton) {
-								String folderName = input.getText().toString();
+		new AlertDialog.Builder(this).setTitle(R.string.explorer_newfolder_title)
+				.setMessage(R.string.explorer_newfolder_prompt).setView(input)
+				.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int whichButton) {
+						String folderName = input.getText().toString();
 
-								Node parent = nh
-										.getNodeById(getCurrentFolderId());
-								if ((parent != null)
-										&& parent.getType() == NodeType.FOLDER) {
-									Node created = nh.createFolder(parent,
-											folderName);
-									if (created != null) {
-										ExplorerActivity.this
-												.setIdToSetFocusTo(created
-														.getId());
-									}
-									refresh();
-								}
+						Node parent = nh.getNodeById(getCurrentFolderId());
+						if ((parent != null) && parent.getType() == NodeType.FOLDER) {
+							Node created = nh.createFolder(parent, folderName);
+							if (created != null) {
+								ExplorerActivity.this.setIdToSetFocusTo(created.getId());
 							}
-						})
-				.setNegativeButton(R.string.cancel,
-						new DialogInterface.OnClickListener() {
-							public void onClick(DialogInterface dialog,
-									int whichButton) {
-								// Do nothing.
-							}
-						}).show();
+							refresh();
+						}
+					}
+				}).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int whichButton) {
+						// Do nothing.
+					}
+				}).show();
 	}
 
 	private void onNewNote() {
@@ -433,39 +417,27 @@ public class ExplorerActivity extends BaseActivity implements
 			input.setText("");
 		}
 
-		new AlertDialog.Builder(this)
-				.setTitle(R.string.explorer_newnote_title)
-				.setMessage(R.string.explorer_newnote_prompt)
-				.setView(input)
-				.setPositiveButton(R.string.ok,
-						new DialogInterface.OnClickListener() {
-							public void onClick(DialogInterface dialog,
-									int whichButton) {
-								String noteName = input.getText().toString();
+		new AlertDialog.Builder(this).setTitle(R.string.explorer_newnote_title)
+				.setMessage(R.string.explorer_newnote_prompt).setView(input)
+				.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int whichButton) {
+						String noteName = input.getText().toString();
 
-								Node parent = nh
-										.getNodeById(getCurrentFolderId());
-								if ((parent != null)
-										&& parent.getType() == NodeType.FOLDER) {
-									Node created = nh.createNote(parent,
-											noteName, "");
-									if (created != null) {
-										ExplorerActivity.this
-												.setIdToSetFocusTo(created
-														.getId());
-									}
+						Node parent = nh.getNodeById(getCurrentFolderId());
+						if ((parent != null) && parent.getType() == NodeType.FOLDER) {
+							Node created = nh.createNote(parent, noteName, "");
+							if (created != null) {
+								ExplorerActivity.this.setIdToSetFocusTo(created.getId());
+							}
 
-									refresh();
-								}
-							}
-						})
-				.setNegativeButton(R.string.cancel,
-						new DialogInterface.OnClickListener() {
-							public void onClick(DialogInterface dialog,
-									int whichButton) {
-								// Do nothing.
-							}
-						}).show();
+							refresh();
+						}
+					}
+				}).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int whichButton) {
+						// Do nothing.
+					}
+				}).show();
 	}
 
 	@Override
@@ -475,10 +447,9 @@ public class ExplorerActivity extends BaseActivity implements
 			menu.add(Menu.NONE, Menu.NONE, Menu.NONE, R.string.insert_date_time)
 					.setOnMenuItemClickListener(new OnMenuItemClickListener() {
 						public boolean onMenuItemClick(MenuItem item) {
-							Log.v(getClass().getName(), "Insert date+time"
-									+ item);
-							input.append(new SimpleDateFormat(
-									"yyyy.MM.dd HH:mm:ss").format(new Date()));
+							Log.v(getClass().getName(), "Insert date+time" + item);
+							input.append(new SimpleDateFormat("yyyy.MM.dd HH:mm:ss")
+									.format(new Date()));
 							return false;
 						}
 					});
@@ -498,70 +469,54 @@ public class ExplorerActivity extends BaseActivity implements
 		}
 		input.setText(selectedNode.getName());
 
-		new AlertDialog.Builder(this)
-				.setTitle(R.string.explorer_rename_title)
-				.setMessage(R.string.explorer_rename_prompt)
-				.setView(input)
-				.setPositiveButton(R.string.ok,
-						new DialogInterface.OnClickListener() {
-							public void onClick(DialogInterface dialog,
-									int whichButton) {
-								if (selectedNode != null) {
-									nh.renameNodeById(selectedNode.getId(),
-											input.getText().toString());
+		new AlertDialog.Builder(this).setTitle(R.string.explorer_rename_title)
+				.setMessage(R.string.explorer_rename_prompt).setView(input)
+				.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int whichButton) {
+						if (selectedNode != null) {
+							nh.renameNodeById(selectedNode.getId(), input.getText().toString());
 
-									refresh();
-								}
-							}
-						})
-				.setNegativeButton(R.string.cancel,
-						new DialogInterface.OnClickListener() {
-							public void onClick(DialogInterface dialog,
-									int whichButton) {
-								// Do nothing.
-							}
-						}).show();
+							refresh();
+						}
+					}
+				}).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int whichButton) {
+						// Do nothing.
+					}
+				}).show();
 
 	}
 
 	private void onDelete() {
 		final Node selectedNode = nh.getNodeById(getSelectedId());
 
-		new AlertDialog.Builder(this)
-				.setTitle(R.string.explorer_delete_title)
+		new AlertDialog.Builder(this).setTitle(R.string.explorer_delete_title)
 				.setMessage(R.string.explorer_delete_prompt)
-				.setPositiveButton(R.string.yes,
-						new DialogInterface.OnClickListener() {
-							public void onClick(DialogInterface dialog,
-									int whichButton) {
-								if (selectedNode != null) {
-									nh.deleteNodeById(selectedNode.getId());
+				.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int whichButton) {
+						if (selectedNode != null) {
+							nh.deleteNodeById(selectedNode.getId());
 
-									refresh();
-								}
-							}
-						})
-				.setNegativeButton(R.string.no,
-						new DialogInterface.OnClickListener() {
-							public void onClick(DialogInterface dialog,
-									int whichButton) {
-								// Do nothing.
-							}
-						}).show();
+							refresh();
+						}
+					}
+				}).setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int whichButton) {
+						// Do nothing.
+					}
+				}).show();
 	}
 
 	private void onNew() {
 		final IconListItem[] items = {
-				new IconListItem(getText(R.string.create_folder).toString(),
-						R.drawable.folder),
-				new IconListItem(getText(R.string.create_note).toString(),
-						R.drawable.note),
+				new IconListItem(getText(R.string.create_folder).toString(), R.drawable.folder),
+				new IconListItem(getText(R.string.create_note).toString(), R.drawable.note),
 		// new IconListItem(getText(R.string.create_checklist).toString(),
 		// R.drawable.note)
 		};
 
-		ListAdapter adapter = new IconListItemAdapter(this,
-				android.R.layout.select_dialog_item, items);
+		ListAdapter adapter = new IconListItemAdapter(this, android.R.layout.select_dialog_item,
+				items);
 
 		new AlertDialog.Builder(this).setTitle(getText(R.string.create_new))
 				.setAdapter(adapter, new DialogInterface.OnClickListener() {
@@ -575,8 +530,8 @@ public class ExplorerActivity extends BaseActivity implements
 							break;
 						case 2:
 							Toast.makeText(getApplicationContext(),
-									getText(R.string.msg_not_implemented_yet),
-									Toast.LENGTH_SHORT).show();
+									getText(R.string.msg_not_implemented_yet), Toast.LENGTH_SHORT)
+									.show();
 							break;
 						}
 
@@ -584,8 +539,7 @@ public class ExplorerActivity extends BaseActivity implements
 				}).show();
 	}
 
-	public void onItemClick(AdapterView<?> parentView, View childView,
-			int position, long id) {
+	public void onItemClick(AdapterView<?> parentView, View childView, int position, long id) {
 		Node selected = (Node) lv.getItemAtPosition(position);
 		onOpen(selected.getId());
 	}
