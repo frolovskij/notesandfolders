@@ -24,7 +24,6 @@ import java.util.Date;
 import java.util.List;
 
 import com.notesandfolders.CopyTask;
-import com.notesandfolders.FileImporter;
 import com.notesandfolders.IconListItem;
 import com.notesandfolders.IconListItemAdapter;
 import com.notesandfolders.Login;
@@ -40,10 +39,10 @@ import com.tani.app.ui.IconContextMenu.IconContextMenuOnClickListener;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
@@ -67,6 +66,9 @@ public class ExplorerActivity extends BaseActivity implements
 		OnItemClickListener {
 
 	private static final int CONTEXT_MENU_ID = 0;
+
+	public static final int COPYING_DIALOG_ID = 1;
+
 	// private static final int MENU_PROPERTIES = 6;
 	private static final int MENU_DELETE = 5;
 	private static final int MENU_CUT = 3;
@@ -78,6 +80,9 @@ public class ExplorerActivity extends BaseActivity implements
 	private List<Node> items;
 	private NodeAdapter adapter;
 	private IconContextMenu iconContextMenu = null;
+
+	private CopyTask copyTask;
+	private boolean mShownDialog;
 
 	// selected_id is id of the selected node to pass to context menu operation
 	private long getSelectedId() {
@@ -156,6 +161,24 @@ public class ExplorerActivity extends BaseActivity implements
 		registerForContextMenu(input);
 
 		createContextMenu();
+
+		Object retained = getLastNonConfigurationInstance();
+		if (retained instanceof CopyTask) {
+			copyTask = (CopyTask) retained;
+			copyTask.setActivity(this);
+		}
+	}
+
+	@Override
+	public Object onRetainNonConfigurationInstance() {
+		copyTask.setActivity(null);
+		return copyTask;
+	}
+
+	public void onCopyTaskCompleted(Integer result) {
+		if (mShownDialog) {
+			checkPasteResult(result);
+		}
 	}
 
 	// context menu listener for nodes
@@ -224,6 +247,16 @@ public class ExplorerActivity extends BaseActivity implements
 			return iconContextMenu.createMenu(getText(
 					R.string.explorer_context_menu_title).toString());
 		}
+
+		if (id == COPYING_DIALOG_ID) {
+			ProgressDialog pd = new ProgressDialog(this);
+			pd.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+			pd.setMessage(getText(R.string.explorer_msg_copying_files));
+			pd.setCancelable(false);
+
+			return pd;
+		}
+
 		return super.onCreateDialog(id);
 	}
 
@@ -262,6 +295,14 @@ public class ExplorerActivity extends BaseActivity implements
 	}
 
 	@Override
+	protected void onPrepareDialog(int id, Dialog dialog) {
+		super.onPrepareDialog(id, dialog);
+		if (id == COPYING_DIALOG_ID) {
+			mShownDialog = true;
+		}
+	}
+
+	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.explorer_options_add:
@@ -270,11 +311,9 @@ public class ExplorerActivity extends BaseActivity implements
 
 		case R.id.explorer_options_paste:
 			if (getIdToCopy() != -1) {
-				CopyTask task = new CopyTask(this, nh, getIdToCopy(),
+				copyTask = new CopyTask(this, nh, getIdToCopy(),
 						getCurrentFolderId());
-
-				task.execute((Void[]) null);
-
+				copyTask.execute();
 			} else if (getIdToMove() != -1) {
 				int result = nh.move(getIdToMove(), getCurrentFolderId());
 				checkPasteResult(result);
