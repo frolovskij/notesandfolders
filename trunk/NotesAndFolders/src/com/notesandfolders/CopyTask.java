@@ -1,19 +1,18 @@
 package com.notesandfolders;
 
-import android.app.ProgressDialog;
 import android.os.AsyncTask;
 
 import com.notesandfolders.activities.ExplorerActivity;
 import com.notesandfolders.dataaccess.NodeHelper;
 
-public final class CopyTask extends AsyncTask<Void, String, Integer> {
+public class CopyTask extends AsyncTask<Void, String, Integer> {
 
-	private final ExplorerActivity mExplorer;
+	private ExplorerActivity mExplorer;
 	private NodeHelper mNh;
 	private long mIdToCopy;
 	private long mNewParentId;
-
-	private ProgressDialog pd;
+	private boolean completed;
+	private Integer result;
 
 	public CopyTask(ExplorerActivity explorer, NodeHelper nh, long idToCopy,
 			long newParentId) {
@@ -25,22 +24,35 @@ public final class CopyTask extends AsyncTask<Void, String, Integer> {
 
 	@Override
 	protected Integer doInBackground(Void... arg0) {
-		return mNh.copy(mIdToCopy, mNewParentId);
+		result = mNh.copy(mIdToCopy, mNewParentId);
+		return result;
 	}
 
 	@Override
 	protected void onPreExecute() {
-		pd = new ProgressDialog(mExplorer);
-		pd.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-		pd.setMessage(mExplorer.getText(R.string.explorer_msg_copying_files));
-		pd.setCancelable(false);
-		pd.show();
+		mExplorer.showDialog(ExplorerActivity.COPYING_DIALOG_ID);
 	}
 
 	@Override
 	protected void onPostExecute(Integer res) {
-		pd.dismiss();
+		mExplorer.dismissDialog(ExplorerActivity.COPYING_DIALOG_ID);
 
-		mExplorer.checkPasteResult(res);
+		notifyActivityTaskCompleted();
+	}
+
+	public void setActivity(ExplorerActivity explorer) {
+		this.mExplorer = explorer;
+		if (completed) {
+			notifyActivityTaskCompleted();
+		}
+	}
+
+	/**
+	 * Helper method to notify the activity that this task was completed.
+	 */
+	private void notifyActivityTaskCompleted() {
+		if (null != mExplorer) {
+			mExplorer.onCopyTaskCompleted(result);
+		}
 	}
 }
