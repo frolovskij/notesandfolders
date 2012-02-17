@@ -54,8 +54,8 @@ public class FileImporter {
 	private static String getFileContents(File f) {
 		StringBuffer sb = new StringBuffer();
 		try {
-			BufferedReader br = new BufferedReader(new InputStreamReader(
-					new FileInputStream(f), "UTF-8"));
+			BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(f),
+					"UTF-8"));
 			try {
 				String s;
 				while ((s = br.readLine()) != null) {
@@ -73,7 +73,6 @@ public class FileImporter {
 		}
 
 		return sb.toString();
-
 	}
 
 	private static Node getNodeFromFile(File file, long id, long parentId) {
@@ -85,6 +84,12 @@ public class FileImporter {
 		n.setDateCreated(n.getDateModified()); // can't know
 		n.setType(file.isDirectory() ? NodeType.FOLDER : NodeType.NOTE);
 		n.setTextContent(getFileContents(file));
+
+		// remove *.txt extension
+		if (!file.isDirectory() && getFileNameExtension(file.getName()).equalsIgnoreCase("txt")) {
+			int nameLen = file.getName().length();
+			n.setName(n.getName().substring(0, nameLen - 4)); // ".txt".length()
+		}
 
 		return n;
 	}
@@ -98,9 +103,7 @@ public class FileImporter {
 			return RESULT_NOT_EXISTS;
 		}
 
-		if (!file.isDirectory()
-				&& !getFileNameExtension(file.getName())
-						.equalsIgnoreCase("txt")) {
+		if (!file.isDirectory() && !getFileNameExtension(file.getName()).equalsIgnoreCase("txt")) {
 			return RESULT_NOT_TXT;
 		}
 
