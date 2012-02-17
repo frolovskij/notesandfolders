@@ -25,8 +25,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.notesandfolders.CopyTask;
 import com.notesandfolders.FileAdapter;
 import com.notesandfolders.FileImporter;
+import com.notesandfolders.ImportTask;
 import com.notesandfolders.Login;
 import com.notesandfolders.Node;
 import com.notesandfolders.R;
@@ -47,10 +49,10 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 
-public class FileSystemExplorerActivity extends BaseActivity implements
-		IconContextMenu.IconContextMenuOnClickListener, OnItemClickListener,
-		OnClickListener {
+public class ImportActivity extends BaseActivity implements
+		IconContextMenu.IconContextMenuOnClickListener, OnItemClickListener, OnClickListener {
 	private static final int CONTEXT_MENU_ID = 0;
+	public static final int IMPORTING_DIALOG_ID = 1;
 	private static final int MENU_IMPORT = 1;
 	private ListView lv;
 	private TextView location;
@@ -62,6 +64,10 @@ public class FileSystemExplorerActivity extends BaseActivity implements
 	private File directory;
 	private File selectedFile;
 	private String path;
+
+	private ImportTask importTask;
+	private boolean mShownDialog;
+	private ProgressDialog pd;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -84,20 +90,46 @@ public class FileSystemExplorerActivity extends BaseActivity implements
 
 		directory = new File(path);
 		update();
+
+		createContextMenu();
+
+		Object retained = getLastNonConfigurationInstance();
+		if (retained != null && retained instanceof ImportTask) {
+			importTask = (ImportTask) retained;
+			importTask.setActivity(this);
+		}
+	}
+
+	public ProgressDialog getImportingDialog() {
+		return pd;
+	}
+
+	@Override
+	public Object onRetainNonConfigurationInstance() {
+		if (importTask != null) {
+			importTask.setActivity(null);
+			return importTask;
+		}
+
+		return null;
+	}
+
+	public void onCopyTaskCompleted(Integer result) {
+		if (mShownDialog) {
+			//
+		}
 	}
 
 	public void createContextMenu() {
 		Resources res = getResources();
 
 		iconContextMenu = new IconContextMenu(this, CONTEXT_MENU_ID);
-		iconContextMenu.addItem(res, R.string.fsimp, R.drawable.fsimp,
-				MENU_IMPORT);
+		iconContextMenu.addItem(res, R.string.fsimp, R.drawable.fsimp, MENU_IMPORT);
 		iconContextMenu.setOnClickListener(this);
 	}
 
 	private OnItemLongClickListener itemLongClickHandler = new OnItemLongClickListener() {
-		public boolean onItemLongClick(AdapterView<?> parent, View view,
-				int position, long id) {
+		public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
 			selectedFile = ((File) lv.getItemAtPosition(position));
 
 			createContextMenu();
@@ -113,10 +145,28 @@ public class FileSystemExplorerActivity extends BaseActivity implements
 	@Override
 	protected Dialog onCreateDialog(int id) {
 		if (id == CONTEXT_MENU_ID) {
-			return iconContextMenu.createMenu(getText(
-					R.string.explorer_context_menu_title).toString());
+			return iconContextMenu.createMenu(getText(R.string.explorer_context_menu_title)
+					.toString());
+		}
+
+		if (id == IMPORTING_DIALOG_ID) {
+			pd = new ProgressDialog(ImportActivity.this);
+			pd.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+			pd.setMessage(getText(R.string.msg_importing_files));
+			pd.setCancelable(false);
+			pd.show();
+
+			return pd;
 		}
 		return super.onCreateDialog(id);
+	}
+
+	@Override
+	protected void onPrepareDialog(int id, Dialog dialog) {
+		super.onPrepareDialog(id, dialog);
+		if (id == IMPORTING_DIALOG_ID) {
+			mShownDialog = true;
+		}
 	}
 
 	public void update() {
@@ -149,50 +199,8 @@ public class FileSystemExplorerActivity extends BaseActivity implements
 			return;
 		}
 
-		final ProgressDialog pd = new ProgressDialog(
-				FileSystemExplorerActivity.this);
-		pd.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-		pd.setMessage(getText(R.string.msg_importing_files));
-		pd.setCancelable(false);
-		pd.show();
-
-		final Context ctx = this;
-
-		new Thread() {
-			public void run() {
-				final NodeHelper nh = new NodeHelper(
-						FileSystemExplorerActivity.this,
-						Login.getPlainTextPasswordFromTempStorage(ctx));
-
-				Node importRoot = nh.createFolder(
-						nh.getRootFolder(),
-						"Imported at "
-								+ new SimpleDateFormat("yyyy.MM.dd HH:mm:ss")
-										.format(new Date()));
-
-				final List<Node> nodes = FileImporter.getFiles(
-						selectedFile.getAbsolutePath(), nh.getLastId() + 1,
-						importRoot.getId());
-
-				// if there's nothing to import
-				if (nodes.size() == 0) {
-					nh.deleteNodeById(importRoot.getId());
-				} else {
-					int nodesCount = nodes.size();
-
-					pd.setMax(nodesCount);
-
-					for (int i = 0; i < nodesCount; i++) {
-						Node n = nodes.get(i);
-
-						nh.insertNode(n);
-						pd.setProgress(i + 1);
-					}
-				}
-
-				pd.dismiss();
-			}
-		}.start();
+		importTask = new ImportTask(this, selectedFile);
+		importTask.execute();
 	}
 
 	public void onClick(int menuId) {
@@ -203,8 +211,7 @@ public class FileSystemExplorerActivity extends BaseActivity implements
 		}
 	}
 
-	public void onItemClick(AdapterView<?> parentView, View childView,
-			int position, long id) {
+	public void onItemClick(AdapterView<?> parentView, View childView, int position, long id) {
 		File clicked = (File) lv.getItemAtPosition(position);
 		if (clicked.isDirectory() && clicked.canRead()) {
 			directory = clicked;

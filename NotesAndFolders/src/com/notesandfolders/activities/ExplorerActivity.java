@@ -324,7 +324,7 @@ public class ExplorerActivity extends BaseActivity implements OnItemClickListene
 			return true;
 
 		case R.id.explorer_options_import:
-			Intent fsexplorer = new Intent(this, FileSystemExplorerActivity.class);
+			Intent fsexplorer = new Intent(this, ImportActivity.class);
 			fsexplorer.putExtra("path", "/");
 			startActivity(fsexplorer);
 			return true;
