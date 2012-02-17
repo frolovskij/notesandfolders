@@ -33,6 +33,11 @@ public class FileImporter {
 
 	private static long _id = 0;
 
+	public static final int RESULT_OK = 0;
+	public static final int RESULT_CANT_READ = -1;
+	public static final int RESULT_NOT_EXISTS = -2;
+	public static final int RESULT_NOT_TXT = -3;
+
 	private static long nextId() {
 		return _id++;
 	}
@@ -71,62 +76,60 @@ public class FileImporter {
 
 	}
 
-	private static void processPath(File file, List<Node> list, long parentId) {
+	private static Node getNodeFromFile(File file, long id, long parentId) {
+		Node n = new Node();
+		n.setId(id);
+		n.setParentId(parentId);
+		n.setName(file.getName());
+		n.setDateModified(new Date(file.lastModified()));
+		n.setDateCreated(n.getDateModified()); // can't know
+		n.setType(file.isDirectory() ? NodeType.FOLDER : NodeType.NOTE);
+		n.setTextContent(getFileContents(file));
+
+		return n;
+	}
+
+	public static int canImport(File file) {
 		if (!file.canRead()) {
-			return;
+			return RESULT_CANT_READ;
 		}
 
 		if (!file.exists()) {
+			return RESULT_NOT_EXISTS;
+		}
+
+		if (!file.isDirectory()
+				&& !getFileNameExtension(file.getName())
+						.equalsIgnoreCase("txt")) {
+			return RESULT_NOT_TXT;
+		}
+
+		return RESULT_OK;
+	}
+
+	private static void processPath(File file, List<Node> list, long parentId) {
+		if (canImport(file) != FileImporter.RESULT_OK) {
 			return;
 		}
 
+		// importing single file
 		if (!file.isDirectory()) {
-			Node f = new Node();
-			f.setId(nextId());
-			f.setParentId(parentId);
-			f.setName(file.getName());
-			f.setDateModified(new Date(file.lastModified()));
-			f.setDateCreated(f.getDateModified()); // can't know
-			f.setType(NodeType.NOTE);
-			f.setTextContent(getFileContents(file));
-
-			list.add(f);
+			list.add(getNodeFromFile(file, nextId(), parentId));
 			return;
 		}
 
-		Node root = new Node();
-		root.setId(nextId());
-		root.setParentId(parentId);
-		root.setName(file.getName());
-		root.setDateModified(new Date(file.lastModified()));
-		root.setDateCreated(root.getDateModified());
-		root.setType(NodeType.FOLDER);
-
+		// create a folder where to import data
+		Node root = getNodeFromFile(file, nextId(), parentId);
 		list.add(root);
 
 		File[] children = file.listFiles();
 
 		for (File child : children) {
-			if (!child.canRead()) {
-				continue;
-			}
-
-			if (child.isDirectory()) {
-				processPath(child, list, root.getId());
-			} else {
-				if (getFileNameExtension(child.getName()).equalsIgnoreCase(
-						"txt")) {
-					Node n = new Node();
-					n.setId(nextId());
-					n.setParentId(root.getId());
-					n.setName(child.getName());
-					n.setDateModified(new Date(child.lastModified()));
-					n.setDateCreated(n.getDateModified());
-					n.setType(NodeType.NOTE);
-
-					n.setTextContent(getFileContents(child));
-
-					list.add(n);
+			if (canImport(child) == FileImporter.RESULT_OK) {
+				if (child.isDirectory()) {
+					processPath(child, list, root.getId());
+				} else {
+					list.add(getNodeFromFile(child, nextId(), root.getId()));
 				}
 			}
 		}
@@ -139,4 +142,5 @@ public class FileImporter {
 
 		return files;
 	}
+
 }

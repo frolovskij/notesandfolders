@@ -48,9 +48,10 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 public class FileSystemExplorerActivity extends BaseActivity implements
-		IconContextMenu.IconContextMenuOnClickListener, OnItemClickListener, OnClickListener {
+		IconContextMenu.IconContextMenuOnClickListener, OnItemClickListener,
+		OnClickListener {
 	private static final int CONTEXT_MENU_ID = 0;
-	private static final int MENU_CHOOSE = 1;
+	private static final int MENU_IMPORT = 1;
 	private ListView lv;
 	private TextView location;
 	private List<File> items;
@@ -89,12 +90,14 @@ public class FileSystemExplorerActivity extends BaseActivity implements
 		Resources res = getResources();
 
 		iconContextMenu = new IconContextMenu(this, CONTEXT_MENU_ID);
-		iconContextMenu.addItem(res, R.string.fsimp, R.drawable.fsimp, MENU_CHOOSE);
+		iconContextMenu.addItem(res, R.string.fsimp, R.drawable.fsimp,
+				MENU_IMPORT);
 		iconContextMenu.setOnClickListener(this);
 	}
 
 	private OnItemLongClickListener itemLongClickHandler = new OnItemLongClickListener() {
-		public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+		public boolean onItemLongClick(AdapterView<?> parent, View view,
+				int position, long id) {
 			selectedFile = ((File) lv.getItemAtPosition(position));
 
 			createContextMenu();
@@ -110,8 +113,8 @@ public class FileSystemExplorerActivity extends BaseActivity implements
 	@Override
 	protected Dialog onCreateDialog(int id) {
 		if (id == CONTEXT_MENU_ID) {
-			return iconContextMenu.createMenu(getText(R.string.explorer_context_menu_title)
-					.toString());
+			return iconContextMenu.createMenu(getText(
+					R.string.explorer_context_menu_title).toString());
 		}
 		return super.onCreateDialog(id);
 	}
@@ -128,8 +131,26 @@ public class FileSystemExplorerActivity extends BaseActivity implements
 		location.setText(directory.getAbsolutePath());
 	}
 
-	public void onChoose() {
-		final ProgressDialog pd = new ProgressDialog(FileSystemExplorerActivity.this);
+	public void onImport() {
+		int canImportResult = FileImporter.canImport(selectedFile);
+		switch (canImportResult) {
+		case FileImporter.RESULT_NOT_EXISTS:
+			showToast(R.string.filesystemexplorer_msg_file_doesnt_exist);
+			break;
+		case FileImporter.RESULT_CANT_READ:
+			showToast(R.string.filesystemexplorer_msg_cant_read);
+			break;
+		case FileImporter.RESULT_NOT_TXT:
+			showToast(R.string.filesystemexplorer_msg_not_txt_file);
+			break;
+		}
+
+		if (canImportResult != FileImporter.RESULT_OK) {
+			return;
+		}
+
+		final ProgressDialog pd = new ProgressDialog(
+				FileSystemExplorerActivity.this);
 		pd.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
 		pd.setMessage(getText(R.string.msg_importing_files));
 		pd.setCancelable(false);
@@ -139,23 +160,34 @@ public class FileSystemExplorerActivity extends BaseActivity implements
 
 		new Thread() {
 			public void run() {
-				final NodeHelper nh = new NodeHelper(FileSystemExplorerActivity.this,
+				final NodeHelper nh = new NodeHelper(
+						FileSystemExplorerActivity.this,
 						Login.getPlainTextPasswordFromTempStorage(ctx));
-				Node importRoot = nh.createFolder(nh.getRootFolder(), "Imported at "
-						+ new SimpleDateFormat("yyyy.MM.dd HH:mm:ss").format(new Date()));
 
-				final List<Node> nodes = FileImporter.getFiles(selectedFile.getAbsolutePath(),
-						nh.getLastId() + 1, importRoot.getId());
+				Node importRoot = nh.createFolder(
+						nh.getRootFolder(),
+						"Imported at "
+								+ new SimpleDateFormat("yyyy.MM.dd HH:mm:ss")
+										.format(new Date()));
 
-				int nodesCount = nodes.size();
+				final List<Node> nodes = FileImporter.getFiles(
+						selectedFile.getAbsolutePath(), nh.getLastId() + 1,
+						importRoot.getId());
 
-				pd.setMax(nodesCount);
+				// if there's nothing to import
+				if (nodes.size() == 0) {
+					nh.deleteNodeById(importRoot.getId());
+				} else {
+					int nodesCount = nodes.size();
 
-				for (int i = 0; i < nodesCount; i++) {
-					Node n = nodes.get(i);
+					pd.setMax(nodesCount);
 
-					nh.insertNode(n);
-					pd.setProgress(i + 1);
+					for (int i = 0; i < nodesCount; i++) {
+						Node n = nodes.get(i);
+
+						nh.insertNode(n);
+						pd.setProgress(i + 1);
+					}
 				}
 
 				pd.dismiss();
@@ -165,13 +197,14 @@ public class FileSystemExplorerActivity extends BaseActivity implements
 
 	public void onClick(int menuId) {
 		switch (menuId) {
-		case MENU_CHOOSE:
-			onChoose();
+		case MENU_IMPORT:
+			onImport();
 			break;
 		}
 	}
 
-	public void onItemClick(AdapterView<?> parentView, View childView, int position, long id) {
+	public void onItemClick(AdapterView<?> parentView, View childView,
+			int position, long id) {
 		File clicked = (File) lv.getItemAtPosition(position);
 		if (clicked.isDirectory() && clicked.canRead()) {
 			directory = clicked;
