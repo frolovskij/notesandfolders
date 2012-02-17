@@ -20,24 +20,17 @@ package com.notesandfolders.activities;
 
 import java.io.File;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
-import com.notesandfolders.CopyTask;
 import com.notesandfolders.FileAdapter;
 import com.notesandfolders.FileImporter;
 import com.notesandfolders.ImportTask;
-import com.notesandfolders.Login;
-import com.notesandfolders.Node;
 import com.notesandfolders.R;
-import com.notesandfolders.dataaccess.NodeHelper;
 import com.tani.app.ui.IconContextMenu;
 
 import android.app.Dialog;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.View;

@@ -7,7 +7,6 @@ import java.util.List;
 
 import android.os.AsyncTask;
 
-import com.notesandfolders.activities.ExplorerActivity;
 import com.notesandfolders.activities.ImportActivity;
 import com.notesandfolders.dataaccess.NodeHelper;
 
