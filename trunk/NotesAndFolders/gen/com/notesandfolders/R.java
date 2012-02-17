@@ -83,100 +83,103 @@ public final class R {
     public static final class string {
         public static final int app_name=0x7f050000;
         public static final int app_version=0x7f050001;
-        public static final int cancel=0x7f05000a;
-        public static final int copy=0x7f050016;
-        public static final int create_checklist=0x7f050041;
-        public static final int create_folder=0x7f05003f;
+        public static final int cancel=0x7f05000d;
+        public static final int copy=0x7f050019;
+        public static final int create_checklist=0x7f050044;
+        public static final int create_folder=0x7f050042;
         /**  Alert Dialog that pop-ups when user chooses "New" from Explorer's options menu 
          */
-        public static final int create_new=0x7f05003e;
-        public static final int create_note=0x7f050040;
-        public static final int cut=0x7f050017;
-        public static final int delete=0x7f050018;
+        public static final int create_new=0x7f050041;
+        public static final int create_note=0x7f050043;
+        public static final int cut=0x7f05001a;
+        public static final int delete=0x7f05001b;
         /**   
          */
-        public static final int documentation_title=0x7f050044;
-        public static final int edit=0x7f050015;
+        public static final int documentation_title=0x7f050047;
+        public static final int edit=0x7f050018;
         /**  Context menu operations on folders, files & checklists 
          */
-        public static final int explorer_context_menu_title=0x7f050013;
-        public static final int explorer_delete_prompt=0x7f050028;
+        public static final int explorer_context_menu_title=0x7f050016;
+        public static final int explorer_delete_prompt=0x7f05002b;
         /**  Delete alert dialog 
          */
-        public static final int explorer_delete_title=0x7f050027;
-        public static final int explorer_msg_copying_files=0x7f05002b;
-        public static final int explorer_msg_destination_is_source=0x7f05002a;
-        public static final int explorer_msg_destination_is_subfolder=0x7f050029;
-        public static final int explorer_newfolder_prompt=0x7f050022;
+        public static final int explorer_delete_title=0x7f05002a;
+        public static final int explorer_msg_copying_files=0x7f05002e;
+        public static final int explorer_msg_destination_is_source=0x7f05002d;
+        public static final int explorer_msg_destination_is_subfolder=0x7f05002c;
+        public static final int explorer_newfolder_prompt=0x7f050025;
         /**  New folder alert dialog 
          */
-        public static final int explorer_newfolder_title=0x7f050021;
-        public static final int explorer_newnote_prompt=0x7f050024;
+        public static final int explorer_newfolder_title=0x7f050024;
+        public static final int explorer_newnote_prompt=0x7f050027;
         /**  New note alert dialog 
          */
-        public static final int explorer_newnote_title=0x7f050023;
-        public static final int explorer_rename_prompt=0x7f050026;
+        public static final int explorer_newnote_title=0x7f050026;
+        public static final int explorer_rename_prompt=0x7f050029;
         /**  Rename alert dialog 
          */
-        public static final int explorer_rename_title=0x7f050025;
+        public static final int explorer_rename_title=0x7f050028;
         public static final int filename_copy_suffix=0x7f050005;
         public static final int filesystemexplorer_go_back=0x7f050007;
         public static final int filesystemexplorer_icon=0x7f050008;
+        public static final int filesystemexplorer_msg_cant_read=0x7f05000a;
+        public static final int filesystemexplorer_msg_file_doesnt_exist=0x7f050009;
+        public static final int filesystemexplorer_msg_not_txt_file=0x7f05000b;
         /**  FileSystemExplorer 
          */
         public static final int filesystemexplorer_title=0x7f050006;
-        public static final int fsimp=0x7f05001b;
+        public static final int fsimp=0x7f05001e;
         public static final int insert_date_time=0x7f050004;
-        public static final int login_button=0x7f05001f;
-        public static final int login_logo=0x7f050020;
-        public static final int login_msg_password_incorrect=0x7f05001e;
+        public static final int login_button=0x7f050022;
+        public static final int login_logo=0x7f050023;
+        public static final int login_msg_password_incorrect=0x7f050021;
         /**  Login activity 
          */
-        public static final int login_prompt=0x7f05001d;
-        public static final int menu_close=0x7f050011;
-        public static final int menu_import=0x7f05000f;
+        public static final int login_prompt=0x7f050020;
+        public static final int menu_close=0x7f050014;
+        public static final int menu_import=0x7f050012;
         /**  Explorer options menu 
          */
-        public static final int menu_new=0x7f05000d;
-        public static final int menu_paste=0x7f050012;
-        public static final int menu_search=0x7f05000e;
-        public static final int menu_settings=0x7f050010;
+        public static final int menu_new=0x7f050010;
+        public static final int menu_paste=0x7f050015;
+        public static final int menu_search=0x7f050011;
+        public static final int menu_settings=0x7f050013;
         public static final int msg_importing_files=0x7f050003;
         public static final int msg_not_implemented_yet=0x7f050002;
-        public static final int no=0x7f05000c;
-        public static final int noteseditor_msg_save_before_exit=0x7f050043;
+        public static final int no=0x7f05000f;
+        public static final int noteseditor_msg_save_before_exit=0x7f050046;
         /**  Notes editor 
          */
-        public static final int noteseditor_title=0x7f050042;
+        public static final int noteseditor_title=0x7f050045;
         /**  Common 
          */
-        public static final int ok=0x7f050009;
-        public static final int open=0x7f050014;
-        public static final int password_edit_confirmation=0x7f050038;
-        public static final int password_edit_current=0x7f050036;
-        public static final int password_edit_new=0x7f050037;
-        public static final int password_edit_save_button=0x7f050039;
+        public static final int ok=0x7f05000c;
+        public static final int open=0x7f050017;
+        public static final int password_edit_confirmation=0x7f05003b;
+        public static final int password_edit_current=0x7f050039;
+        public static final int password_edit_new=0x7f05003a;
+        public static final int password_edit_save_button=0x7f05003c;
         /**  Password settings activity 
          */
-        public static final int password_edit_title=0x7f050035;
-        public static final int password_msg_password_confirmation_do_not_match=0x7f05003d;
-        public static final int password_msg_password_was_saved=0x7f05003a;
-        public static final int password_msg_save_error=0x7f05003c;
-        public static final int password_msg_wrong_password=0x7f05003b;
-        public static final int properties=0x7f05001a;
-        public static final int rename=0x7f050019;
-        public static final int save=0x7f05001c;
-        public static final int settings_documentation_summary=0x7f050032;
-        public static final int settings_documentation_title=0x7f050031;
-        public static final int settings_information=0x7f050030;
-        public static final int settings_password=0x7f05002e;
-        public static final int settings_password_summary=0x7f05002f;
-        public static final int settings_security=0x7f05002d;
+        public static final int password_edit_title=0x7f050038;
+        public static final int password_msg_password_confirmation_do_not_match=0x7f050040;
+        public static final int password_msg_password_was_saved=0x7f05003d;
+        public static final int password_msg_save_error=0x7f05003f;
+        public static final int password_msg_wrong_password=0x7f05003e;
+        public static final int properties=0x7f05001d;
+        public static final int rename=0x7f05001c;
+        public static final int save=0x7f05001f;
+        public static final int settings_documentation_summary=0x7f050035;
+        public static final int settings_documentation_title=0x7f050034;
+        public static final int settings_information=0x7f050033;
+        public static final int settings_password=0x7f050031;
+        public static final int settings_password_summary=0x7f050032;
+        public static final int settings_security=0x7f050030;
         /**  Settings activity 
          */
-        public static final int settings_title=0x7f05002c;
-        public static final int settings_version_summary=0x7f050034;
-        public static final int settings_version_title=0x7f050033;
-        public static final int yes=0x7f05000b;
+        public static final int settings_title=0x7f05002f;
+        public static final int settings_version_summary=0x7f050037;
+        public static final int settings_version_title=0x7f050036;
+        public static final int yes=0x7f05000e;
     }
 }

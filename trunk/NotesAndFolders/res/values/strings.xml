@@ -12,6 +12,9 @@
     <string name="filesystemexplorer_title">File system</string>
     <string name="filesystemexplorer_go_back">Go to the upper folder</string>
     <string name="filesystemexplorer_icon">Icon</string>
+    <string name="filesystemexplorer_msg_file_doesnt_exist">File does not exist</string>
+    <string name="filesystemexplorer_msg_cant_read">Can\'t import not readable item</string>
+    <string name="filesystemexplorer_msg_not_txt_file">Only *.txt files can be imported</string>
 
     <!-- Common -->
     <string name="ok">Ok</string>
