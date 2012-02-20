@@ -99,6 +99,8 @@ public final class R {
         public static final int checklist_msg_save_before_exit=0x7f05004e;
         public static final int checklist_newitem_prompt=0x7f05004d;
         public static final int checklist_newitem_title=0x7f05004c;
+        public static final int checklist_rename_prompt=0x7f050050;
+        public static final int checklist_rename_title=0x7f05004f;
         /**  Checklist 
          */
         public static final int checklist_title=0x7f05004a;

@@ -27,32 +27,64 @@ import com.notesandfolders.CheckListItem;
 import com.notesandfolders.CheckListItemAdapter;
 import com.notesandfolders.Login;
 import com.notesandfolders.Node;
-import com.notesandfolders.NodeType;
 import com.notesandfolders.R;
 import com.notesandfolders.dataaccess.NodeHelper;
+import com.tani.app.ui.IconContextMenu;
+import com.tani.app.ui.IconContextMenu.IconContextMenuOnClickListener;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.ListActivity;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.AdapterView.OnItemLongClickListener;
 
 public class CheckListActivity extends ListActivity {
+	private static final int CONTEXT_MENU_ID = 0;
+	private static final int MENU_RENAME = 1;
+	private static final int MENU_COPY = 2;
+	private static final int MENU_DELETE = 3;
+
 	private CheckList initialCheckList;
 	CheckListItemAdapter adapter;
 	private CheckList checkList;
 	private TextView name;
 	private NodeHelper nh;
 	private long id;
+	private IconContextMenu iconContextMenu = null;
+	private ListView lv;
+
+	// selected_id is id of the selected node to pass to context menu operation
+	private int getSelectedIndex() {
+		return getIntent().getIntExtra("selected_index", -1);
+	}
+
+	private void setSelectedIndex(int selectedIndex) {
+		getIntent().putExtra("selected_index", selectedIndex);
+	}
+
+	// id_to_copy is id of the node to be copy/pasted
+	private long getIdToCopy() {
+		return getIntent().getLongExtra("id_to_copy", -1);
+	}
+
+	private void setIdToCopy(long idToCopy) {
+		getIntent().putExtra("id_to_copy", idToCopy);
+	}
 
 	/** Called when the activity is first created. */
 	@Override
@@ -67,21 +99,19 @@ public class CheckListActivity extends ListActivity {
 		initialCheckList = CheckList.deserialize(tc);
 		checkList = CheckList.deserialize(tc);
 
-		for (CheckListItem item : initialCheckList) {
-			Log.i("1", item.getText());
-		}
-
 		setContentView(R.layout.checklist);
 
 		name = (TextView) findViewById(R.id.checklist_name);
 
-		ListView listView = getListView();
+		lv = getListView();
 
-		if (listView instanceof DragNDropListView) {
-			((DragNDropListView) listView).setDropListener(mDropListener);
-			((DragNDropListView) listView).setRemoveListener(mRemoveListener);
-			((DragNDropListView) listView).setDragListener(mDragListener);
+		if (lv instanceof DragNDropListView) {
+			((DragNDropListView) lv).setDropListener(mDropListener);
+			((DragNDropListView) lv).setRemoveListener(mRemoveListener);
+			((DragNDropListView) lv).setDragListener(mDragListener);
 		}
+
+		lv.setOnItemLongClickListener(itemLongClickHandler);
 
 		refresh();
 	}
@@ -151,6 +181,59 @@ public class CheckListActivity extends ListActivity {
 		}
 	}
 
+	private OnItemLongClickListener itemLongClickHandler = new OnItemLongClickListener() {
+		public boolean onItemLongClick(AdapterView<?> parent, View view,
+				int position, long id) {
+			Log.i("CheckListActivity", "onItemLongClick");
+			setSelectedIndex(position);
+			showDialog(CONTEXT_MENU_ID);
+
+			return false;
+		}
+	};
+
+	public void createContextMenu() {
+		Resources res = getResources();
+
+		iconContextMenu = new IconContextMenu(this, CONTEXT_MENU_ID);
+		iconContextMenu.addItem(res, R.string.rename, R.drawable.rename,
+				MENU_RENAME);
+		iconContextMenu.addItem(res, R.string.copy, R.drawable.copy, MENU_COPY);
+		iconContextMenu.addItem(res, R.string.delete, R.drawable.delete,
+				MENU_DELETE);
+		iconContextMenu.setOnClickListener(contextMenuListener);
+	}
+
+	@Override
+	protected Dialog onCreateDialog(int id) {
+		if (id == CONTEXT_MENU_ID) {
+			return iconContextMenu.createMenu(getText(
+					R.string.explorer_context_menu_title).toString());
+		}
+
+		return super.onCreateDialog(id);
+	}
+
+	// context menu listener for nodes
+	final IconContextMenuOnClickListener contextMenuListener = new IconContextMenuOnClickListener() {
+		public void onClick(int menuId) {
+			switch (menuId) {
+			case MENU_RENAME:
+				onRename();
+				break;
+
+			case MENU_DELETE:
+				// onDelete();
+				break;
+
+			case MENU_COPY:
+				// setIdToCopy(getSelectedId());
+				// setIdToMove(-1);
+				break;
+			}
+		}
+	};
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater inflater = getMenuInflater();
@@ -195,6 +278,42 @@ public class CheckListActivity extends ListActivity {
 								// Do nothing.
 							}
 						}).show();
+	}
+
+	private void onRename() {
+		final CheckListItem selectedItem = this.adapter
+				.getItem(getSelectedIndex());
+
+		if (selectedItem == null) {
+			return;
+		}
+
+		final EditText edit = new EditText(this);
+		edit.setText(selectedItem.getText());
+
+		new AlertDialog.Builder(this)
+				.setTitle(R.string.checklist_rename_title)
+				.setMessage(R.string.checklist_rename_prompt)
+				.setView(edit)
+				.setPositiveButton(R.string.ok,
+						new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog,
+									int whichButton) {
+								if (selectedItem != null) {
+									selectedItem.setText(edit.getText()
+											.toString());
+
+									refresh();
+								}
+							}
+						})
+				.setNegativeButton(R.string.cancel,
+						new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog,
+									int whichButton) {
+							}
+						}).show();
+
 	}
 
 	private DropListener mDropListener = new DropListener() {

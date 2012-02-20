@@ -74,7 +74,7 @@ public class DragNDropListView extends ListView {
 		}
 
 		if (!mDragMode)
-			return super.onTouchEvent(ev);
+			return false; // super.onTouchEvent(ev);
 
 		switch (action) {
 		case MotionEvent.ACTION_DOWN:
