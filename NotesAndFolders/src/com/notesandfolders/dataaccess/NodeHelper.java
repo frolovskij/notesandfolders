@@ -22,6 +22,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Date;
 import net.sf.andhsli.hotspotlogin.SimpleCrypto;
+
+import com.notesandfolders.CheckList;
 import com.notesandfolders.Node;
 import com.notesandfolders.NodeType;
 import com.notesandfolders.R;
@@ -330,6 +332,11 @@ public class NodeHelper {
 
 	public Node createNote(Node parent, String name, String textContent) {
 		return createNode(parent, name, textContent, NodeType.NOTE);
+	}
+
+	public Node createCheckList(Node parent, String name) {
+		return createNode(parent, name, new CheckList().serialize(),
+				NodeType.CHECKLIST);
 	}
 
 	public Node getRootFolder() {
