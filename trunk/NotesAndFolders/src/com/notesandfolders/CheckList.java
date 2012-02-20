@@ -50,4 +50,8 @@ public class CheckList extends ArrayList<CheckListItem> implements Serializable 
 
 		return result;
 	}
+
+	public CheckList clone() {
+		return CheckList.deserialize(serialize());
+	}
 }

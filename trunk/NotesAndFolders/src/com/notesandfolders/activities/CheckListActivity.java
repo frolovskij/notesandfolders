@@ -62,9 +62,14 @@ public class CheckListActivity extends ListActivity {
 		nh = new NodeHelper(this,
 				Login.getPlainTextPasswordFromTempStorage(this));
 		id = getIntent().getExtras().getLong("checklist_id");
-		initialCheckList = CheckList.deserialize(nh.getTextContentById(id));
 
-		checkList = CheckList.deserialize(nh.getTextContentById(id));
+		String tc = nh.getTextContentById(id);
+		initialCheckList = CheckList.deserialize(tc);
+		checkList = CheckList.deserialize(tc);
+
+		for (CheckListItem item : initialCheckList) {
+			Log.i("1", item.getText());
+		}
 
 		setContentView(R.layout.checklist);
 
@@ -82,10 +87,11 @@ public class CheckListActivity extends ListActivity {
 	}
 
 	public void refresh() {
+		// loading checkList from adapter
 		if (adapter != null) {
+			checkList = new CheckList();
 			for (int i = 0; i < adapter.getCount(); i++) {
-				CheckListItem item = (CheckListItem) adapter.getItem(i);
-				Log.i("1", Boolean.toString(item.isChecked()));
+				checkList.add((CheckListItem) adapter.getItem(i));
 			}
 		}
 
@@ -96,6 +102,13 @@ public class CheckListActivity extends ListActivity {
 		setListAdapter(adapter);
 
 		name.setText(nh.getFullPathById(id));
+	}
+
+	public void onSave() {
+		initialCheckList = checkList.clone();
+
+		String serialized = checkList.serialize();
+		nh.setTextContentById(id, serialized);
 	}
 
 	public void superOnBackPressed() {
@@ -116,7 +129,7 @@ public class CheckListActivity extends ListActivity {
 							new DialogInterface.OnClickListener() {
 								public void onClick(DialogInterface dialog,
 										int whichButton) {
-									// save();
+									onSave();
 									superOnBackPressed();
 								}
 							})
@@ -150,6 +163,9 @@ public class CheckListActivity extends ListActivity {
 		switch (item.getItemId()) {
 		case R.id.checklist_options_add:
 			onNew();
+			return true;
+		case R.id.checklist_options_save:
+			onSave();
 			return true;
 		}
 		return false; // super.onOptionsItemSelected(item);
