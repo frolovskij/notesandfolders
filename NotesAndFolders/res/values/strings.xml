@@ -109,5 +109,8 @@
     <!-- Checklist -->
     <string name="checklist_title">Checklist</string>
     <string name="checklist_add">New item</string>
+    <string name="checklist_newitem_title">New item</string>
+    <string name="checklist_newitem_prompt">Enter text of new item</string>
+    <string name="checklist_msg_save_before_exit">Save changes?</string>
 
 </resources>

@@ -26,20 +26,29 @@ import com.notesandfolders.CheckList;
 import com.notesandfolders.CheckListItem;
 import com.notesandfolders.CheckListItemAdapter;
 import com.notesandfolders.Login;
+import com.notesandfolders.Node;
+import com.notesandfolders.NodeType;
 import com.notesandfolders.R;
 import com.notesandfolders.dataaccess.NodeHelper;
 
+import android.app.AlertDialog;
 import android.app.ListActivity;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
 public class CheckListActivity extends ListActivity {
+	private CheckList initialCheckList;
+	CheckListItemAdapter adapter;
+	private CheckList checkList;
 	private TextView name;
 	private NodeHelper nh;
 	private long id;
@@ -52,23 +61,13 @@ public class CheckListActivity extends ListActivity {
 		nh = new NodeHelper(this,
 				Login.getPlainTextPasswordFromTempStorage(this));
 		id = getIntent().getExtras().getLong("checklist_id");
+		initialCheckList = CheckList.deserialize(nh.getTextContentById(id));
+
+		checkList = CheckList.deserialize(nh.getTextContentById(id));
 
 		setContentView(R.layout.checklist);
 
 		name = (TextView) findViewById(R.id.checklist_name);
-		name.setText(nh.getFullPathById(id));
-
-		CheckList cl = CheckList.deserialize(nh.getTextContentById(id));
-
-		cl.add(new CheckListItem("First", true));
-		cl.add(new CheckListItem("Second", false));
-		cl.add(new CheckListItem("Third", true));
-
-		CheckListItemAdapter adapter = new CheckListItemAdapter(this,
-				new int[] { R.layout.checklist_item },
-				new int[] { R.id.checklist_item_item }, cl);
-
-		setListAdapter(adapter);
 
 		ListView listView = getListView();
 
@@ -77,6 +76,58 @@ public class CheckListActivity extends ListActivity {
 			((DragNDropListView) listView).setRemoveListener(mRemoveListener);
 			((DragNDropListView) listView).setDragListener(mDragListener);
 		}
+
+		refresh();
+	}
+
+	public void refresh() {
+		adapter = new CheckListItemAdapter(this,
+				new int[] { R.layout.checklist_item },
+				new int[] { R.id.checklist_item_item }, checkList);
+
+		setListAdapter(adapter);
+
+		name.setText(nh.getFullPathById(id));
+	}
+
+	public void superOnBackPressed() {
+		super.onBackPressed();
+	}
+
+	@Override
+	public void onBackPressed() {
+		if (checkList.equals(initialCheckList)) {
+			// wasn't changed
+			superOnBackPressed();
+		} else {
+			// if was changed
+			new AlertDialog.Builder(this)
+					.setTitle(R.string.noteseditor_title)
+					.setMessage(R.string.checklist_msg_save_before_exit)
+					.setPositiveButton(R.string.yes,
+							new DialogInterface.OnClickListener() {
+								public void onClick(DialogInterface dialog,
+										int whichButton) {
+									// save();
+									superOnBackPressed();
+								}
+							})
+					.setNegativeButton(R.string.no,
+							new DialogInterface.OnClickListener() {
+								public void onClick(DialogInterface dialog,
+										int whichButton) {
+									superOnBackPressed();
+								}
+							}).
+					// setNeutralButton(R.string.cancel, new
+					// DialogInterface.OnClickListener() {
+					// public void onClick(DialogInterface dialog, int
+					// whichButton) {
+					// dialog.cancel();
+					// }
+					// }).
+					show();
+		}
 	}
 
 	@Override
@@ -84,6 +135,44 @@ public class CheckListActivity extends ListActivity {
 		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.checklist_options, menu);
 		return true;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.checklist_options_add:
+			onNew();
+			return true;
+		}
+		return false; // super.onOptionsItemSelected(item);
+	}
+
+	public void onNew() {
+		final EditText edit = new EditText(this);
+
+		new AlertDialog.Builder(this)
+				.setTitle(R.string.checklist_newitem_title)
+				.setMessage(R.string.checklist_newitem_prompt)
+				.setView(edit)
+				.setPositiveButton(R.string.ok,
+						new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog,
+									int whichButton) {
+								String itemName = edit.getText().toString();
+								checkList
+										.add(new CheckListItem(itemName, false));
+								refresh();
+							}
+						})
+				.setNegativeButton(R.string.cancel,
+						new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog,
+									int whichButton) {
+								// Do nothing.
+							}
+						}).show();
+
+		refresh();
 	}
 
 	private DropListener mDropListener = new DropListener() {
