@@ -40,11 +40,13 @@ import android.content.DialogInterface;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ContextMenu.ContextMenuInfo;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -91,8 +93,7 @@ public class CheckListActivity extends ListActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		nh = new NodeHelper(this,
-				Login.getPlainTextPasswordFromTempStorage(this));
+		nh = new NodeHelper(this, Login.getPlainTextPasswordFromTempStorage(this));
 		id = getIntent().getExtras().getLong("checklist_id");
 
 		String tc = nh.getTextContentById(id);
@@ -111,9 +112,18 @@ public class CheckListActivity extends ListActivity {
 			((DragNDropListView) lv).setDragListener(mDragListener);
 		}
 
+		// registerForContextMenu(lv);
+		createContextMenu();
 		lv.setOnItemLongClickListener(itemLongClickHandler);
 
 		refresh();
+	}
+
+	@Override
+	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
+		super.onCreateContextMenu(menu, v, menuInfo);
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.checklist_context, menu);
 	}
 
 	public void refresh() {
@@ -125,8 +135,7 @@ public class CheckListActivity extends ListActivity {
 			}
 		}
 
-		adapter = new CheckListItemAdapter(this,
-				new int[] { R.layout.checklist_item },
+		adapter = new CheckListItemAdapter(this, new int[] { R.layout.checklist_item },
 				new int[] { R.id.checklist_item_item }, checkList);
 
 		setListAdapter(adapter);
@@ -152,24 +161,18 @@ public class CheckListActivity extends ListActivity {
 			superOnBackPressed();
 		} else {
 			// if was changed
-			new AlertDialog.Builder(this)
-					.setTitle(R.string.noteseditor_title)
+			new AlertDialog.Builder(this).setTitle(R.string.noteseditor_title)
 					.setMessage(R.string.checklist_msg_save_before_exit)
-					.setPositiveButton(R.string.yes,
-							new DialogInterface.OnClickListener() {
-								public void onClick(DialogInterface dialog,
-										int whichButton) {
-									onSave();
-									superOnBackPressed();
-								}
-							})
-					.setNegativeButton(R.string.no,
-							new DialogInterface.OnClickListener() {
-								public void onClick(DialogInterface dialog,
-										int whichButton) {
-									superOnBackPressed();
-								}
-							}).
+					.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int whichButton) {
+							onSave();
+							superOnBackPressed();
+						}
+					}).setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int whichButton) {
+							superOnBackPressed();
+						}
+					}).
 					// setNeutralButton(R.string.cancel, new
 					// DialogInterface.OnClickListener() {
 					// public void onClick(DialogInterface dialog, int
@@ -182,8 +185,7 @@ public class CheckListActivity extends ListActivity {
 	}
 
 	private OnItemLongClickListener itemLongClickHandler = new OnItemLongClickListener() {
-		public boolean onItemLongClick(AdapterView<?> parent, View view,
-				int position, long id) {
+		public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
 			Log.i("CheckListActivity", "onItemLongClick");
 			setSelectedIndex(position);
 			showDialog(CONTEXT_MENU_ID);
@@ -196,19 +198,17 @@ public class CheckListActivity extends ListActivity {
 		Resources res = getResources();
 
 		iconContextMenu = new IconContextMenu(this, CONTEXT_MENU_ID);
-		iconContextMenu.addItem(res, R.string.rename, R.drawable.rename,
-				MENU_RENAME);
+		iconContextMenu.addItem(res, R.string.rename, R.drawable.rename, MENU_RENAME);
 		iconContextMenu.addItem(res, R.string.copy, R.drawable.copy, MENU_COPY);
-		iconContextMenu.addItem(res, R.string.delete, R.drawable.delete,
-				MENU_DELETE);
+		iconContextMenu.addItem(res, R.string.delete, R.drawable.delete, MENU_DELETE);
 		iconContextMenu.setOnClickListener(contextMenuListener);
 	}
 
 	@Override
 	protected Dialog onCreateDialog(int id) {
 		if (id == CONTEXT_MENU_ID) {
-			return iconContextMenu.createMenu(getText(
-					R.string.explorer_context_menu_title).toString());
+			return iconContextMenu.createMenu(getText(R.string.explorer_context_menu_title)
+					.toString());
 		}
 
 		return super.onCreateDialog(id);
@@ -257,32 +257,23 @@ public class CheckListActivity extends ListActivity {
 	public void onNew() {
 		final EditText edit = new EditText(this);
 
-		new AlertDialog.Builder(this)
-				.setTitle(R.string.checklist_newitem_title)
-				.setMessage(R.string.checklist_newitem_prompt)
-				.setView(edit)
-				.setPositiveButton(R.string.ok,
-						new DialogInterface.OnClickListener() {
-							public void onClick(DialogInterface dialog,
-									int whichButton) {
-								String itemName = edit.getText().toString();
-								checkList
-										.add(new CheckListItem(itemName, false));
-								refresh();
-							}
-						})
-				.setNegativeButton(R.string.cancel,
-						new DialogInterface.OnClickListener() {
-							public void onClick(DialogInterface dialog,
-									int whichButton) {
-								// Do nothing.
-							}
-						}).show();
+		new AlertDialog.Builder(this).setTitle(R.string.checklist_newitem_title)
+				.setMessage(R.string.checklist_newitem_prompt).setView(edit)
+				.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int whichButton) {
+						String itemName = edit.getText().toString();
+						checkList.add(new CheckListItem(itemName, false));
+						refresh();
+					}
+				}).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int whichButton) {
+						// Do nothing.
+					}
+				}).show();
 	}
 
 	private void onRename() {
-		final CheckListItem selectedItem = this.adapter
-				.getItem(getSelectedIndex());
+		final CheckListItem selectedItem = this.adapter.getItem(getSelectedIndex());
 
 		if (selectedItem == null) {
 			return;
@@ -291,28 +282,20 @@ public class CheckListActivity extends ListActivity {
 		final EditText edit = new EditText(this);
 		edit.setText(selectedItem.getText());
 
-		new AlertDialog.Builder(this)
-				.setTitle(R.string.checklist_rename_title)
-				.setMessage(R.string.checklist_rename_prompt)
-				.setView(edit)
-				.setPositiveButton(R.string.ok,
-						new DialogInterface.OnClickListener() {
-							public void onClick(DialogInterface dialog,
-									int whichButton) {
-								if (selectedItem != null) {
-									selectedItem.setText(edit.getText()
-											.toString());
+		new AlertDialog.Builder(this).setTitle(R.string.checklist_rename_title)
+				.setMessage(R.string.checklist_rename_prompt).setView(edit)
+				.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int whichButton) {
+						if (selectedItem != null) {
+							selectedItem.setText(edit.getText().toString());
 
-									refresh();
-								}
-							}
-						})
-				.setNegativeButton(R.string.cancel,
-						new DialogInterface.OnClickListener() {
-							public void onClick(DialogInterface dialog,
-									int whichButton) {
-							}
-						}).show();
+							refresh();
+						}
+					}
+				}).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int whichButton) {
+					}
+				}).show();
 
 	}
 
@@ -349,7 +332,7 @@ public class CheckListActivity extends ListActivity {
 			itemView.setVisibility(View.INVISIBLE);
 			defaultBackgroundColor = itemView.getDrawingCacheBackgroundColor();
 			itemView.setBackgroundColor(backgroundColor);
-			ImageView iv = (ImageView) itemView.findViewById(R.id.imageView01);
+			ImageView iv = (ImageView) itemView.findViewById(R.id.ImageView01);
 			if (iv != null)
 				iv.setVisibility(View.INVISIBLE);
 		}
@@ -357,7 +340,7 @@ public class CheckListActivity extends ListActivity {
 		public void onStopDrag(View itemView) {
 			itemView.setVisibility(View.VISIBLE);
 			itemView.setBackgroundColor(defaultBackgroundColor);
-			ImageView iv = (ImageView) itemView.findViewById(R.id.imageView01);
+			ImageView iv = (ImageView) itemView.findViewById(R.id.ImageView01);
 			if (iv != null)
 				iv.setVisibility(View.VISIBLE);
 		}
