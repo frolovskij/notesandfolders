@@ -29,29 +29,27 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
+import android.widget.CheckedTextView;
 import android.widget.CompoundButton;
 
-public final class CheckListItemAdapter extends BaseAdapter implements
-		RemoveListener, DropListener {
+public final class CheckListItemAdapter extends BaseAdapter implements RemoveListener, DropListener {
 
 	private int[] mIds;
 	private int[] mLayouts;
 	private LayoutInflater mInflater;
 	private ArrayList<CheckListItem> mContent;
 
-	public CheckListItemAdapter(Context context,
-			ArrayList<CheckListItem> content) {
+	public CheckListItemAdapter(Context context, ArrayList<CheckListItem> content) {
 		init(context, new int[] { android.R.layout.simple_list_item_1 },
 				new int[] { android.R.id.text1 }, content);
 	}
 
-	public CheckListItemAdapter(Context context, int[] itemLayouts,
-			int[] itemIDs, ArrayList<CheckListItem> content) {
+	public CheckListItemAdapter(Context context, int[] itemLayouts, int[] itemIDs,
+			ArrayList<CheckListItem> content) {
 		init(context, itemLayouts, itemIDs, content);
 	}
 
-	private void init(Context context, int[] layouts, int[] ids,
-			ArrayList<CheckListItem> content) {
+	private void init(Context context, int[] layouts, int[] ids, ArrayList<CheckListItem> content) {
 		// Cache the LayoutInflate to avoid asking for a new one each time.
 		mInflater = LayoutInflater.from(context);
 		mIds = ids;
@@ -102,21 +100,9 @@ public final class CheckListItemAdapter extends BaseAdapter implements
 			convertView = mInflater.inflate(mLayouts[0], null);
 
 			holder = new ViewHolder();
-			holder.checkBox = (CheckBox) convertView.findViewById(mIds[0]);
-
-			holder.checkBox
-					.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-
-						public void onCheckedChanged(CompoundButton buttonView,
-								boolean isChecked) {
-							CheckListItem item = (CheckListItem) holder.checkBox
-									.getTag();
-
-							if (item != null) {
-								item.setChecked(buttonView.isChecked());
-							}
-						}
-					});
+			holder.checkBox = (CheckedTextView) convertView.findViewById(mIds[0]);
+			holder.checkBox.setFocusable(false);
+			holder.checkBox.setFocusableInTouchMode(false);
 
 			convertView.setTag(holder);
 		} else {
@@ -133,7 +119,7 @@ public final class CheckListItemAdapter extends BaseAdapter implements
 	}
 
 	static class ViewHolder {
-		CheckBox checkBox;
+		CheckedTextView checkBox;
 	}
 
 	public void onRemove(int which) {
