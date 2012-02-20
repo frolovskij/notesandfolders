@@ -23,7 +23,6 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
-import com.ericharlow.DragNDrop.DragNDropListActivity;
 import com.notesandfolders.CopyTask;
 import com.notesandfolders.IconListItem;
 import com.notesandfolders.IconListItemAdapter;
@@ -378,7 +377,7 @@ public class ExplorerActivity extends BaseActivity implements
 		// when going back from viewer/editor this item will be focused
 		setIdToSetFocusTo(id);
 
-		Intent viewer = new Intent(this, DragNDropListActivity.class);
+		Intent viewer = new Intent(this, CheckListActivity.class);
 		viewer.putExtra("checklist_id", id);
 		startActivity(viewer);
 	}

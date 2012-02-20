@@ -55,11 +55,10 @@
     <!-- New note alert dialog -->
     <string name="explorer_newnote_title">New note</string>
     <string name="explorer_newnote_prompt">Enter name of new note</string>
-    
+
     <!-- New checklist alert dialog -->
     <string name="explorer_newchecklist_title">New checklist</string>
     <string name="explorer_newchecklist_prompt">Enter name of new checklist</string>
-    
 
     <!-- Rename alert dialog -->
     <string name="explorer_rename_title">Renaming</string>
@@ -106,5 +105,9 @@
 
     <!--  -->
     <string name="documentation_title">Documentation</string>
+
+    <!-- Checklist -->
+    <string name="checklist_title">Checklist</string>
+    <string name="checklist_add">New item</string>
 
 </resources>

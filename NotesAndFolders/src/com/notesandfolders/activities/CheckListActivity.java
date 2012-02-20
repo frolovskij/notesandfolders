@@ -14,27 +14,47 @@
  * limitations under the License.
  */
 
-package com.ericharlow.DragNDrop;
+package com.notesandfolders.activities;
 
 import java.util.ArrayList;
 
+import com.ericharlow.DragNDrop.DragListener;
+import com.ericharlow.DragNDrop.DragNDropAdapter;
+import com.ericharlow.DragNDrop.DragNDropListView;
+import com.ericharlow.DragNDrop.DropListener;
+import com.ericharlow.DragNDrop.RemoveListener;
+import com.notesandfolders.Login;
 import com.notesandfolders.R;
+import com.notesandfolders.dataaccess.NodeHelper;
 
 import android.app.ListActivity;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 
-public class DragNDropListActivity extends ListActivity {
+public class CheckListActivity extends ListActivity {
+	private TextView name;
+	private NodeHelper nh;
+	private long id;
 
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
+		nh = new NodeHelper(this,
+				Login.getPlainTextPasswordFromTempStorage(this));
+		id = getIntent().getExtras().getLong("checklist_id");
+
 		setContentView(R.layout.dragndroplistview);
+
+		name = (TextView) findViewById(R.id.checklist_name);
+		name.setText(nh.getFullPathById(id));
 
 		ArrayList<String> content = new ArrayList<String>(mListContent.length);
 		for (int i = 0; i < mListContent.length; i++) {
@@ -51,6 +71,13 @@ public class DragNDropListActivity extends ListActivity {
 			((DragNDropListView) listView).setRemoveListener(mRemoveListener);
 			((DragNDropListView) listView).setDragListener(mDragListener);
 		}
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.checklist_options, menu);
+		return true;
 	}
 
 	private DropListener mDropListener = new DropListener() {

@@ -47,8 +47,8 @@
             android:label="@string/documentation_title" >
         </activity>
         <activity
-            android:name="com.ericharlow.DragNDrop.DragNDropListActivity"
-            android:label="@string/create_checklist" >
+            android:name=".activities.CheckListActivity"
+            android:label="@string/checklist_title" >
         </activity>
     </application>
 
