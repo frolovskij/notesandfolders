@@ -35,6 +35,7 @@ import android.app.AlertDialog;
 import android.app.ListActivity;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -81,6 +82,13 @@ public class CheckListActivity extends ListActivity {
 	}
 
 	public void refresh() {
+		if (adapter != null) {
+			for (int i = 0; i < adapter.getCount(); i++) {
+				CheckListItem item = (CheckListItem) adapter.getItem(i);
+				Log.i("1", Boolean.toString(item.isChecked()));
+			}
+		}
+
 		adapter = new CheckListItemAdapter(this,
 				new int[] { R.layout.checklist_item },
 				new int[] { R.id.checklist_item_item }, checkList);
@@ -171,8 +179,6 @@ public class CheckListActivity extends ListActivity {
 								// Do nothing.
 							}
 						}).show();
-
-		refresh();
 	}
 
 	private DropListener mDropListener = new DropListener() {

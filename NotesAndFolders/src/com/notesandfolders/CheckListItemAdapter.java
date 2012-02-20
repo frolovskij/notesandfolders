@@ -29,6 +29,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 
 public final class CheckListItemAdapter extends BaseAdapter implements
 		RemoveListener, DropListener {
@@ -95,7 +96,7 @@ public final class CheckListItemAdapter extends BaseAdapter implements
 	 *      android.view.ViewGroup)
 	 */
 	public View getView(int position, View convertView, ViewGroup parent) {
-		ViewHolder holder;
+		final ViewHolder holder;
 
 		if (convertView == null) {
 			convertView = mInflater.inflate(mLayouts[0], null);
@@ -103,10 +104,27 @@ public final class CheckListItemAdapter extends BaseAdapter implements
 			holder = new ViewHolder();
 			holder.checkBox = (CheckBox) convertView.findViewById(mIds[0]);
 
+			holder.checkBox
+					.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
+						public void onCheckedChanged(CompoundButton buttonView,
+								boolean isChecked) {
+							CheckListItem item = (CheckListItem) holder.checkBox
+									.getTag();
+
+							if (item != null) {
+								item.setChecked(buttonView.isChecked());
+							}
+						}
+					});
+
 			convertView.setTag(holder);
 		} else {
 			holder = (ViewHolder) convertView.getTag();
 		}
+
+		// saves a reference to the corresponding CheckListItem
+		holder.checkBox.setTag(mContent.get(position));
 
 		holder.checkBox.setText(mContent.get(position).getText());
 		holder.checkBox.setChecked(mContent.get(position).isChecked());
