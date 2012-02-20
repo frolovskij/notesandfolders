@@ -23,6 +23,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
+import com.ericharlow.DragNDrop.DragNDropListActivity;
 import com.notesandfolders.CopyTask;
 import com.notesandfolders.IconListItem;
 import com.notesandfolders.IconListItemAdapter;
@@ -373,6 +374,15 @@ public class ExplorerActivity extends BaseActivity implements
 		startActivity(viewer);
 	}
 
+	public void openCheckList(long id) {
+		// when going back from viewer/editor this item will be focused
+		setIdToSetFocusTo(id);
+
+		Intent viewer = new Intent(this, DragNDropListActivity.class);
+		viewer.putExtra("checklist_id", id);
+		startActivity(viewer);
+	}
+
 	private void onOpen(long id) {
 		Node node = nh.getNodeById(id);
 
@@ -384,7 +394,7 @@ public class ExplorerActivity extends BaseActivity implements
 			openNote(node.getId());
 			break;
 		case CHECKLIST:
-			showAlert(R.string.msg_not_implemented_yet);
+			openCheckList(node.getId());
 			break;
 		}
 	}

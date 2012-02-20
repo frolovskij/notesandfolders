@@ -46,6 +46,10 @@
             android:name=".activities.HelpActivity"
             android:label="@string/documentation_title" >
         </activity>
-        </application>
+        <activity
+            android:name="com.ericharlow.DragNDrop.DragNDropListActivity"
+            android:label="@string/create_checklist" >
+        </activity>
+    </application>
 
 </manifest>
