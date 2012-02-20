@@ -29,7 +29,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.ArrayList;
 
-public class FileImporter {
+public class ImportHelper {
 
 	private static long _id = 0;
 
@@ -54,8 +54,8 @@ public class FileImporter {
 	private static String getFileContents(File f) {
 		StringBuffer sb = new StringBuffer();
 		try {
-			BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(f),
-					"UTF-8"));
+			BufferedReader br = new BufferedReader(new InputStreamReader(
+					new FileInputStream(f), "UTF-8"));
 			try {
 				String s;
 				while ((s = br.readLine()) != null) {
@@ -86,7 +86,8 @@ public class FileImporter {
 		n.setTextContent(getFileContents(file));
 
 		// remove *.txt extension
-		if (!file.isDirectory() && getFileNameExtension(file.getName()).equalsIgnoreCase("txt")) {
+		if (!file.isDirectory()
+				&& getFileNameExtension(file.getName()).equalsIgnoreCase("txt")) {
 			int nameLen = file.getName().length();
 			n.setName(n.getName().substring(0, nameLen - 4)); // ".txt".length()
 		}
@@ -103,7 +104,9 @@ public class FileImporter {
 			return RESULT_NOT_EXISTS;
 		}
 
-		if (!file.isDirectory() && !getFileNameExtension(file.getName()).equalsIgnoreCase("txt")) {
+		if (!file.isDirectory()
+				&& !getFileNameExtension(file.getName())
+						.equalsIgnoreCase("txt")) {
 			return RESULT_NOT_TXT;
 		}
 
@@ -111,7 +114,7 @@ public class FileImporter {
 	}
 
 	private static void processPath(File file, List<Node> list, long parentId) {
-		if (canImport(file) != FileImporter.RESULT_OK) {
+		if (canImport(file) != ImportHelper.RESULT_OK) {
 			return;
 		}
 
@@ -128,7 +131,7 @@ public class FileImporter {
 		File[] children = file.listFiles();
 
 		for (File child : children) {
-			if (canImport(child) == FileImporter.RESULT_OK) {
+			if (canImport(child) == ImportHelper.RESULT_OK) {
 				if (child.isDirectory()) {
 					processPath(child, list, root.getId());
 				} else {
