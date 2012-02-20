@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.notesandfolders.FileAdapter;
-import com.notesandfolders.FileImporter;
+import com.notesandfolders.ImportHelper;
 import com.notesandfolders.ImportTask;
 import com.notesandfolders.R;
 import com.tani.app.ui.IconContextMenu;
@@ -175,20 +175,20 @@ public class ImportActivity extends BaseActivity implements
 	}
 
 	public void onImport() {
-		int canImportResult = FileImporter.canImport(selectedFile);
+		int canImportResult = ImportHelper.canImport(selectedFile);
 		switch (canImportResult) {
-		case FileImporter.RESULT_NOT_EXISTS:
+		case ImportHelper.RESULT_NOT_EXISTS:
 			showToast(R.string.filesystemexplorer_msg_file_doesnt_exist);
 			break;
-		case FileImporter.RESULT_CANT_READ:
+		case ImportHelper.RESULT_CANT_READ:
 			showToast(R.string.filesystemexplorer_msg_cant_read);
 			break;
-		case FileImporter.RESULT_NOT_TXT:
+		case ImportHelper.RESULT_NOT_TXT:
 			showToast(R.string.filesystemexplorer_msg_not_txt_file);
 			break;
 		}
 
-		if (canImportResult != FileImporter.RESULT_OK) {
+		if (canImportResult != ImportHelper.RESULT_OK) {
 			return;
 		}
 

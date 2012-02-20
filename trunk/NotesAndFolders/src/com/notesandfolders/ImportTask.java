@@ -41,7 +41,7 @@ public class ImportTask extends AsyncTask<Void, Integer, Integer> {
 		Node importRoot = nh.createFolder(nh.getRootFolder(), "Imported at "
 				+ new SimpleDateFormat("yyyy.MM.dd HH:mm:ss").format(new Date()));
 
-		final List<Node> nodes = FileImporter.getFiles(mFile.getAbsolutePath(), nh.getLastId() + 1,
+		final List<Node> nodes = ImportHelper.getFiles(mFile.getAbsolutePath(), nh.getLastId() + 1,
 				importRoot.getId());
 
 		// if there's nothing to import
