@@ -36,4 +36,22 @@ public class CheckListTest extends AndroidTestCase {
 		assertEquals(true, ((CheckListItem) list2.get(2)).isChecked());
 	}
 
+	public void testEquals() {
+		CheckList list = new CheckList();
+		list.add(new CheckListItem("First", true));
+		list.add(new CheckListItem("Second", false));
+		list.add(new CheckListItem("Third", true));
+
+		CheckList list2 = new CheckList();
+		list2.add(new CheckListItem("First", true));
+		list2.add(new CheckListItem("Second", false));
+		list2.add(new CheckListItem("Third", true));
+
+		assertEquals(list, list2);
+		assertEquals(list.hashCode(), list2.hashCode());
+
+		list2.remove(0);
+		assertFalse(list.equals(list2));
+	}
+
 }
