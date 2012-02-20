@@ -1,28 +1,30 @@
 /*
- * Copyright (C) 2010 Eric Harlow
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+Copyright 2012 Фроловский Алексей
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+This file is a part of Notes & Folders project.
  */
 
 package com.notesandfolders.activities;
 
-import java.util.ArrayList;
-
 import com.ericharlow.DragNDrop.DragListener;
-import com.ericharlow.DragNDrop.DragNDropAdapter;
 import com.ericharlow.DragNDrop.DragNDropListView;
 import com.ericharlow.DragNDrop.DropListener;
 import com.ericharlow.DragNDrop.RemoveListener;
+import com.notesandfolders.CheckList;
+import com.notesandfolders.CheckListItem;
+import com.notesandfolders.CheckListItemAdapter;
 import com.notesandfolders.Login;
 import com.notesandfolders.R;
 import com.notesandfolders.dataaccess.NodeHelper;
@@ -51,19 +53,23 @@ public class CheckListActivity extends ListActivity {
 				Login.getPlainTextPasswordFromTempStorage(this));
 		id = getIntent().getExtras().getLong("checklist_id");
 
-		setContentView(R.layout.dragndroplistview);
+		setContentView(R.layout.checklist);
 
 		name = (TextView) findViewById(R.id.checklist_name);
 		name.setText(nh.getFullPathById(id));
 
-		ArrayList<String> content = new ArrayList<String>(mListContent.length);
-		for (int i = 0; i < mListContent.length; i++) {
-			content.add(mListContent[i]);
-		}
+		CheckList cl = CheckList.deserialize(nh.getTextContentById(id));
 
-		setListAdapter(new DragNDropAdapter(this,
-				new int[] { R.layout.dragitem }, new int[] { R.id.checkBox1 },
-				content));// new DragNDropAdapter(this,content)
+		cl.add(new CheckListItem("First", true));
+		cl.add(new CheckListItem("Second", false));
+		cl.add(new CheckListItem("Third", true));
+
+		CheckListItemAdapter adapter = new CheckListItemAdapter(this,
+				new int[] { R.layout.checklist_item },
+				new int[] { R.id.checklist_item_item }, cl);
+
+		setListAdapter(adapter);
+
 		ListView listView = getListView();
 
 		if (listView instanceof DragNDropListView) {
@@ -83,8 +89,8 @@ public class CheckListActivity extends ListActivity {
 	private DropListener mDropListener = new DropListener() {
 		public void onDrop(int from, int to) {
 			ListAdapter adapter = getListAdapter();
-			if (adapter instanceof DragNDropAdapter) {
-				((DragNDropAdapter) adapter).onDrop(from, to);
+			if (adapter instanceof CheckListItemAdapter) {
+				((CheckListItemAdapter) adapter).onDrop(from, to);
 				getListView().invalidateViews();
 			}
 		}
@@ -93,8 +99,8 @@ public class CheckListActivity extends ListActivity {
 	private RemoveListener mRemoveListener = new RemoveListener() {
 		public void onRemove(int which) {
 			ListAdapter adapter = getListAdapter();
-			if (adapter instanceof DragNDropAdapter) {
-				((DragNDropAdapter) adapter).onRemove(which);
+			if (adapter instanceof CheckListItemAdapter) {
+				((CheckListItemAdapter) adapter).onRemove(which);
 				getListView().invalidateViews();
 			}
 		}
@@ -127,6 +133,4 @@ public class CheckListActivity extends ListActivity {
 		}
 
 	};
-
-	private static String[] mListContent = { "A", "B", "C", "D", "E" };
 }

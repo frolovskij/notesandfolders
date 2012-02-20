@@ -21,6 +21,8 @@ package com.notesandfolders;
 import java.io.Serializable;
 
 public class CheckListItem implements Serializable {
+	private static final long serialVersionUID = 488624307828105499L;
+
 	private boolean isChecked;
 
 	private String text;
