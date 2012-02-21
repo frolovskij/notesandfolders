@@ -113,6 +113,8 @@
     <string name="checklist_newitem_prompt">Enter text of new item</string>
     <string name="checklist_msg_save_before_exit">Save changes?</string>
     <string name="checklist_rename_title">Renaming</string>
-    <string name="checklist_rename_prompt">Enter new text</string>    
+    <string name="checklist_rename_prompt">Enter new text</string>
+    <string name="checklist_delete_title">Deleting</string>
+    <string name="checklist_delete_prompt">Are you sure you want to delete it?</string>
 
 </resources>
