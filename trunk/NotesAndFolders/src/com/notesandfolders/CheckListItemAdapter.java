@@ -28,9 +28,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.CheckBox;
 import android.widget.CheckedTextView;
-import android.widget.CompoundButton;
 
 public final class CheckListItemAdapter extends BaseAdapter implements RemoveListener, DropListener {
 

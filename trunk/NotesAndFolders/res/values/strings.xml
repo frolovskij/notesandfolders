@@ -8,13 +8,13 @@
     <string name="insert_date_time">Insert date &amp; time</string>
     <string name="filename_copy_suffix">" - Copy"</string>
 
-    <!-- FileSystemExplorer -->
-    <string name="filesystemexplorer_title">File system</string>
-    <string name="filesystemexplorer_go_back">Go to the upper folder</string>
-    <string name="filesystemexplorer_icon">Icon</string>
-    <string name="filesystemexplorer_msg_file_doesnt_exist">File does not exist</string>
-    <string name="filesystemexplorer_msg_cant_read">Can\'t import not readable item</string>
-    <string name="filesystemexplorer_msg_not_txt_file">Only *.txt files can be imported</string>
+    <!-- Import activity -->
+    <string name="import_title">File system</string>
+    <string name="import_go_back">Go to the upper folder</string>
+    <string name="import_icon">Icon</string>
+    <string name="import_msg_file_doesnt_exist">File does not exist</string>
+    <string name="import_msg_cant_read">Can\'t import not readable item</string>
+    <string name="import_msg_not_txt_file">Only *.txt files can be imported</string>
 
     <!-- Common -->
     <string name="ok">Ok</string>
@@ -103,8 +103,8 @@
     <string name="noteseditor_title">Notes editor</string>
     <string name="noteseditor_msg_save_before_exit">Save changes?</string>
 
-    <!--  -->
-    <string name="documentation_title">Documentation</string>
+    <!-- Help -->
+    <string name="help_title">Documentation</string>
 
     <!-- Checklist -->
     <string name="checklist_title">Checklist</string>

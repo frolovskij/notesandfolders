@@ -1,4 +1,4 @@
-package com.notesandfolders.activities;
+package com.notesandfolders;
 
 import java.io.BufferedReader;
 import java.io.IOException;

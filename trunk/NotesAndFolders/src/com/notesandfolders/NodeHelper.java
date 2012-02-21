@@ -16,18 +16,14 @@ limitations under the License.
 This file is a part of Notes & Folders project.
  */
 
-package com.notesandfolders.dataaccess;
+package com.notesandfolders;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Date;
 import net.sf.andhsli.hotspotlogin.SimpleCrypto;
 
-import com.notesandfolders.CheckList;
-import com.notesandfolders.Node;
-import com.notesandfolders.NodeType;
 import com.notesandfolders.R;
-import com.notesandfolders.Settings;
 
 import android.content.ContentValues;
 import android.content.Context;

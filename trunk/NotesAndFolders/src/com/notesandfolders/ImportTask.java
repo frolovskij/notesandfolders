@@ -25,8 +25,6 @@ import java.util.List;
 
 import android.os.AsyncTask;
 
-import com.notesandfolders.activities.ImportActivity;
-import com.notesandfolders.dataaccess.NodeHelper;
 
 public class ImportTask extends AsyncTask<Void, Integer, Integer> {
 

@@ -16,14 +16,12 @@ limitations under the License.
 This file is a part of Notes & Folders project.
  */
 
-package com.notesandfolders.activities;
+package com.notesandfolders;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import com.notesandfolders.Login;
 import com.notesandfolders.R;
-import com.notesandfolders.dataaccess.NodeHelper;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;

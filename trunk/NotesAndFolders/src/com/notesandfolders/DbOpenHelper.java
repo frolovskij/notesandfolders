@@ -16,14 +16,12 @@ limitations under the License.
 This file is a part of Notes & Folders project.
  */
 
-package com.notesandfolders.dataaccess;
+package com.notesandfolders;
 
 import java.util.Date;
 
 import net.sf.andhsli.hotspotlogin.SimpleCrypto;
 
-import com.notesandfolders.KeyGenerator;
-import com.notesandfolders.Settings;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;

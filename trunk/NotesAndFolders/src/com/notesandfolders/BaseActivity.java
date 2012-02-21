@@ -16,7 +16,7 @@ limitations under the License.
 This file is a part of Notes & Folders project.
  */
 
-package com.notesandfolders.activities;
+package com.notesandfolders;
 
 import android.app.Activity;
 import android.app.AlertDialog;
