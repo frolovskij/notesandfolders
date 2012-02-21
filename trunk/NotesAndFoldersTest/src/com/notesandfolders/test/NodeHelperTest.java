@@ -1,13 +1,13 @@
-package com.notesandfolders.dataaccess.test;
+package com.notesandfolders.test;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import com.notesandfolders.DbOpenHelper;
+import com.notesandfolders.NodeHelper;
 import com.notesandfolders.NodeType;
 import com.notesandfolders.Node;
 import com.notesandfolders.Settings;
-import com.notesandfolders.dataaccess.DbOpenHelper;
-import com.notesandfolders.dataaccess.NodeHelper;
 import android.database.sqlite.SQLiteDatabase;
 import android.test.AndroidTestCase;
 
