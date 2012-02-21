@@ -1,12 +1,12 @@
-package com.notesandfolders.dataaccess.test;
+package com.notesandfolders.test;
 
 import net.sf.andhsli.hotspotlogin.SimpleCrypto;
 import android.database.sqlite.SQLiteDatabase;
 import android.test.AndroidTestCase;
 import android.util.Log;
 
+import com.notesandfolders.DbOpenHelper;
 import com.notesandfolders.Settings;
-import com.notesandfolders.dataaccess.DbOpenHelper;
 
 public class DbOpenHelperTest extends AndroidTestCase {
 	Settings s;

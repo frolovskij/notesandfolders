@@ -1,7 +1,7 @@
 package com.notesandfolders.test;
 
+import com.notesandfolders.DbOpenHelper;
 import com.notesandfolders.Settings;
-import com.notesandfolders.dataaccess.DbOpenHelper;
 
 import android.database.sqlite.SQLiteDatabase;
 import android.test.AndroidTestCase;
