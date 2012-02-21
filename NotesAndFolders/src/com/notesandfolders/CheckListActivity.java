@@ -16,26 +16,19 @@ limitations under the License.
 This file is a part of Notes & Folders project.
  */
 
-package com.notesandfolders.activities;
+package com.notesandfolders;
 
 import com.ericharlow.DragNDrop.DragListener;
 import com.ericharlow.DragNDrop.DragNDropListView;
 import com.ericharlow.DragNDrop.DropListener;
 import com.ericharlow.DragNDrop.RemoveListener;
-import com.notesandfolders.CheckList;
-import com.notesandfolders.CheckListItem;
-import com.notesandfolders.CheckListItemAdapter;
-import com.notesandfolders.Login;
-import com.notesandfolders.Node;
 import com.notesandfolders.R;
-import com.notesandfolders.dataaccess.NodeHelper;
 import com.tani.app.ui.IconContextMenu;
 import com.tani.app.ui.IconContextMenu.IconContextMenuOnClickListener;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ListActivity;
-import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.res.Resources;
 import android.os.Bundle;
@@ -45,7 +38,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.widget.AdapterView;
 import android.widget.EditText;

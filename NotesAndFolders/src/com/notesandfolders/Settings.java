@@ -23,7 +23,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.notesandfolders.dataaccess.DbOpenHelper;
 
 public class Settings {
 	public static final String SETTINGS_PASSWORD_SHA1_HASH = "password_sha1_hash";

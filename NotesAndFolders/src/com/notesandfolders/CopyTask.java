@@ -2,8 +2,6 @@ package com.notesandfolders;
 
 import android.os.AsyncTask;
 
-import com.notesandfolders.activities.ExplorerActivity;
-import com.notesandfolders.dataaccess.NodeHelper;
 
 public class CopyTask extends AsyncTask<Void, String, Integer> {
 

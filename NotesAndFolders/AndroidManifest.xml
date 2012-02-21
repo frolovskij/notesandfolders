@@ -10,7 +10,7 @@
         android:icon="@drawable/icon"
         android:label="@string/app_name" >
         <activity
-            android:name=".activities.LoginActivity"
+            android:name=".LoginActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -19,35 +19,35 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activities.ExplorerActivity"
+            android:name=".ExplorerActivity"
             android:label="@string/app_name" >
         </activity>
         <activity
-            android:name=".activities.SettingsActivity"
+            android:name=".SettingsActivity"
             android:label="@string/settings_title" >
         </activity>
         <activity
-            android:name=".activities.PasswordActivity"
+            android:name=".PasswordActivity"
             android:label="@string/password_edit_title" >
         </activity>
         <activity
-            android:name=".activities.NotesViewerActivity"
+            android:name=".NotesViewerActivity"
             android:label="@string/noteseditor_title" >
         </activity>
         <activity
-            android:name=".activities.NotesEditorActivity"
+            android:name=".NotesEditorActivity"
             android:label="@string/noteseditor_title" >
         </activity>
         <activity
-            android:name=".activities.ImportActivity"
-            android:label="@string/filesystemexplorer_title" >
+            android:name=".ImportActivity"
+            android:label="@string/import_title" >
         </activity>
         <activity
-            android:name=".activities.HelpActivity"
-            android:label="@string/documentation_title" >
+            android:name=".HelpActivity"
+            android:label="@string/help_title" >
         </activity>
         <activity
-            android:name=".activities.CheckListActivity"
+            android:name=".CheckListActivity"
             android:label="@string/checklist_title" >
         </activity>
     </application>

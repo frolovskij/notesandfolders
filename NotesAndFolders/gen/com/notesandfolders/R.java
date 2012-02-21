@@ -78,8 +78,8 @@ public final class R {
         public static final int documentation=0x7f030002;
         public static final int explorer=0x7f030003;
         public static final int explorer_item=0x7f030004;
-        public static final int fsexplorer=0x7f030005;
-        public static final int fsexplorer_item=0x7f030006;
+        public static final int import_=0x7f030005;
+        public static final int import_list_item=0x7f030006;
         public static final int login=0x7f030007;
         public static final int noteseditor=0x7f030008;
         public static final int notesviewer=0x7f030009;
@@ -116,9 +116,6 @@ public final class R {
         public static final int create_note=0x7f050045;
         public static final int cut=0x7f05001a;
         public static final int delete=0x7f05001b;
-        /**   
-         */
-        public static final int documentation_title=0x7f050049;
         public static final int edit=0x7f050018;
         /**  Context menu operations on folders, files & checklists 
          */
@@ -147,15 +144,18 @@ public final class R {
          */
         public static final int explorer_rename_title=0x7f05002a;
         public static final int filename_copy_suffix=0x7f050005;
-        public static final int filesystemexplorer_go_back=0x7f050007;
-        public static final int filesystemexplorer_icon=0x7f050008;
-        public static final int filesystemexplorer_msg_cant_read=0x7f05000a;
-        public static final int filesystemexplorer_msg_file_doesnt_exist=0x7f050009;
-        public static final int filesystemexplorer_msg_not_txt_file=0x7f05000b;
-        /**  FileSystemExplorer 
-         */
-        public static final int filesystemexplorer_title=0x7f050006;
         public static final int fsimp=0x7f05001e;
+        /**  Help 
+         */
+        public static final int help_title=0x7f050049;
+        public static final int import_go_back=0x7f050007;
+        public static final int import_icon=0x7f050008;
+        public static final int import_msg_cant_read=0x7f05000a;
+        public static final int import_msg_file_doesnt_exist=0x7f050009;
+        public static final int import_msg_not_txt_file=0x7f05000b;
+        /**  Import activity 
+         */
+        public static final int import_title=0x7f050006;
         public static final int insert_date_time=0x7f050004;
         public static final int login_button=0x7f050022;
         public static final int login_logo=0x7f050023;

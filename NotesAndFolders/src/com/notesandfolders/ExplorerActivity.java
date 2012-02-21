@@ -16,23 +16,14 @@ limitations under the License.
 This file is a part of Notes & Folders project.
  */
 
-package com.notesandfolders.activities;
+package com.notesandfolders;
 
 import java.text.SimpleDateFormat;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
-import com.notesandfolders.CopyTask;
-import com.notesandfolders.IconListItem;
-import com.notesandfolders.IconListItemAdapter;
-import com.notesandfolders.Login;
-import com.notesandfolders.NaturalOrderNodesComparator;
-import com.notesandfolders.Node;
-import com.notesandfolders.NodeAdapter;
-import com.notesandfolders.NodeType;
 import com.notesandfolders.R;
-import com.notesandfolders.dataaccess.NodeHelper;
 import com.tani.app.ui.IconContextMenu;
 import com.tani.app.ui.IconContextMenu.IconContextMenuOnClickListener;
 

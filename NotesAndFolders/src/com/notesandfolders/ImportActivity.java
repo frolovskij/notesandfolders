@@ -16,16 +16,13 @@ limitations under the License.
 This file is a part of Notes & Folders project.
  */
 
-package com.notesandfolders.activities;
+package com.notesandfolders;
 
 import java.io.File;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import com.notesandfolders.FileAdapter;
-import com.notesandfolders.ImportHelper;
-import com.notesandfolders.ImportTask;
 import com.notesandfolders.R;
 import com.tani.app.ui.IconContextMenu;
 
@@ -43,7 +40,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 public class ImportActivity extends BaseActivity implements
-		IconContextMenu.IconContextMenuOnClickListener, OnItemClickListener, OnClickListener {
+		IconContextMenu.IconContextMenuOnClickListener, OnItemClickListener,
+		OnClickListener {
 	private static final int CONTEXT_MENU_ID = 0;
 	public static final int IMPORTING_DIALOG_ID = 1;
 	private static final int MENU_IMPORT = 1;
@@ -71,7 +69,7 @@ public class ImportActivity extends BaseActivity implements
 			path = "/";
 		}
 
-		setContentView(R.layout.fsexplorer);
+		setContentView(R.layout.import_);
 		location = (TextView) findViewById(R.id.fsexplorer_path);
 
 		lv = (ListView) findViewById(R.id.fsexplorer_listview);
@@ -117,12 +115,14 @@ public class ImportActivity extends BaseActivity implements
 		Resources res = getResources();
 
 		iconContextMenu = new IconContextMenu(this, CONTEXT_MENU_ID);
-		iconContextMenu.addItem(res, R.string.fsimp, R.drawable.fsimp, MENU_IMPORT);
+		iconContextMenu.addItem(res, R.string.fsimp, R.drawable.fsimp,
+				MENU_IMPORT);
 		iconContextMenu.setOnClickListener(this);
 	}
 
 	private OnItemLongClickListener itemLongClickHandler = new OnItemLongClickListener() {
-		public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+		public boolean onItemLongClick(AdapterView<?> parent, View view,
+				int position, long id) {
 			selectedFile = ((File) lv.getItemAtPosition(position));
 
 			createContextMenu();
@@ -138,8 +138,8 @@ public class ImportActivity extends BaseActivity implements
 	@Override
 	protected Dialog onCreateDialog(int id) {
 		if (id == CONTEXT_MENU_ID) {
-			return iconContextMenu.createMenu(getText(R.string.explorer_context_menu_title)
-					.toString());
+			return iconContextMenu.createMenu(getText(
+					R.string.explorer_context_menu_title).toString());
 		}
 
 		if (id == IMPORTING_DIALOG_ID) {
@@ -168,7 +168,7 @@ public class ImportActivity extends BaseActivity implements
 		for (File f : directory.listFiles()) {
 			items.add(f);
 		}
-		adapter = new FileAdapter(this, R.layout.fsexplorer_item, items);
+		adapter = new FileAdapter(this, R.layout.import_list_item, items);
 		lv.setAdapter(adapter);
 
 		location.setText(directory.getAbsolutePath());
@@ -178,13 +178,13 @@ public class ImportActivity extends BaseActivity implements
 		int canImportResult = ImportHelper.canImport(selectedFile);
 		switch (canImportResult) {
 		case ImportHelper.RESULT_NOT_EXISTS:
-			showToast(R.string.filesystemexplorer_msg_file_doesnt_exist);
+			showToast(R.string.import_msg_file_doesnt_exist);
 			break;
 		case ImportHelper.RESULT_CANT_READ:
-			showToast(R.string.filesystemexplorer_msg_cant_read);
+			showToast(R.string.import_msg_cant_read);
 			break;
 		case ImportHelper.RESULT_NOT_TXT:
-			showToast(R.string.filesystemexplorer_msg_not_txt_file);
+			showToast(R.string.import_msg_not_txt_file);
 			break;
 		}
 
@@ -204,7 +204,8 @@ public class ImportActivity extends BaseActivity implements
 		}
 	}
 
-	public void onItemClick(AdapterView<?> parentView, View childView, int position, long id) {
+	public void onItemClick(AdapterView<?> parentView, View childView,
+			int position, long id) {
 		File clicked = (File) lv.getItemAtPosition(position);
 		if (clicked.isDirectory() && clicked.canRead()) {
 			directory = clicked;

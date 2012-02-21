@@ -44,7 +44,7 @@ public class FileAdapter extends ArrayAdapter<File> {
 		if (v == null) {
 			LayoutInflater vi = (LayoutInflater) getContext().getSystemService(
 					Context.LAYOUT_INFLATER_SERVICE);
-			v = vi.inflate(R.layout.fsexplorer_item, null);
+			v = vi.inflate(R.layout.import_list_item, null);
 		}
 
 		File f = items.get(position);
