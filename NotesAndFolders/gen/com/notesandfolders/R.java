@@ -47,6 +47,7 @@ public final class R {
         public static final int explorer_file_name=0x7f070009;
         public static final int explorer_listview=0x7f070007;
         public static final int explorer_options_add=0x7f070026;
+        public static final int explorer_options_close=0x7f07002a;
         public static final int explorer_options_import=0x7f070028;
         public static final int explorer_options_paste=0x7f070027;
         public static final int explorer_options_settings=0x7f070029;
