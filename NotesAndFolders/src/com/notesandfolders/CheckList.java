@@ -52,6 +52,7 @@ public class CheckList extends ArrayList<CheckListItem> implements Serializable 
 	}
 
 	public CheckList clone() {
-		return CheckList.deserialize(serialize());
+		return (CheckList) Serializer.deserializeObject(Serializer
+				.serializeObject(this));
 	}
 }
