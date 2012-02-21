@@ -65,7 +65,7 @@ public class NodeAdapter extends ArrayAdapter<Node> {
 					icon.setImageResource(R.drawable.note);
 					break;
 				case CHECKLIST:
-					icon.setImageResource(R.drawable.note);
+					icon.setImageResource(R.drawable.checklist);
 					break;
 				}
 			}
