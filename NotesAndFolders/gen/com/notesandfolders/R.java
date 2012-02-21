@@ -11,23 +11,24 @@ public final class R {
     public static final class attr {
     }
     public static final class drawable {
-        public static final int copy=0x7f020000;
-        public static final int cut=0x7f020001;
-        public static final int delete=0x7f020002;
-        public static final int folder=0x7f020003;
-        public static final int fsfile=0x7f020004;
-        public static final int fsfile_locked=0x7f020005;
-        public static final int fsfolder=0x7f020006;
-        public static final int fsfolder_locked=0x7f020007;
-        public static final int fsimp=0x7f020008;
-        public static final int ic_menu_goto=0x7f020009;
-        public static final int icmpmove=0x7f02000a;
-        public static final int icon=0x7f02000b;
-        public static final int note=0x7f02000c;
-        public static final int paste=0x7f02000d;
-        public static final int properties=0x7f02000e;
-        public static final int rename=0x7f02000f;
-        public static final int up=0x7f020010;
+        public static final int checklist=0x7f020000;
+        public static final int copy=0x7f020001;
+        public static final int cut=0x7f020002;
+        public static final int delete=0x7f020003;
+        public static final int folder=0x7f020004;
+        public static final int fsfile=0x7f020005;
+        public static final int fsfile_locked=0x7f020006;
+        public static final int fsfolder=0x7f020007;
+        public static final int fsfolder_locked=0x7f020008;
+        public static final int fsimp=0x7f020009;
+        public static final int ic_menu_goto=0x7f02000a;
+        public static final int icmpmove=0x7f02000b;
+        public static final int icon=0x7f02000c;
+        public static final int note=0x7f02000d;
+        public static final int paste=0x7f02000e;
+        public static final int properties=0x7f02000f;
+        public static final int rename=0x7f020010;
+        public static final int up=0x7f020011;
     }
     public static final class id {
         public static final int ImageView01=0x7f070002;

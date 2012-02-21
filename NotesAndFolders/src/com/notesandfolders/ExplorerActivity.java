@@ -600,7 +600,7 @@ public class ExplorerActivity extends BaseActivity implements
 				new IconListItem(getText(R.string.create_note).toString(),
 						R.drawable.note),
 				new IconListItem(getText(R.string.create_checklist).toString(),
-						R.drawable.note) };
+						R.drawable.checklist) };
 
 		ListAdapter adapter = new IconListItemAdapter(this,
 				android.R.layout.select_dialog_item, items);
