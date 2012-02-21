@@ -74,12 +74,12 @@ public class CheckListActivity extends ListActivity {
 	}
 
 	// id_to_copy is id of the node to be copy/pasted
-	private long getIdToCopy() {
-		return getIntent().getLongExtra("id_to_copy", -1);
+	private long getIndexToCopy() {
+		return getIntent().getLongExtra("index_to_copy", -1);
 	}
 
-	private void setIdToCopy(long idToCopy) {
-		getIntent().putExtra("id_to_copy", idToCopy);
+	private void setIndexToCopy(long indexToCopy) {
+		getIntent().putExtra("index_to_copy", indexToCopy);
 	}
 
 	/** Called when the activity is first created. */
@@ -245,8 +245,7 @@ public class CheckListActivity extends ListActivity {
 				break;
 
 			case MENU_COPY:
-				// setIdToCopy(getSelectedId());
-				// setIdToMove(-1);
+				setIndexToCopy(getSelectedIndex());
 				break;
 			}
 		}
@@ -260,6 +259,15 @@ public class CheckListActivity extends ListActivity {
 	}
 
 	@Override
+	public boolean onPrepareOptionsMenu(Menu menu) {
+		boolean enablePaste = (getIndexToCopy() != -1);
+		MenuItem item = menu.findItem(R.id.checklist_options_paste);
+		item.setVisible(enablePaste);
+
+		return true;
+	}
+
+	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.checklist_options_add:
@@ -267,6 +275,9 @@ public class CheckListActivity extends ListActivity {
 			return true;
 		case R.id.checklist_options_save:
 			onSave();
+			return true;
+		case R.id.checklist_options_paste:
+			onPaste();
 			return true;
 		}
 		return false; // super.onOptionsItemSelected(item);
@@ -333,14 +344,14 @@ public class CheckListActivity extends ListActivity {
 						}).show();
 
 	}
-	
+
 	public void onDelete() {
 		final CheckListItem selectedItem = this.adapter
 				.getItem(getSelectedIndex());
 
 		if (selectedItem == null) {
 			return;
-		}		
+		}
 
 		new AlertDialog.Builder(this)
 				.setTitle(R.string.checklist_delete_title)
@@ -363,6 +374,18 @@ public class CheckListActivity extends ListActivity {
 								// Do nothing.
 							}
 						}).show();
+	}
+
+	private void onPaste() {
+		final CheckListItem selectedItem = this.adapter
+				.getItem(getSelectedIndex());
+
+		if (selectedItem == null) {
+			return;
+		}
+
+		checkList.add(selectedItem.clone());
+		refresh();
 	}
 
 	private DropListener mDropListener = new DropListener() {

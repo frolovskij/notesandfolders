@@ -69,4 +69,9 @@ public class CheckListItem implements Serializable {
 		result = 31 * result + (isChecked() ? 1 : 0);
 		return result;
 	}
+
+	public CheckListItem clone() {
+		return (CheckListItem) Serializer.deserializeObject(Serializer
+				.serializeObject(this));
+	}
 }
