@@ -241,7 +241,7 @@ public class CheckListActivity extends ListActivity {
 				break;
 
 			case MENU_DELETE:
-				// onDelete();
+				onDelete();
 				break;
 
 			case MENU_COPY:
@@ -332,6 +332,37 @@ public class CheckListActivity extends ListActivity {
 							}
 						}).show();
 
+	}
+	
+	public void onDelete() {
+		final CheckListItem selectedItem = this.adapter
+				.getItem(getSelectedIndex());
+
+		if (selectedItem == null) {
+			return;
+		}		
+
+		new AlertDialog.Builder(this)
+				.setTitle(R.string.checklist_delete_title)
+				.setMessage(R.string.checklist_delete_prompt)
+				.setPositiveButton(R.string.yes,
+						new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog,
+									int whichButton) {
+								if (selectedItem != null) {
+									checkList.remove(getSelectedIndex());
+
+									refresh();
+								}
+							}
+						})
+				.setNegativeButton(R.string.no,
+						new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog,
+									int whichButton) {
+								// Do nothing.
+							}
+						}).show();
 	}
 
 	private DropListener mDropListener = new DropListener() {
