@@ -69,6 +69,7 @@ public class ExplorerActivity extends BaseActivity implements
 	private List<Node> items;
 	private NodeAdapter adapter;
 	private IconContextMenu iconContextMenu = null;
+	private TextView placeholder;
 
 	private CopyTask copyTask;
 	private boolean mShownDialog;
@@ -138,6 +139,7 @@ public class ExplorerActivity extends BaseActivity implements
 		setContentView(R.layout.explorer);
 		path = (TextView) findViewById(R.id.explorer_path);
 		lv = (ListView) findViewById(R.id.explorer_listview);
+		placeholder = (TextView) findViewById(R.id.explorer_placeholder);
 
 		lv.setOnItemLongClickListener(itemLongClickHandler);
 		lv.setOnItemClickListener(this);
@@ -348,6 +350,13 @@ public class ExplorerActivity extends BaseActivity implements
 
 	private void refresh() {
 		items = nh.getChildrenById(getCurrentFolderId());
+
+		if (items.isEmpty()) {
+			placeholder.setVisibility(View.VISIBLE);
+		} else {
+			placeholder.setVisibility(View.GONE);
+		}
+
 		Collections.sort(items, new NaturalOrderNodesComparator());
 
 		adapter = new NodeAdapter(this, R.layout.explorer_item, items);

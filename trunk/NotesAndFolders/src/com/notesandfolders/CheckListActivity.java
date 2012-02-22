@@ -61,6 +61,7 @@ public class CheckListActivity extends ListActivity {
 	private long id;
 	private IconContextMenu iconContextMenu = null;
 	private ListView lv;
+	private TextView placeholder;
 
 	// selected_id is id of the selected node to pass to context menu operation
 	private int getSelectedIndex() {
@@ -95,6 +96,7 @@ public class CheckListActivity extends ListActivity {
 		setContentView(R.layout.checklist);
 
 		name = (TextView) findViewById(R.id.checklist_name);
+		placeholder = (TextView) findViewById(R.id.checklist_placeholder);
 
 		lv = getListView();
 
@@ -133,6 +135,12 @@ public class CheckListActivity extends ListActivity {
 	}
 
 	public void refresh() {
+		if (checkList.isEmpty()) {
+			placeholder.setVisibility(View.VISIBLE);
+		} else {
+			placeholder.setVisibility(View.GONE);
+		}
+
 		// loading checkList from adapter
 		if (adapter != null) {
 			checkList = new CheckList();
@@ -419,17 +427,11 @@ public class CheckListActivity extends ListActivity {
 			itemView.setVisibility(View.INVISIBLE);
 			defaultBackgroundColor = itemView.getDrawingCacheBackgroundColor();
 			itemView.setBackgroundColor(backgroundColor);
-			ImageView iv = (ImageView) itemView.findViewById(R.id.ImageView01);
-			if (iv != null)
-				iv.setVisibility(View.INVISIBLE);
 		}
 
 		public void onStopDrag(View itemView) {
 			itemView.setVisibility(View.VISIBLE);
 			itemView.setBackgroundColor(defaultBackgroundColor);
-			ImageView iv = (ImageView) itemView.findViewById(R.id.ImageView01);
-			if (iv != null)
-				iv.setVisibility(View.VISIBLE);
 		}
 
 	};
