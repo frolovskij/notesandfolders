@@ -20,15 +20,7 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:gravity="center_vertical"
-        android:textSize="20dip"
-        android:text="" />
-
-    <ImageView
-        android:id="@+id/ImageView01"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:src="@drawable/icmpmove" >
-    </ImageView>
+        android:text=""
+        android:textSize="20dip" />
 
 </LinearLayout>

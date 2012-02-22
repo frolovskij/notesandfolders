@@ -32,13 +32,15 @@ public class NotesViewerActivity extends BaseActivity {
 	private TextView textContent;
 	private TextView name;
 	private Button editButton;
+	private TextView placeholder;
 
 	private long id;
 
 	final private OnClickListener editButtonOnClickListener = new OnClickListener() {
 		public void onClick(View v) {
 			if (v != null && v == editButton) {
-				Intent editor = new Intent(NotesViewerActivity.this, NotesEditorActivity.class);
+				Intent editor = new Intent(NotesViewerActivity.this,
+						NotesEditorActivity.class);
 				editor.putExtra("note_id", id);
 				startActivity(editor);
 			}
@@ -51,6 +53,12 @@ public class NotesViewerActivity extends BaseActivity {
 
 		String tc = nh.getTextContentById(id);
 		textContent.setText(tc);
+
+		if (tc.equals("")) {
+			placeholder.setVisibility(View.VISIBLE);
+		} else {
+			placeholder.setVisibility(View.GONE);
+		}
 	}
 
 	@Override
@@ -68,5 +76,8 @@ public class NotesViewerActivity extends BaseActivity {
 
 		editButton = (Button) findViewById(R.id.notesviewer_edit_button);
 		editButton.setOnClickListener(editButtonOnClickListener);
+
+		placeholder = (TextView) findViewById(R.id.notesviewer_placeholder);
+
 	}
 }

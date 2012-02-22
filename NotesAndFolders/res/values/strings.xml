@@ -70,6 +70,7 @@
     <string name="explorer_msg_destination_is_subfolder">Can\'t paste here because this folder is a subfolder of the source folder</string>
     <string name="explorer_msg_destination_is_source">Can\'t paste folder into itself</string>
     <string name="explorer_msg_copying_files">Copying files. Please wait…</string>
+    <string name="explorer_empty_placeholder">You have no items yet. Use menu to add new items or import them from file system.</string>
 
     <!-- Settings activity -->
     <string name="settings_title">Settings</string>
@@ -103,6 +104,9 @@
     <string name="noteseditor_title">Notes editor</string>
     <string name="noteseditor_msg_save_before_exit">Save changes?</string>
 
+    <!-- Notes viewer -->
+    <string name="notesviewer_empty_placeholder">Note is empty</string>
+
     <!-- Help -->
     <string name="help_title">Documentation</string>
 
@@ -116,5 +120,6 @@
     <string name="checklist_rename_prompt">Enter new text</string>
     <string name="checklist_delete_title">Deleting</string>
     <string name="checklist_delete_prompt">Are you sure you want to delete it?</string>
+    <string name="checklist_empty_placeholder">You have no items yet. Use menu to add new items.</string>
 
 </resources>
