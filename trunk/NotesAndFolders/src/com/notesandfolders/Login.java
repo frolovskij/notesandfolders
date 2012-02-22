@@ -60,27 +60,4 @@ public class Login {
 		return passwordSha1Hash.equals(Settings.EMPTY_PASSWORD_SHA1_HASH);
 	}
 
-	/**
-	 * As different activities need plain text password we have to store it
-	 * somewhere. Previously it was passed in intent's extras, but for now it is
-	 * stored in shared preferences. Should be cleared on exit.
-	 */
-	public static String getPlainTextPasswordFromTempStorage(Context c) {
-		SharedPreferences settings = c.getSharedPreferences("password", 0);
-		return settings.getString("password", Settings.EMPTY_PASSWORD);
-	}
-
-	public static void setPasswordInTempStorage(Context c, String password) {
-		SharedPreferences settings = c.getSharedPreferences("password", 0);
-		SharedPreferences.Editor editor = settings.edit();
-		editor.putString("password", password);
-		editor.commit();
-	}
-
-	public static void clearPasswordInTempStorage(Context c) {
-		SharedPreferences settings = c.getSharedPreferences("password", 0);
-		SharedPreferences.Editor editor = settings.edit();
-		editor.remove("password");
-		editor.commit();
-	}
 }

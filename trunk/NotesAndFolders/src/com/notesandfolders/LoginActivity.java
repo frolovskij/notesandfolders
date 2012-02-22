@@ -39,11 +39,10 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
 		super.onResume();
 
 		// temp.close is set when Close is choosed in explorer's options menu
-		SharedPreferences settings = getSharedPreferences("temp", 0);
-		if (settings.getBoolean("close", false)) {
+		if (new TempStorage(this).isExiting()) {
 			finish();
 		}
-		
+
 		// if going back from explorer && no password is set
 		if (login.isEmptyPassword()) {
 			this.finish();
@@ -56,7 +55,7 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
 	public void onDestroy() {
 		super.onDestroy();
 
-		Login.clearPasswordInTempStorage(this);
+		new TempStorage(this).deleteAll();
 	}
 
 	/** Called when the activity is first created. */
@@ -64,18 +63,13 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		SharedPreferences pref = getSharedPreferences("temp", 0);
-		SharedPreferences.Editor editor = pref.edit();
-		editor.putBoolean("close", false);
-		editor.commit();
-
 		settings = new Settings(this);
 		login = new Login(settings);
 
 		// Start automatically if password is empty
 		if (login.isEmptyPassword()) {
 			Intent explorer = new Intent(this, ExplorerActivity.class);
-			Login.setPasswordInTempStorage(this, Settings.EMPTY_PASSWORD);
+			new TempStorage(this).setPassword(Settings.EMPTY_PASSWORD);
 			startActivity(explorer);
 		}
 
@@ -91,8 +85,8 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
 			if (login.isPasswordValid(password.getText().toString())) {
 
 				Intent explorer = new Intent(this, ExplorerActivity.class);
-				Login.setPasswordInTempStorage(this, password.getText()
-						.toString());
+				new TempStorage(this)
+						.setPassword(password.getText().toString());
 				startActivity(explorer);
 
 			} else {
