@@ -32,7 +32,6 @@ import android.app.ListActivity;
 import android.content.DialogInterface;
 import android.content.res.Resources;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -41,7 +40,6 @@ import android.view.View;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.CheckedTextView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListAdapter;
@@ -144,8 +142,9 @@ public class CheckListActivity extends ListActivity {
 		}
 
 		adapter = new CheckListItemAdapter(this,
-				new int[] { R.layout.checklist_item },
-				new int[] { R.id.checklist_item_item }, checkList);
+				new int[] { R.layout.checklist_item }, new int[] {
+						R.id.checklist_item_check, R.id.checklist_item_text },
+				checkList);
 
 		setListAdapter(adapter);
 

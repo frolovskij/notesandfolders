@@ -69,7 +69,7 @@ public class DragNDropListView extends ListView {
 		final int x = (int) ev.getX();
 		final int y = (int) ev.getY();
 
-		if (action == MotionEvent.ACTION_DOWN && x < this.getWidth() / 4) {
+		if (action == MotionEvent.ACTION_DOWN && x > 3 * this.getWidth() / 4) {
 			mDragMode = true;
 		}
 
@@ -111,8 +111,8 @@ public class DragNDropListView extends ListView {
 					.getLayoutParams();
 			layoutParams.x = x;
 			layoutParams.y = y - mDragPointOffset;
-			WindowManager mWindowManager = (WindowManager) getContext().getSystemService(
-					Context.WINDOW_SERVICE);
+			WindowManager mWindowManager = (WindowManager) getContext()
+					.getSystemService(Context.WINDOW_SERVICE);
 			mWindowManager.updateViewLayout(mDragView, layoutParams);
 
 			if (mDragListener != null)
@@ -167,8 +167,8 @@ public class DragNDropListView extends ListView {
 			if (mDragListener != null)
 				mDragListener.onStopDrag(getChildAt(itemIndex));
 			mDragView.setVisibility(GONE);
-			WindowManager wm = (WindowManager) getContext()
-					.getSystemService(Context.WINDOW_SERVICE);
+			WindowManager wm = (WindowManager) getContext().getSystemService(
+					Context.WINDOW_SERVICE);
 			wm.removeView(mDragView);
 			mDragView.setImageDrawable(null);
 			mDragView = null;

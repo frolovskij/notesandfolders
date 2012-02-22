@@ -31,10 +31,10 @@ public final class R {
         public static final int up=0x7f020011;
     }
     public static final class id {
-        public static final int ImageView01=0x7f070002;
-        public static final int TextView01=0x7f070004;
+        public static final int ImageView01=0x7f070004;
         public static final int btnLogin=0x7f070013;
-        public static final int checklist_item_item=0x7f070003;
+        public static final int checklist_item_check=0x7f070002;
+        public static final int checklist_item_text=0x7f070003;
         public static final int checklist_menu_copy=0x7f070021;
         public static final int checklist_menu_delete=0x7f070022;
         public static final int checklist_menu_rename=0x7f070020;

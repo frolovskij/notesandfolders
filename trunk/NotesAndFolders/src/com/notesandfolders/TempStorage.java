@@ -18,8 +18,6 @@ This file is a part of Notes & Folders project.
 
 package com.notesandfolders;
 
-import java.util.Map;
-
 import android.content.Context;
 import android.content.SharedPreferences;
 
