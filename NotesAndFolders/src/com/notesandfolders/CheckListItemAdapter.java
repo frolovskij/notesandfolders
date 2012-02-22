@@ -24,13 +24,12 @@ import com.ericharlow.DragNDrop.DropListener;
 import com.ericharlow.DragNDrop.RemoveListener;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.CheckedTextView;
+import android.widget.TextView;
 
 public final class CheckListItemAdapter extends BaseAdapter implements
 		RemoveListener, DropListener {
@@ -39,12 +38,6 @@ public final class CheckListItemAdapter extends BaseAdapter implements
 	private int[] mLayouts;
 	private LayoutInflater mInflater;
 	private ArrayList<CheckListItem> mContent;
-
-	public CheckListItemAdapter(Context context,
-			ArrayList<CheckListItem> content) {
-		init(context, new int[] { android.R.layout.simple_list_item_1 },
-				new int[] { android.R.id.text1 }, content);
-	}
 
 	public CheckListItemAdapter(Context context, int[] itemLayouts,
 			int[] itemIDs, ArrayList<CheckListItem> content) {
@@ -105,8 +98,9 @@ public final class CheckListItemAdapter extends BaseAdapter implements
 			holder = new ViewHolder();
 			holder.checkBox = (CheckedTextView) convertView
 					.findViewById(mIds[0]);
-			holder.checkBox.setFocusable(false);
-			holder.checkBox.setFocusableInTouchMode(false);
+			holder.text = (TextView) convertView.findViewById(mIds[1]);
+			// holder.checkBox.setFocusable(false);
+			// holder.checkBox.setFocusableInTouchMode(false);
 
 			convertView.setTag(holder);
 		} else {
@@ -115,20 +109,16 @@ public final class CheckListItemAdapter extends BaseAdapter implements
 
 		// saves a reference to the corresponding CheckListItem
 		holder.checkBox.setTag(mContent.get(position));
-		holder.checkBox.setText(mContent.get(position).getText());
+
 		holder.checkBox.setChecked(mContent.get(position).isChecked());
-		// holder.checkBox.setOnClickListener(new OnClickListener() {
-		// public void onClick(View v) {
-		// CheckedTextView ctw = (CheckedTextView) v;
-		// ctw.setChecked(!ctw.isChecked());
-		// }
-		// });
+		holder.text.setText(mContent.get(position).getText());
 
 		return convertView;
 	}
 
 	static class ViewHolder {
 		CheckedTextView checkBox;
+		TextView text;
 	}
 
 	public void onRemove(int which) {

@@ -22,8 +22,6 @@ import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import net.sf.andhsli.hotspotlogin.SimpleCrypto;
 
 public class Login {
