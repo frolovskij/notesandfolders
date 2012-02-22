@@ -25,7 +25,6 @@ import java.util.List;
 
 import android.os.AsyncTask;
 
-
 public class ImportTask extends AsyncTask<Void, Integer, Integer> {
 
 	private ImportActivity mExplorer;
@@ -51,14 +50,17 @@ public class ImportTask extends AsyncTask<Void, Integer, Integer> {
 
 	@Override
 	protected Integer doInBackground(Void... arg0) {
-		final NodeHelper nh = new NodeHelper(mExplorer,
-				Login.getPlainTextPasswordFromTempStorage(mExplorer));
+		final NodeHelper nh = new NodeHelper(mExplorer, new TempStorage(
+				mExplorer).getPassword());
 
-		Node importRoot = nh.createFolder(nh.getRootFolder(), "Imported at "
-				+ new SimpleDateFormat("yyyy.MM.dd HH:mm:ss").format(new Date()));
+		Node importRoot = nh.createFolder(
+				nh.getRootFolder(),
+				"Imported at "
+						+ new SimpleDateFormat("yyyy.MM.dd HH:mm:ss")
+								.format(new Date()));
 
-		final List<Node> nodes = ImportHelper.getFiles(mFile.getAbsolutePath(), nh.getLastId() + 1,
-				importRoot.getId());
+		final List<Node> nodes = ImportHelper.getFiles(mFile.getAbsolutePath(),
+				nh.getLastId() + 1, importRoot.getId());
 
 		// if there's nothing to import
 		if (nodes.size() == 0) {

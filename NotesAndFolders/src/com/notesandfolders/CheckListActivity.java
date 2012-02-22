@@ -87,8 +87,7 @@ public class CheckListActivity extends ListActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		nh = new NodeHelper(this,
-				Login.getPlainTextPasswordFromTempStorage(this));
+		nh = new NodeHelper(this, new TempStorage(this).getPassword());
 		id = getIntent().getExtras().getLong("checklist_id");
 
 		String tc = nh.getTextContentById(id);

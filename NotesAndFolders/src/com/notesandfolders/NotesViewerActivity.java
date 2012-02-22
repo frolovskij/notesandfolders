@@ -58,7 +58,7 @@ public class NotesViewerActivity extends BaseActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.notesviewer);
 
-		nh = new NodeHelper(this, Login.getPlainTextPasswordFromTempStorage(this));
+		nh = new NodeHelper(this, new TempStorage(this).getPassword());
 		id = getIntent().getExtras().getLong("note_id");
 
 		textContent = (TextView) findViewById(R.id.notesviewer_note_text_view);
