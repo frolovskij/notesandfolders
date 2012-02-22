@@ -21,6 +21,7 @@ package com.notesandfolders;
 import com.notesandfolders.R;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -37,6 +38,12 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
 	public void onResume() {
 		super.onResume();
 
+		// temp.close is set when Close is choosed in explorer's options menu
+		SharedPreferences settings = getSharedPreferences("temp", 0);
+		if (settings.getBoolean("close", false)) {
+			finish();
+		}
+		
 		// if going back from explorer && no password is set
 		if (login.isEmptyPassword()) {
 			this.finish();
@@ -56,6 +63,11 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
+		SharedPreferences pref = getSharedPreferences("temp", 0);
+		SharedPreferences.Editor editor = pref.edit();
+		editor.putBoolean("close", false);
+		editor.commit();
 
 		settings = new Settings(this);
 		login = new Login(settings);
@@ -79,7 +91,8 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
 			if (login.isPasswordValid(password.getText().toString())) {
 
 				Intent explorer = new Intent(this, ExplorerActivity.class);
-				Login.setPasswordInTempStorage(this, password.getText().toString());
+				Login.setPasswordInTempStorage(this, password.getText()
+						.toString());
 				startActivity(explorer);
 
 			} else {
