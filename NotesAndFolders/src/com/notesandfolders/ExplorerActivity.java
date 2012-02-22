@@ -32,6 +32,7 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.text.InputType;
@@ -334,7 +335,7 @@ public class ExplorerActivity extends BaseActivity implements OnItemClickListene
 			return true;
 
 		case R.id.explorer_options_close:
-			finish();
+			onClose();
 			return true;
 		}
 		return false; // super.onOptionsItemSelected(item);
@@ -575,9 +576,6 @@ public class ExplorerActivity extends BaseActivity implements OnItemClickListene
 							break;
 						case 2:
 							onNewCheckList();
-							// Toast.makeText(getApplicationContext(),
-							// getText(R.string.msg_not_implemented_yet),
-							// Toast.LENGTH_SHORT).show();
 							break;
 						}
 
@@ -588,5 +586,14 @@ public class ExplorerActivity extends BaseActivity implements OnItemClickListene
 	public void onItemClick(AdapterView<?> parentView, View childView, int position, long id) {
 		Node selected = (Node) lv.getItemAtPosition(position);
 		onOpen(selected.getId());
+	}
+	
+	public void onClose() {
+		SharedPreferences settings = getSharedPreferences("temp", 0);
+		SharedPreferences.Editor editor = settings.edit();
+		editor.putBoolean("close", true);
+		editor.commit();
+		
+		finish();
 	}
 }
