@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Notes &amp; Folders</string>
+    <string name="app_version">0.2</string>
+    <string name="msg_not_implemented_yet">Not implemented yet</string>
+    <string name="msg_importing_files">Importing files. Please wait …</string>
+    <string name="insert_date_time">Insert date &amp; time</string>
+    <string name="filename_copy_suffix">" - Copy"</string>
+
+    <!-- Import activity -->
+    <string name="import_title">File system</string>
+    <string name="import_go_back">Go to the upper folder</string>
+    <string name="import_icon">Icon</string>
+    <string name="import_msg_file_doesnt_exist">File does not exist</string>
+    <string name="import_msg_cant_read">Can\'t import not readable item</string>
+    <string name="import_msg_not_txt_file">Only *.txt files can be imported</string>
+
+    <!-- Common -->
+    <string name="ok">Ok</string>
+    <string name="cancel">Cancel</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+
+    <!-- Explorer options menu -->
+    <string name="menu_new">New</string>
+    <string name="menu_search">Search</string>
+    <string name="menu_import">Import</string>
+    <string name="menu_settings">Settings</string>
+    <string name="menu_close">Close</string>
+    <string name="menu_paste">Paste</string>
+
+    <!-- Context menu operations on folders, files & checklists -->
+    <string name="explorer_context_menu_title">Actions</string>
+    <string name="open">Open</string>
+    <string name="edit">Edit</string>
+    <string name="copy">Copy</string>
+    <string name="cut">Cut</string>
+    <string name="delete">Delete</string>
+    <string name="rename">Rename</string>
+    <string name="properties">Properties</string>
+    <string name="fsimp">Import</string>
+    <string name="save">Save</string>
+
+    <!-- Login activity -->
+    <string name="login_prompt">Password</string>
+    <string name="login_msg_password_incorrect">Wrong password</string>
+    <string name="login_button">OK</string>
+    <string name="login_logo">Logo</string>
+
+    <!-- New folder alert dialog -->
+    <string name="explorer_newfolder_title">New folder</string>
+    <string name="explorer_newfolder_prompt">Enter name of new folder</string>
+
+    <!-- New note alert dialog -->
+    <string name="explorer_newnote_title">New note</string>
+    <string name="explorer_newnote_prompt">Enter name of new note</string>
+
+    <!-- New checklist alert dialog -->
+    <string name="explorer_newchecklist_title">New checklist</string>
+    <string name="explorer_newchecklist_prompt">Enter name of new checklist</string>
+
+    <!-- Rename alert dialog -->
+    <string name="explorer_rename_title">Renaming</string>
+    <string name="explorer_rename_prompt">Enter new name</string>
+
+    <!-- Delete alert dialog -->
+    <string name="explorer_delete_title">Deleting</string>
+    <string name="explorer_delete_prompt">Are you sure you want to delete it?</string>
+    <string name="explorer_msg_destination_is_subfolder">Can\'t paste here because this folder is a subfolder of the source folder</string>
+    <string name="explorer_msg_destination_is_source">Can\'t paste folder into itself</string>
+    <string name="explorer_msg_copying_files">Copying files. Please wait…</string>
+    <string name="explorer_empty_placeholder">You have no items yet. Use menu to add new items or import them from file system.</string>
+
+    <!-- Settings activity -->
+    <string name="settings_title">Settings</string>
+    <string name="settings_security">Security</string>
+    <string name="settings_password">Password</string>
+    <string name="settings_password_summary">If set empty it won\'t be prompted at start. Default password is empty</string>
+    <string name="settings_information">Information</string>
+    <string name="settings_documentation_title">Documentation</string>
+    <string name="settings_documentation_summary">Offline html documentation</string>
+    <string name="settings_version_title">Notes &amp; Folders</string>
+    <string name="settings_version_summary">Offline html documentation</string>
+
+    <!-- Password settings activity -->
+    <string name="password_edit_title">Changing password</string>
+    <string name="password_edit_current">Current password</string>
+    <string name="password_edit_new">New password</string>
+    <string name="password_edit_confirmation">Confirmation</string>
+    <string name="password_edit_save_button">Save</string>
+    <string name="password_msg_password_was_saved">Password was saved</string>
+    <string name="password_msg_wrong_password">Wrong current password</string>
+    <string name="password_msg_save_error">Password wasn\'t saved because of internal error</string>
+    <string name="password_msg_password_confirmation_do_not_match">The password and confirmation do not match</string>
+
+    <!-- Alert Dialog that pop-ups when user chooses "New" from Explorer's options menu -->
+    <string name="create_new">New</string>
+    <string name="create_folder">Folder</string>
+    <string name="create_note">Note</string>
+    <string name="create_checklist">Checklist</string>
+
+    <!-- Notes editor -->
+    <string name="noteseditor_title">Notes editor</string>
+    <string name="noteseditor_msg_save_before_exit">Save changes?</string>
+
+    <!-- Notes viewer -->
+    <string name="notesviewer_empty_placeholder">Note is empty</string>
+
+    <!-- Help -->
+    <string name="help_title">Documentation</string>
+
+    <!-- Checklist -->
+    <string name="checklist_title">Checklist</string>
+    <string name="checklist_add">New item</string>
+    <string name="checklist_newitem_title">New item</string>
+    <string name="checklist_newitem_prompt">Enter text of new item</string>
+    <string name="checklist_msg_save_before_exit">Save changes?</string>
+    <string name="checklist_rename_title">Renaming</string>
+    <string name="checklist_rename_prompt">Enter new text</string>
+    <string name="checklist_delete_title">Deleting</string>
+    <string name="checklist_delete_prompt">Are you sure you want to delete it?</string>
+    <string name="checklist_empty_placeholder">You have no items yet. Use menu to add new items.</string>
+
+</resources>
