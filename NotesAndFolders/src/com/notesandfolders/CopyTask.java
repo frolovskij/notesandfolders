@@ -28,12 +28,12 @@ public class CopyTask extends AsyncTask<Void, String, Integer> {
 
 	@Override
 	protected void onPreExecute() {
-		mExplorer.showDialog(ExplorerActivity.COPYING_DIALOG_ID);
+		mExplorer.showDialog(ExplorerActivity.DIALOG_COPY);
 	}
 
 	@Override
 	protected void onPostExecute(Integer res) {
-		mExplorer.dismissDialog(ExplorerActivity.COPYING_DIALOG_ID);
+		mExplorer.dismissDialog(ExplorerActivity.DIALOG_COPY);
 
 		notifyActivityTaskCompleted();
 	}
