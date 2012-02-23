@@ -38,6 +38,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -53,6 +54,10 @@ public class CheckListActivity extends ListActivity {
 	private static final int MENU_COPY = 2;
 	private static final int MENU_DELETE = 3;
 
+	private static final int DIALOG_NEW = 4;
+	private static final int DIALOG_RENAME = 5;
+	private static final int DIALOG_DELETE = 6;
+
 	private CheckList initialCheckList;
 	CheckListItemAdapter adapter;
 	private CheckList checkList;
@@ -62,6 +67,8 @@ public class CheckListActivity extends ListActivity {
 	private IconContextMenu iconContextMenu = null;
 	private ListView lv;
 	private TextView placeholder;
+
+	private EditText input;
 
 	// selected_id is id of the selected node to pass to context menu operation
 	private int getSelectedIndex() {
@@ -121,6 +128,22 @@ public class CheckListActivity extends ListActivity {
 				}
 			}
 		});
+
+		input = new EditText(this);
+		input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
+		if (savedInstanceState != null) {
+			// Restoring edittext in new/rename alert dialogs
+			String inputValue = savedInstanceState.getString("input_value");
+			if (inputValue != null) {
+				input.setText(inputValue);
+			}
+
+			// Restoring checklist
+			String checkListSerialized = savedInstanceState.getString("checklist");
+			if (checkListSerialized != null) {
+				checkList = CheckList.deserialize(checkListSerialized);
+			}
+		}
 
 		refresh();
 	}
@@ -215,11 +238,87 @@ public class CheckListActivity extends ListActivity {
 		iconContextMenu.setOnClickListener(contextMenuListener);
 	}
 
+	protected void onSaveInstanceState(Bundle outState) {
+		// Alert dialog EditText used to input new item or to rename an existing
+		outState.putString("input_value", input.getText().toString());
+
+		// Current not saved checklist
+		outState.putString("checklist", checkList.serialize());
+	}
+
 	@Override
 	protected Dialog onCreateDialog(int id) {
 		if (id == CONTEXT_MENU_ID) {
 			return iconContextMenu.createMenu(getText(R.string.explorer_context_menu_title)
 					.toString());
+		}
+
+		if (id == DIALOG_NEW) {
+			if (input.getParent() != null) {
+				((ViewGroup) input.getParent()).removeView(input);
+			}
+
+			return new AlertDialog.Builder(this).setTitle(R.string.checklist_newitem_title)
+					.setMessage(R.string.checklist_newitem_prompt).setView(input)
+					.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int whichButton) {
+							String itemName = input.getText().toString();
+							checkList.add(new CheckListItem(itemName, false));
+							refresh();
+						}
+					}).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int whichButton) {
+							// Do nothing.
+						}
+					}).create();
+		}
+
+		if (id == DIALOG_RENAME) {
+			if (input.getParent() != null) {
+				((ViewGroup) input.getParent()).removeView(input);
+			}
+
+			final CheckListItem selectedItem = this.adapter.getItem(getSelectedIndex());
+
+			if (selectedItem != null) {
+				return new AlertDialog.Builder(this).setTitle(R.string.checklist_rename_title)
+						.setMessage(R.string.checklist_rename_prompt).setView(input)
+						.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog, int whichButton) {
+								if (selectedItem != null) {
+									selectedItem.setText(input.getText().toString());
+
+									refresh();
+								}
+							}
+						})
+						.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog, int whichButton) {
+							}
+						}).create();
+			}
+		}
+
+		if (id == DIALOG_DELETE) {
+			final CheckListItem selectedItem = this.adapter.getItem(getSelectedIndex());
+
+			if (selectedItem != null) {
+				return new AlertDialog.Builder(this).setTitle(R.string.checklist_delete_title)
+						.setMessage(R.string.checklist_delete_prompt)
+						.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog, int whichButton) {
+								if (selectedItem != null) {
+									checkList.remove(getSelectedIndex());
+
+									refresh();
+								}
+							}
+						}).setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog, int whichButton) {
+								// Do nothing.
+							}
+						}).create();
+			}
 		}
 
 		return super.onCreateDialog(id);
@@ -277,74 +376,25 @@ public class CheckListActivity extends ListActivity {
 	}
 
 	public void onNew() {
-		final EditText edit = new EditText(this);
-		edit.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
-
-		new AlertDialog.Builder(this).setTitle(R.string.checklist_newitem_title)
-				.setMessage(R.string.checklist_newitem_prompt).setView(edit)
-				.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int whichButton) {
-						String itemName = edit.getText().toString();
-						checkList.add(new CheckListItem(itemName, false));
-						refresh();
-					}
-				}).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int whichButton) {
-						// Do nothing.
-					}
-				}).show();
+		input.setText("");
+		showDialog(DIALOG_NEW);
 	}
 
 	private void onRename() {
 		final CheckListItem selectedItem = this.adapter.getItem(getSelectedIndex());
 
-		if (selectedItem == null) {
-			return;
+		if (selectedItem != null) {
+			input.setText(selectedItem.getText());
 		}
 
-		final EditText edit = new EditText(this);
-		edit.setText(selectedItem.getText());
-		edit.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
-
-		new AlertDialog.Builder(this).setTitle(R.string.checklist_rename_title)
-				.setMessage(R.string.checklist_rename_prompt).setView(edit)
-				.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int whichButton) {
-						if (selectedItem != null) {
-							selectedItem.setText(edit.getText().toString());
-
-							refresh();
-						}
-					}
-				}).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int whichButton) {
-					}
-				}).show();
-
+		showDialog(DIALOG_RENAME);
 	}
 
 	public void onDelete() {
 		final CheckListItem selectedItem = this.adapter.getItem(getSelectedIndex());
-
-		if (selectedItem == null) {
-			return;
+		if (selectedItem != null) {
+			showDialog(DIALOG_DELETE);
 		}
-
-		new AlertDialog.Builder(this).setTitle(R.string.checklist_delete_title)
-				.setMessage(R.string.checklist_delete_prompt)
-				.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int whichButton) {
-						if (selectedItem != null) {
-							checkList.remove(getSelectedIndex());
-
-							refresh();
-						}
-					}
-				}).setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int whichButton) {
-						// Do nothing.
-					}
-				}).show();
 	}
 
 	private void onPaste() {
