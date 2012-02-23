@@ -32,6 +32,7 @@ import android.app.ListActivity;
 import android.content.DialogInterface;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -277,6 +278,7 @@ public class CheckListActivity extends ListActivity {
 
 	public void onNew() {
 		final EditText edit = new EditText(this);
+		edit.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
 
 		new AlertDialog.Builder(this).setTitle(R.string.checklist_newitem_title)
 				.setMessage(R.string.checklist_newitem_prompt).setView(edit)
@@ -302,6 +304,7 @@ public class CheckListActivity extends ListActivity {
 
 		final EditText edit = new EditText(this);
 		edit.setText(selectedItem.getText());
+		edit.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
 
 		new AlertDialog.Builder(this).setTitle(R.string.checklist_rename_title)
 				.setMessage(R.string.checklist_rename_prompt).setView(edit)
