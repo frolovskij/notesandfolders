@@ -69,7 +69,8 @@ public class CheckListActivity extends ListActivity {
 	private ListView lv;
 	private TextView placeholder;
 
-	private EditText input;
+	private EditText inputNewItem;
+	private EditText inputRename;
 
 	// selected_id is id of the selected node to pass to context menu operation
 	private int getSelectedIndex() {
@@ -130,13 +131,22 @@ public class CheckListActivity extends ListActivity {
 			}
 		});
 
-		input = new EditText(this);
-		input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
+		inputNewItem = new EditText(this);
+		inputNewItem.setInputType(InputType.TYPE_CLASS_TEXT
+				| InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
+
+		inputRename = new EditText(this);
+		inputRename
+				.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
 		if (savedInstanceState != null) {
-			// Restoring edittext in new/rename alert dialogs
-			String inputValue = savedInstanceState.getString("input_value");
+			String inputValue = savedInstanceState.getString("input_new_item");
 			if (inputValue != null) {
-				input.setText(inputValue);
+				inputNewItem.setText(inputValue);
+			}
+
+			inputValue = savedInstanceState.getString("input_rename");
+			if (inputValue != null) {
+				inputRename.setText(inputValue);
 			}
 
 			// Restoring checklist
@@ -240,8 +250,10 @@ public class CheckListActivity extends ListActivity {
 	}
 
 	protected void onSaveInstanceState(Bundle outState) {
-		// Alert dialog EditText used to input new item or to rename an existing
-		outState.putString("input_value", input.getText().toString());
+		// Alert dialogs EditText used to input new item or to rename an
+		// existing
+		outState.putString("input_new_item", inputNewItem.getText().toString());
+		outState.putString("input_rename", inputRename.getText().toString());
 
 		// Current not saved checklist
 		outState.putString("checklist", checkList.serialize());
@@ -255,15 +267,11 @@ public class CheckListActivity extends ListActivity {
 		}
 
 		if (id == DIALOG_NEW) {
-			if (input.getParent() != null) {
-				((ViewGroup) input.getParent()).removeView(input);
-			}
-
 			return new AlertDialog.Builder(this).setTitle(R.string.checklist_newitem_title)
-					.setMessage(R.string.checklist_newitem_prompt).setView(input)
+					.setMessage(R.string.checklist_newitem_prompt).setView(inputNewItem)
 					.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
 						public void onClick(DialogInterface dialog, int whichButton) {
-							String itemName = input.getText().toString();
+							String itemName = inputNewItem.getText().toString();
 							checkList.add(new CheckListItem(itemName, false));
 							refresh();
 						}
@@ -275,19 +283,15 @@ public class CheckListActivity extends ListActivity {
 		}
 
 		if (id == DIALOG_RENAME) {
-			if (input.getParent() != null) {
-				((ViewGroup) input.getParent()).removeView(input);
-			}
-
 			final CheckListItem selectedItem = this.adapter.getItem(getSelectedIndex());
 
 			if (selectedItem != null) {
 				return new AlertDialog.Builder(this).setTitle(R.string.checklist_rename_title)
-						.setMessage(R.string.checklist_rename_prompt).setView(input)
+						.setMessage(R.string.checklist_rename_prompt).setView(inputRename)
 						.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
 							public void onClick(DialogInterface dialog, int whichButton) {
 								if (selectedItem != null) {
-									selectedItem.setText(input.getText().toString());
+									selectedItem.setText(inputRename.getText().toString());
 
 									refresh();
 								}
@@ -377,7 +381,7 @@ public class CheckListActivity extends ListActivity {
 	}
 
 	public void onNew() {
-		input.setText("");
+		inputNewItem.setText("");
 		showDialog(DIALOG_NEW);
 	}
 
@@ -385,7 +389,7 @@ public class CheckListActivity extends ListActivity {
 		final CheckListItem selectedItem = this.adapter.getItem(getSelectedIndex());
 
 		if (selectedItem != null) {
-			input.setText(selectedItem.getText());
+			inputRename.setText(selectedItem.getText());
 		}
 
 		showDialog(DIALOG_RENAME);
