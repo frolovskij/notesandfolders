@@ -62,4 +62,20 @@ public class TempStorage {
 		editor.commit();
 	}
 
+	public void setCheckListItem(CheckListItem item) {
+		if (item != null) {
+			SharedPreferences.Editor editor = mPreferences.edit();
+			editor.putString("checklist_item_text", item.getText());
+			editor.putBoolean("checklist_item_checked", item.isChecked());
+			editor.commit();
+		}
+	}
+
+	public CheckListItem getCheckListItem() {
+		String text = mPreferences.getString("checklist_item_text", null);
+		boolean isChecked = mPreferences.getBoolean("checklist_item_checked",
+				false);
+
+		return (text == null) ? null : new CheckListItem(text, isChecked);
+	}
 }
