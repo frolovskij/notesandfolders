@@ -20,6 +20,12 @@
         android:title="@string/menu_import">
     </item>
     <item
+        android:id="@+id/explorer_options_search"
+        android:enabled="true"
+        android:icon="@android:drawable/ic_menu_search"
+        android:title="@string/menu_search">
+    </item>
+    <item
         android:id="@+id/explorer_options_settings"
         android:enabled="true"
         android:icon="@android:drawable/ic_menu_preferences"
@@ -30,5 +36,6 @@
         android:enabled="true"
         android:icon="@android:drawable/ic_menu_close_clear_cancel"
         android:title="@string/menu_close">
-    </item>    
+    </item>
+
 </menu>
