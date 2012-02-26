@@ -122,4 +122,16 @@
     <string name="checklist_delete_prompt">Are you sure you want to delete it?</string>
     <string name="checklist_empty_placeholder">You have no items yet. Use menu to add new items.</string>
 
+    <!-- Search -->
+    <string name="search_title">Search</string>
+    <string name="search_text">Search</string>
+    <string name="search_button">Search!</string>
+    <string name="search_type">How</string>
+    <string name="search_type_by_name">By name</string>
+    <string name="search_type_by_content">By content</string>
+    <string name="search_where">Where</string>
+    <string name="search_where_everywhere">Everywhere</string>
+    <string name="search_where_current_folder">In this folder and subfolders</string>
+    <string name="search_case_sensitive">Case-sensitive</string>
+
 </resources>

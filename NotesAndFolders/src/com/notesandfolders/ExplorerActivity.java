@@ -515,6 +515,11 @@ public class ExplorerActivity extends BaseActivity implements OnItemClickListene
 
 			return true;
 
+		case R.id.explorer_options_search:
+			Intent search = new Intent(this, SearchActivity.class);
+			startActivity(search);
+			return true;
+
 		case R.id.explorer_options_settings:
 			Intent settings = new Intent(this, SettingsActivity.class);
 			startActivity(settings);
