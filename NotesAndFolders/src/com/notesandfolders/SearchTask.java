@@ -20,54 +20,54 @@ package com.notesandfolders;
 
 import android.os.AsyncTask;
 
-public class CopyTask extends AsyncTask<Void, String, Integer> {
-
-	private ExplorerActivity mExplorer;
+public class SearchTask extends AsyncTask<Void, String, Integer> {
+	private SearchParameters mParameters;
+	private SearchActivity mSearchActivity;
 	private NodeHelper mNh;
-	private long mIdToCopy;
-	private long mNewParentId;
 	private boolean completed;
 	private Integer result;
 
-	public CopyTask(ExplorerActivity explorer, NodeHelper nh, long idToCopy,
-			long newParentId) {
+	public SearchTask(SearchActivity searchActivity, NodeHelper nh,
+			SearchParameters searchParameters) {
 		mNh = nh;
-		mIdToCopy = idToCopy;
-		mNewParentId = newParentId;
-		mExplorer = explorer;
+		mSearchActivity = searchActivity;
+		mParameters = searchParameters;
 	}
 
 	@Override
 	protected Integer doInBackground(Void... arg0) {
-		result = mNh.copy(mIdToCopy, mNewParentId);
+		try {
+			Thread.sleep(10000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 		return result;
 	}
 
 	@Override
 	protected void onPreExecute() {
-		mExplorer.showDialog(ExplorerActivity.DIALOG_COPY);
+		mSearchActivity.showDialog(SearchActivity.DIALOG_SEARCH);
 	}
 
 	@Override
 	protected void onPostExecute(Integer res) {
-		mExplorer.dismissDialog(ExplorerActivity.DIALOG_COPY);
+		mSearchActivity.dismissDialog(SearchActivity.DIALOG_SEARCH);
 
 		notifyActivityTaskCompleted();
 	}
 
-	public void setActivity(ExplorerActivity explorer) {
-		this.mExplorer = explorer;
+	public void setActivity(SearchActivity searchActivity) {
+		this.mSearchActivity = searchActivity;
 		if (completed) {
 			notifyActivityTaskCompleted();
 		}
 	}
 
-	/**
-	 * Helper method to notify the activity that this task was completed.
-	 */
 	private void notifyActivityTaskCompleted() {
-		if (null != mExplorer) {
-			mExplorer.onCopyTaskCompleted(result);
+		if (null != mSearchActivity) {
+			mSearchActivity.onSearchTaskCompleted(result);
 		}
 	}
 }

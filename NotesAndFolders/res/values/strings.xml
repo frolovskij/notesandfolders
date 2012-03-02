@@ -4,7 +4,7 @@
     <string name="app_name">Notes &amp; Folders</string>
     <string name="app_version">0.2</string>
     <string name="msg_not_implemented_yet">Not implemented yet</string>
-    <string name="msg_importing_files">Importing files. Please wait …</string>
+    <string name="msg_importing_files">Importing files. Please wait…</string>
     <string name="insert_date_time">Insert date &amp; time</string>
     <string name="filename_copy_suffix">" - Copy"</string>
 
@@ -133,5 +133,6 @@
     <string name="search_where_everywhere">Everywhere</string>
     <string name="search_where_current_folder">In this folder and subfolders</string>
     <string name="search_case_sensitive">Case-sensitive</string>
+    <string name="search_msg_searching">Searching in progress. Please wait…</string>
 
 </resources>

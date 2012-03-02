@@ -294,9 +294,6 @@ public class ExplorerActivity extends BaseActivity implements OnItemClickListene
 		}
 	};
 
-	/**
-	 * create context menu
-	 */
 	@Override
 	protected Dialog onCreateDialog(int id) {
 		if (id == DIALOG_CONTEXT_MENU) {
