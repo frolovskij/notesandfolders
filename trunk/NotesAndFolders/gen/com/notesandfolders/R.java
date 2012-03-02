@@ -216,6 +216,7 @@ public final class R {
         public static final int save=0x7f05001f;
         public static final int search_button=0x7f050058;
         public static final int search_case_sensitive=0x7f05005f;
+        public static final int search_msg_searching=0x7f050060;
         public static final int search_text=0x7f050057;
         /**  Search 
          */

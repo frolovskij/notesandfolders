@@ -18,14 +18,23 @@ This file is a part of Notes & Folders project.
 
 package com.notesandfolders;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ListAdapter;
 import android.widget.Spinner;
 
-public class SearchActivity extends BaseActivity {
+public class SearchActivity extends BaseActivity implements OnClickListener {
+	public static final int DIALOG_SEARCH = 0;
+
 	private Spinner mTypeSpinner;
 	private Spinner mLocationSpinner;
 	private ImageButton mSearchButton;
@@ -33,6 +42,9 @@ public class SearchActivity extends BaseActivity {
 	private CheckBox mCaseSensitive;
 	private ArrayAdapter<CharSequence> mTypeAdapter;
 	private ArrayAdapter<CharSequence> mLocationAdapter;
+	private SearchTask searchTask;
+	private boolean mShownDialog;
+	private SearchParameters mParameters;
 
 	@Override
 	public void onResume() {
@@ -52,13 +64,16 @@ public class SearchActivity extends BaseActivity {
 		setContentView(R.layout.search);
 
 		mSearchButton = (ImageButton) findViewById(R.id.search_button);
+		mSearchButton.setOnClickListener(this);
 		mTextToSearch = (EditText) findViewById(R.id.search_text);
 
 		mTypeSpinner = (Spinner) findViewById(R.id.search_type_spinner);
-		mTypeAdapter = new ArrayAdapter<CharSequence>(this, android.R.layout.simple_spinner_item,
-				new CharSequence[] { getText(R.string.search_type_by_content),
+		mTypeAdapter = new ArrayAdapter<CharSequence>(this,
+				android.R.layout.simple_spinner_item, new CharSequence[] {
+						getText(R.string.search_type_by_content),
 						getText(R.string.search_type_by_name) });
-		mTypeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		mTypeAdapter
+				.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		mTypeSpinner.setAdapter(mTypeAdapter);
 
 		mLocationSpinner = (Spinner) findViewById(R.id.search_where_spinner);
@@ -66,9 +81,68 @@ public class SearchActivity extends BaseActivity {
 				android.R.layout.simple_spinner_item, new CharSequence[] {
 						getText(R.string.search_where_current_folder),
 						getText(R.string.search_where_everywhere) });
-		mLocationAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		mLocationAdapter
+				.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		mLocationSpinner.setAdapter(mLocationAdapter);
 
 		mCaseSensitive = (CheckBox) findViewById(R.id.search_case_sensitive);
+
+		mParameters = new SearchParameters();
+
+		Object retained = getLastNonConfigurationInstance();
+		if (retained != null && retained instanceof SearchTask) {
+			searchTask = (SearchTask) retained;
+			searchTask.setActivity(this);
+		}
+	}
+
+	@Override
+	public Object onRetainNonConfigurationInstance() {
+		if (searchTask != null) {
+			searchTask.setActivity(null);
+			return searchTask;
+		}
+
+		return null;
+	}
+
+	public void onSearchTaskCompleted(Integer result) {
+		if (mShownDialog) {
+			// start results explorer
+		}
+	}
+
+	public void onSearch() {
+		searchTask = new SearchTask(this, new NodeHelper(this, new TempStorage(
+				this).getPassword()), mParameters);
+		searchTask.execute();
+	}
+
+	public void onClick(View v) {
+		if (v == mSearchButton) {
+			onSearch();
+		}
+	}
+
+	@Override
+	protected Dialog onCreateDialog(int id) {
+		if (id == DIALOG_SEARCH) {
+			ProgressDialog pd = new ProgressDialog(this);
+			pd.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+			pd.setMessage(getText(R.string.search_msg_searching));
+			pd.setCancelable(false);
+
+			return pd;
+		}
+
+		return super.onCreateDialog(id);
+	}
+
+	@Override
+	protected void onPrepareDialog(int id, Dialog dialog) {
+		super.onPrepareDialog(id, dialog);
+		if (id == DIALOG_SEARCH) {
+			mShownDialog = true;
+		}
 	}
 }
