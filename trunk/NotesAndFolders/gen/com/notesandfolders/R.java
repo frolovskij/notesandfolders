@@ -215,8 +215,8 @@ public final class R {
         public static final int rename=0x7f05001c;
         public static final int save=0x7f05001f;
         public static final int search_button=0x7f050058;
-        public static final int search_case_sensitive=0x7f05005f;
-        public static final int search_msg_searching=0x7f050060;
+        public static final int search_case_sensitive=0x7f050060;
+        public static final int search_msg_searching=0x7f050061;
         public static final int search_text=0x7f050057;
         /**  Search 
          */
@@ -224,9 +224,10 @@ public final class R {
         public static final int search_type=0x7f050059;
         public static final int search_type_by_content=0x7f05005b;
         public static final int search_type_by_name=0x7f05005a;
-        public static final int search_where=0x7f05005c;
-        public static final int search_where_current_folder=0x7f05005e;
-        public static final int search_where_everywhere=0x7f05005d;
+        public static final int search_type_by_name_and_content=0x7f05005c;
+        public static final int search_where=0x7f05005d;
+        public static final int search_where_current_folder=0x7f05005f;
+        public static final int search_where_everywhere=0x7f05005e;
         public static final int settings_documentation_summary=0x7f050038;
         public static final int settings_documentation_title=0x7f050037;
         public static final int settings_information=0x7f050036;

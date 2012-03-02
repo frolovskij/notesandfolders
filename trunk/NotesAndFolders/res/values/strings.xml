@@ -129,6 +129,7 @@
     <string name="search_type">How</string>
     <string name="search_type_by_name">By name</string>
     <string name="search_type_by_content">By content</string>
+    <string name="search_type_by_name_and_content">By name and content</string>
     <string name="search_where">Where</string>
     <string name="search_where_everywhere">Everywhere</string>
     <string name="search_where_current_folder">In this folder and subfolders</string>

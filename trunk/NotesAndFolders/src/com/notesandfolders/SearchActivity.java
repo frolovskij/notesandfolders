@@ -44,7 +44,6 @@ public class SearchActivity extends BaseActivity implements OnClickListener {
 	private ArrayAdapter<CharSequence> mLocationAdapter;
 	private SearchTask searchTask;
 	private boolean mShownDialog;
-	private SearchParameters mParameters;
 
 	@Override
 	public void onResume() {
@@ -70,6 +69,7 @@ public class SearchActivity extends BaseActivity implements OnClickListener {
 		mTypeSpinner = (Spinner) findViewById(R.id.search_type_spinner);
 		mTypeAdapter = new ArrayAdapter<CharSequence>(this,
 				android.R.layout.simple_spinner_item, new CharSequence[] {
+						getText(R.string.search_type_by_name_and_content),
 						getText(R.string.search_type_by_content),
 						getText(R.string.search_type_by_name) });
 		mTypeAdapter
@@ -86,8 +86,6 @@ public class SearchActivity extends BaseActivity implements OnClickListener {
 		mLocationSpinner.setAdapter(mLocationAdapter);
 
 		mCaseSensitive = (CheckBox) findViewById(R.id.search_case_sensitive);
-
-		mParameters = new SearchParameters();
 
 		Object retained = getLastNonConfigurationInstance();
 		if (retained != null && retained instanceof SearchTask) {
@@ -113,6 +111,35 @@ public class SearchActivity extends BaseActivity implements OnClickListener {
 	}
 
 	public void onSearch() {
+		SearchParameters mParameters = new SearchParameters();
+		mParameters.setText(mTextToSearch.getText().toString());
+		mParameters.setCaseSensitive(mCaseSensitive.isChecked());
+
+		switch (mTypeSpinner.getSelectedItemPosition()) {
+		case 0: // by name and content
+			mParameters.setSearchInNames(true);
+			mParameters.setSearchInText(true);
+			break;
+		case 1: // by content
+			mParameters.setSearchInNames(false);
+			mParameters.setSearchInText(true);
+			break;
+		case 2: // by name
+			mParameters.setSearchInNames(true);
+			mParameters.setSearchInText(false);
+			break;
+		}
+
+		if (mLocationSpinner.getSelectedItemPosition() == 0) {
+			// search in the folder that was opened in Explorer when search
+			// activity was started
+			mParameters.setFolderId(getIntent().getExtras().getLong(
+					"current_folder_id"));
+		} else {
+			// search everywhere
+			mParameters.setFolderId(0);
+		}
+
 		searchTask = new SearchTask(this, new NodeHelper(this, new TempStorage(
 				this).getPassword()), mParameters);
 		searchTask.execute();
