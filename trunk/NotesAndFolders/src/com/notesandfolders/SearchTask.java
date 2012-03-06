@@ -39,11 +39,16 @@ public class SearchTask extends AsyncTask<Void, String, List<Long>> {
 	@Override
 	protected List<Long> doInBackground(Void... arg0) {
 		try {
-			Thread.sleep(10000);
+			Thread.sleep(3000);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+
+		// Just for test!
+		NodeHelper nh = new NodeHelper(mSearchActivity,
+				new TempStorage(mSearchActivity).getPassword());
+		result = nh.getChildrenIdsById(0);
 
 		return result;
 	}

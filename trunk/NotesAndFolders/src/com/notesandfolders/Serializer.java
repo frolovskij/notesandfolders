@@ -25,6 +25,8 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutput;
 import java.io.ObjectOutputStream;
 
+import biz.source_code.base64Coder.Base64Coder;
+
 import android.util.Log;
 
 public class Serializer {
@@ -49,8 +51,7 @@ public class Serializer {
 
 	public static Object deserializeObject(byte[] b) {
 		try {
-			ObjectInputStream in = new ObjectInputStream(
-					new ByteArrayInputStream(b));
+			ObjectInputStream in = new ObjectInputStream(new ByteArrayInputStream(b));
 			Object object = in.readObject();
 			in.close();
 
@@ -64,5 +65,15 @@ public class Serializer {
 
 			return null;
 		}
+	}
+
+	public static String serialize(Object o) {
+		byte[] serialized = Serializer.serializeObject(o);
+		return new String(Base64Coder.encode(serialized));
+	}
+
+	public static Object deserialize(String serializedAsString) {
+		byte[] serialized = Base64Coder.decode(serializedAsString);
+		return Serializer.deserializeObject(serialized);
 	}
 }

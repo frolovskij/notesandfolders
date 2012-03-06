@@ -47,17 +47,14 @@ public class NodeHelper {
 		// decrypting key with password
 		try {
 			Settings s = new Settings(context);
-			String encryptedKey = s.getString(Settings.SETTINGS_ENCRYPTED_KEY,
-					"");
+			String encryptedKey = s.getString(Settings.SETTINGS_ENCRYPTED_KEY, "");
 			this.key = SimpleCrypto.decrypt(password, encryptedKey);
 		} catch (Exception e) {
-			Log.i("NodeHelper", "Can't decrypt key with password '" + password
-					+ "'");
+			Log.i("NodeHelper", "Can't decrypt key with password '" + password + "'");
 		}
 	}
 
-	private Node createNode(Node parent, String name, String textContent,
-			NodeType type) {
+	private Node createNode(Node parent, String name, String textContent, NodeType type) {
 		if (parent == null) {
 			Log.i("createNode", "parent is null");
 			return null;
@@ -196,8 +193,7 @@ public class NodeHelper {
 			c = db.rawQuery("select id from data where parent_id = ?",
 					new String[] { Long.toString(id) });
 
-			for (boolean hasItem = c.moveToFirst(); hasItem; hasItem = c
-					.moveToNext()) {
+			for (boolean hasItem = c.moveToFirst(); hasItem; hasItem = c.moveToNext()) {
 				childrenIds.add(c.getLong(0));
 			}
 		} catch (Exception ex) {
@@ -331,8 +327,7 @@ public class NodeHelper {
 	}
 
 	public Node createCheckList(Node parent, String name) {
-		return createNode(parent, name, new CheckList().serialize(),
-				NodeType.CHECKLIST);
+		return createNode(parent, name, Serializer.serialize(new CheckList()), NodeType.CHECKLIST);
 	}
 
 	public Node getRootFolder() {
@@ -380,8 +375,7 @@ public class NodeHelper {
 			db.execSQL(
 					"update data set text_content = ?, date_modified = ? where id = ?",
 					new String[] { SimpleCrypto.encrypt(key, textContent),
-							Long.toString(new Date().getTime()),
-							Long.toString(id) });
+							Long.toString(new Date().getTime()), Long.toString(id) });
 		} catch (Exception ex) {
 			Log.i("setTextContentById", ex.toString());
 		} finally {
@@ -397,11 +391,8 @@ public class NodeHelper {
 		SQLiteDatabase db = dbOpenHelper.getWritableDatabase();
 
 		try {
-			db.execSQL(
-					"update data set name = ?, date_modified = ? where id = ?",
-					new String[] { newName,
-							Long.toString(new Date().getTime()),
-							Long.toString(id) });
+			db.execSQL("update data set name = ?, date_modified = ? where id = ?", new String[] {
+					newName, Long.toString(new Date().getTime()), Long.toString(id) });
 		} catch (Exception ex) {
 			Log.i("renameNodeById", ex.toString());
 		} finally {
@@ -486,8 +477,7 @@ public class NodeHelper {
 		Node node = getNodeById(id);
 		Node newParent = getNodeById(newParentId);
 
-		if (node == null || newParent == null
-				|| node.getParentId() == newParentId
+		if (node == null || newParent == null || node.getParentId() == newParentId
 				|| newParent.getType() != NodeType.FOLDER) {
 			return RESULT_BAD_PARAMS;
 		}
@@ -513,10 +503,8 @@ public class NodeHelper {
 		SQLiteDatabase db = dbOpenHelper.getWritableDatabase();
 
 		try {
-			db.execSQL(
-					"update data set parent_id = ?, date_modified = ? where id = ?",
-					new String[] { Long.toString(newParentId),
-							Long.toString(new Date().getTime()),
+			db.execSQL("update data set parent_id = ?, date_modified = ? where id = ?",
+					new String[] { Long.toString(newParentId), Long.toString(new Date().getTime()),
 							Long.toString(id) });
 		} catch (Exception ex) {
 			Log.i("move", ex.toString());
@@ -614,10 +602,7 @@ public class NodeHelper {
 
 		// rename if copy goes into the same folder
 		if (newParentId == node.getParentId()) {
-			renameNodeById(
-					cloneId,
-					node.getName()
-							+ context.getText(R.string.filename_copy_suffix));
+			renameNodeById(cloneId, node.getName() + context.getText(R.string.filename_copy_suffix));
 		}
 
 		move(cloneId, newParentId);
