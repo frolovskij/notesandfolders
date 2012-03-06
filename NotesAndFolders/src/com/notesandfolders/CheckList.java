@@ -7,16 +7,6 @@ import biz.source_code.base64Coder.Base64Coder;
 public class CheckList extends ArrayList<CheckListItem> implements Serializable {
 	private static final long serialVersionUID = 328947806452179738L;
 
-	public String serialize() {
-		byte[] serialized = Serializer.serializeObject(this);
-		return new String(Base64Coder.encode(serialized));
-	}
-
-	public static CheckList deserialize(String serializedAsString) {
-		byte[] serialized = Base64Coder.decode(serializedAsString);
-		return (CheckList) Serializer.deserializeObject(serialized);
-	}
-
 	public boolean equals(Object o) {
 		if (this == o) {
 			return true;
@@ -52,7 +42,6 @@ public class CheckList extends ArrayList<CheckListItem> implements Serializable 
 	}
 
 	public CheckList clone() {
-		return (CheckList) Serializer.deserializeObject(Serializer
-				.serializeObject(this));
+		return (CheckList) Serializer.deserializeObject(Serializer.serializeObject(this));
 	}
 }

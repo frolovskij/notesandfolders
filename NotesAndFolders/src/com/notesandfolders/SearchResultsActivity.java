@@ -18,6 +18,8 @@ This file is a part of Notes & Folders project.
 
 package com.notesandfolders;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import com.notesandfolders.R;
@@ -79,6 +81,38 @@ public class SearchResultsActivity extends BaseActivity implements OnItemClickLi
 		lv.setOnItemClickListener(this);
 
 		createContextMenu();
+
+		refresh();
+	}
+
+	public void refresh() {
+		List<Long> idsToDisplay = (List<Long>) Serializer.deserialize(getIntent().getExtras()
+				.getString("ids_list"));
+
+		items = new ArrayList<Node>();
+		for (Long id : idsToDisplay) {
+			if (id != null) {
+				items.add(nh.getNodeById(id));
+			}
+		}
+
+		if (items.isEmpty()) {
+			placeholder.setVisibility(View.VISIBLE);
+		} else {
+			placeholder.setVisibility(View.GONE);
+		}
+
+		Collections.sort(items, new NaturalOrderNodesComparator());
+
+		adapter = new NodeAdapter(this, R.layout.explorer_item, items);
+		lv.setAdapter(adapter);
+
+		for (int i = 0; i < adapter.getCount(); i++) {
+			Node n = adapter.getItem(i);
+			if (n != null && n.getId() == getIdToSetFocusTo()) {
+				lv.setSelection(i);
+			}
+		}
 	}
 
 	// context menu listener for nodes
