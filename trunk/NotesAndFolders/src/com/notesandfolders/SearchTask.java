@@ -18,6 +18,7 @@ This file is a part of Notes & Folders project.
 
 package com.notesandfolders;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import android.os.AsyncTask;
@@ -36,20 +37,56 @@ public class SearchTask extends AsyncTask<Void, String, List<Long>> {
 		mParameters = searchParameters;
 	}
 
-	@Override
-	protected List<Long> doInBackground(Void... arg0) {
-		try {
-			Thread.sleep(3000);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+	private List<Long> search() {
+		List<Long> result = new ArrayList<Long>();
+
+		List<Long> nodesId = mNh.getChildrenIdsById(mParameters.getFolderId());
+		for (Long id : nodesId) {
+			if (id == null) {
+				continue;
+			}
+
+			Node n = mNh.getNodeById(id);
+
+			boolean match = false;
+
+			if (mParameters.isCaseSensitive() == false) {
+				mParameters.setText(mParameters.getText().toLowerCase());
+			}
+
+			if (mParameters.isSearchInText()) {
+				String tc = mNh.getTextContentById(id);
+				if (mParameters.isCaseSensitive() == false) {
+					tc = tc.toLowerCase();
+				}
+
+				if (tc.contains(mParameters.getText())) {
+					match = true;
+				}
+			}
+
+			if (match == false && mParameters.isSearchInNames()) {
+				String name = n.getName();
+				if (mParameters.isCaseSensitive() == false) {
+					name = name.toLowerCase();
+				}
+
+				if (name.contains(mParameters.getText())) {
+					match = true;
+				}
+			}
+
+			if (match) {
+				result.add(n.getId());
+			}
 		}
 
-		// Just for test!
-		NodeHelper nh = new NodeHelper(mSearchActivity,
-				new TempStorage(mSearchActivity).getPassword());
-		result = nh.getChildrenIdsById(0);
+		return result;
+	}
 
+	@Override
+	protected List<Long> doInBackground(Void... arg0) {
+		result = search();
 		return result;
 	}
 

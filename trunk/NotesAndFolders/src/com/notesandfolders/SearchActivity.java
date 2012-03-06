@@ -107,6 +107,10 @@ public class SearchActivity extends BaseActivity implements OnClickListener {
 
 	public void onSearchTaskCompleted(List<Long> result) {
 		if (mShownDialog) {
+			for (Long l : result) {
+				System.out.println("+" + l);
+			}
+
 			Intent results = new Intent(this, SearchResultsActivity.class);
 			results.putExtra("ids_list", Serializer.serialize(result));
 			startActivity(results);
