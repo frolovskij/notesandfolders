@@ -18,10 +18,14 @@ This file is a part of Notes & Folders project.
 
 package com.notesandfolders;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -67,13 +71,11 @@ public class SearchActivity extends BaseActivity implements OnClickListener {
 		mTextToSearch = (EditText) findViewById(R.id.search_text);
 
 		mTypeSpinner = (Spinner) findViewById(R.id.search_type_spinner);
-		mTypeAdapter = new ArrayAdapter<CharSequence>(this,
-				android.R.layout.simple_spinner_item, new CharSequence[] {
-						getText(R.string.search_type_by_name_and_content),
+		mTypeAdapter = new ArrayAdapter<CharSequence>(this, android.R.layout.simple_spinner_item,
+				new CharSequence[] { getText(R.string.search_type_by_name_and_content),
 						getText(R.string.search_type_by_content),
 						getText(R.string.search_type_by_name) });
-		mTypeAdapter
-				.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		mTypeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		mTypeSpinner.setAdapter(mTypeAdapter);
 
 		mLocationSpinner = (Spinner) findViewById(R.id.search_where_spinner);
@@ -81,8 +83,7 @@ public class SearchActivity extends BaseActivity implements OnClickListener {
 				android.R.layout.simple_spinner_item, new CharSequence[] {
 						getText(R.string.search_where_current_folder),
 						getText(R.string.search_where_everywhere) });
-		mLocationAdapter
-				.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		mLocationAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		mLocationSpinner.setAdapter(mLocationAdapter);
 
 		mCaseSensitive = (CheckBox) findViewById(R.id.search_case_sensitive);
@@ -104,9 +105,10 @@ public class SearchActivity extends BaseActivity implements OnClickListener {
 		return null;
 	}
 
-	public void onSearchTaskCompleted(Integer result) {
+	public void onSearchTaskCompleted(List<Long> result) {
 		if (mShownDialog) {
-			// start results explorer
+			Intent results = new Intent(this, SearchResultsActivity.class);
+			startActivity(results);
 		}
 	}
 
@@ -133,15 +135,14 @@ public class SearchActivity extends BaseActivity implements OnClickListener {
 		if (mLocationSpinner.getSelectedItemPosition() == 0) {
 			// search in the folder that was opened in Explorer when search
 			// activity was started
-			mParameters.setFolderId(getIntent().getExtras().getLong(
-					"current_folder_id"));
+			mParameters.setFolderId(getIntent().getExtras().getLong("current_folder_id"));
 		} else {
 			// search everywhere
 			mParameters.setFolderId(0);
 		}
 
-		searchTask = new SearchTask(this, new NodeHelper(this, new TempStorage(
-				this).getPassword()), mParameters);
+		searchTask = new SearchTask(this,
+				new NodeHelper(this, new TempStorage(this).getPassword()), mParameters);
 		searchTask.execute();
 	}
 

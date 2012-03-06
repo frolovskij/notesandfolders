@@ -136,4 +136,8 @@
     <string name="search_case_sensitive">Case-sensitive</string>
     <string name="search_msg_searching">Searching in progress. Please wait…</string>
 
+    <!-- Search results -->
+    <string name="searchresults_title">Search results</string>
+    <string name="searchresults_empty_placeholder">Nothing was found</string>
+
 </resources>

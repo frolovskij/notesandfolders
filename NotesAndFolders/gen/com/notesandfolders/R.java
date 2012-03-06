@@ -33,24 +33,24 @@ public final class R {
         public static final int btnLogin=0x7f070014;
         public static final int checklist_item_check=0x7f070003;
         public static final int checklist_item_text=0x7f070004;
-        public static final int checklist_menu_copy=0x7f070028;
-        public static final int checklist_menu_delete=0x7f070029;
-        public static final int checklist_menu_rename=0x7f070027;
+        public static final int checklist_menu_copy=0x7f07002c;
+        public static final int checklist_menu_delete=0x7f07002d;
+        public static final int checklist_menu_rename=0x7f07002b;
         public static final int checklist_name=0x7f070000;
-        public static final int checklist_options_add=0x7f07002a;
-        public static final int checklist_options_paste=0x7f07002b;
-        public static final int checklist_options_save=0x7f07002c;
+        public static final int checklist_options_add=0x7f07002e;
+        public static final int checklist_options_paste=0x7f07002f;
+        public static final int checklist_options_save=0x7f070030;
         public static final int checklist_placeholder=0x7f070002;
         public static final int documentation=0x7f070005;
         public static final int explorer_file_icon=0x7f070009;
         public static final int explorer_file_name=0x7f07000a;
         public static final int explorer_listview=0x7f070008;
-        public static final int explorer_options_add=0x7f07002d;
-        public static final int explorer_options_close=0x7f070032;
-        public static final int explorer_options_import=0x7f07002f;
-        public static final int explorer_options_paste=0x7f07002e;
-        public static final int explorer_options_search=0x7f070030;
-        public static final int explorer_options_settings=0x7f070031;
+        public static final int explorer_options_add=0x7f070031;
+        public static final int explorer_options_close=0x7f070036;
+        public static final int explorer_options_import=0x7f070033;
+        public static final int explorer_options_paste=0x7f070032;
+        public static final int explorer_options_search=0x7f070034;
+        public static final int explorer_options_settings=0x7f070035;
         public static final int explorer_path=0x7f070006;
         public static final int explorer_placeholder=0x7f070007;
         public static final int fsexplorer_file_icon=0x7f07000e;
@@ -77,6 +77,10 @@ public final class R {
         public static final int search_text=0x7f070022;
         public static final int search_type_spinner=0x7f070025;
         public static final int search_where_spinner=0x7f070024;
+        public static final int searchresults_file_icon=0x7f070029;
+        public static final int searchresults_file_name=0x7f07002a;
+        public static final int searchresults_listview=0x7f070028;
+        public static final int searchresults_placeholder=0x7f070027;
         public static final int textView1=0x7f07001c;
         public static final int textView2=0x7f070011;
         public static final int textView3=0x7f07001f;
@@ -96,6 +100,8 @@ public final class R {
         public static final int password_edit=0x7f03000a;
         public static final int preferences=0x7f03000b;
         public static final int search=0x7f03000c;
+        public static final int searchresults=0x7f03000d;
+        public static final int searchresults_item=0x7f03000e;
     }
     public static final class menu {
         public static final int checklist_context=0x7f060000;
@@ -228,6 +234,10 @@ public final class R {
         public static final int search_where=0x7f05005d;
         public static final int search_where_current_folder=0x7f05005f;
         public static final int search_where_everywhere=0x7f05005e;
+        public static final int searchresults_empty_placeholder=0x7f050063;
+        /**  Search results 
+         */
+        public static final int searchresults_title=0x7f050062;
         public static final int settings_documentation_summary=0x7f050038;
         public static final int settings_documentation_title=0x7f050037;
         public static final int settings_information=0x7f050036;
