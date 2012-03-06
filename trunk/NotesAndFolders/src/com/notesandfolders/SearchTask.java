@@ -18,14 +18,16 @@ This file is a part of Notes & Folders project.
 
 package com.notesandfolders;
 
+import java.util.List;
+
 import android.os.AsyncTask;
 
-public class SearchTask extends AsyncTask<Void, String, Integer> {
+public class SearchTask extends AsyncTask<Void, String, List<Long>> {
 	private SearchParameters mParameters;
 	private SearchActivity mSearchActivity;
 	private NodeHelper mNh;
 	private boolean completed;
-	private Integer result;
+	private List<Long> result;
 
 	public SearchTask(SearchActivity searchActivity, NodeHelper nh,
 			SearchParameters searchParameters) {
@@ -35,7 +37,7 @@ public class SearchTask extends AsyncTask<Void, String, Integer> {
 	}
 
 	@Override
-	protected Integer doInBackground(Void... arg0) {
+	protected List<Long> doInBackground(Void... arg0) {
 		try {
 			Thread.sleep(10000);
 		} catch (InterruptedException e) {
@@ -52,7 +54,7 @@ public class SearchTask extends AsyncTask<Void, String, Integer> {
 	}
 
 	@Override
-	protected void onPostExecute(Integer res) {
+	protected void onPostExecute(List<Long> res) {
 		mSearchActivity.dismissDialog(SearchActivity.DIALOG_SEARCH);
 
 		notifyActivityTaskCompleted();
