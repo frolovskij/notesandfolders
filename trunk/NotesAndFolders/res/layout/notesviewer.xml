@@ -9,6 +9,8 @@
         android:id="@+id/notesviewer_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:ellipsize="start"
+        android:singleLine="true"
         android:text=""
         android:textSize="20dip" />
 
@@ -24,7 +26,7 @@
         android:layout_height="1dip"
         android:background="#FF909090" >
     </View>
-    
+
     <TextView
         android:id="@+id/notesviewer_placeholder"
         android:layout_width="fill_parent"
@@ -32,7 +34,7 @@
         android:gravity="center"
         android:text="@string/notesviewer_empty_placeholder"
         android:textSize="20dip"
-        android:visibility="visible" />    
+        android:visibility="visible" />
 
     <ScrollView
         android:layout_width="fill_parent"
