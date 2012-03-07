@@ -36,8 +36,13 @@ public class SearchTask extends AsyncTask<Void, String, List<Long>> {
 		mSearchActivity = searchActivity;
 		mParameters = searchParameters;
 	}
+	
+	public List<Long> getSearchResults() {
+		result = new ArrayList<Long>();
+		return search(mParameters.getFolderId());
+	}
 
-	private void search(long folderId) {
+	private List<Long> search(long folderId) {
 		List<Long> nodesId = mNh.getChildrenIdsById(folderId);
 		for (Long id : nodesId) {
 			if (id == null) {
@@ -98,13 +103,13 @@ public class SearchTask extends AsyncTask<Void, String, List<Long>> {
 				search(n.getId());
 			}
 		}
+		
+		return result;
 	}
 
 	@Override
 	protected List<Long> doInBackground(Void... arg0) {
-		result = new ArrayList<Long>();
-		search(mParameters.getFolderId());
-		return result;
+		return getSearchResults();
 	}
 
 	@Override
