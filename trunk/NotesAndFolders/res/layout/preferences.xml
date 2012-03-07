@@ -1,16 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
 
-    <!--
     <PreferenceCategory android:title="@string/settings_editor" >
 
-        <Preference
+        <CheckBoxPreference
             android:key="editor_cursor_to_end"
             android:summary="@string/settings_editor_cursor_to_end_summary"
             android:title="@string/settings_editor_cursor_to_end_title" />
-    </PreferenceCategory>
-    -->
-
+    </PreferenceCategory>
     <PreferenceCategory android:title="@string/settings_security" >
 
         <Preference

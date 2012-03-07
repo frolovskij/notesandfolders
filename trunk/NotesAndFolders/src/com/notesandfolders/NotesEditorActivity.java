@@ -25,7 +25,9 @@ import com.notesandfolders.R;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -112,8 +114,13 @@ public class NotesEditorActivity extends BaseActivity {
 		textContent = (EditText) findViewById(R.id.noteseditor_note_text);
 		textContent.setText(initialText);
 		registerForContextMenu(textContent);
-		
-		
+
+		SharedPreferences sharedPrefs = PreferenceManager
+				.getDefaultSharedPreferences(this);
+		if (sharedPrefs.getBoolean("editor_cursor_to_end", false)) {
+			textContent.setSelection(textContent.getText().length());
+		}
+
 		name = (TextView) findViewById(R.id.noteseditor_name);
 		Node n = nh.getNodeById(id);
 		name.setText(n.getName());
