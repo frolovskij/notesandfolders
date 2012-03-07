@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:baselineAligned="false"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:id="@+id/linearLayout1"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" >
+
+        <TextView
+            android:id="@+id/notesviewer_name"
+            android:layout_width="0dip"
+            android:layout_height="fill_parent"
+            android:layout_weight="0.5"
+            android:ellipsize="end"
+            android:gravity="center_vertical"
+            android:paddingLeft="5dip"
+            android:singleLine="true"
+            android:text=""
+            android:textSize="20dip" />
+
+        <ImageButton
+            android:id="@+id/notesviewer_edit_button"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_gravity="right"
+            android:gravity="center_vertical"
+            android:paddingBottom="5dip"
+            android:paddingLeft="5dip"
+            android:paddingTop="5dip"
+            android:src="@android:drawable/ic_menu_edit" />
+    </LinearLayout>
+
+    <View
+        android:id="@+id/view1"
+        android:layout_width="wrap_content"
+        android:layout_height="1dip"
+        android:background="#FF909090" >
+    </View>
+
+    <TextView
+        android:id="@+id/notesviewer_placeholder"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:gravity="center"
+        android:text="@string/notesviewer_empty_placeholder"
+        android:textSize="20dip"
+        android:visibility="visible" />
+
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="0dip"
+        android:layout_weight="1" >
+
+        <TextView
+            android:id="@+id/notesviewer_note_text_view"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textSize="20dip" />
+    </ScrollView>
+
+</LinearLayout>
