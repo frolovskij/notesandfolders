@@ -37,10 +37,8 @@ public class SearchTask extends AsyncTask<Void, String, List<Long>> {
 		mParameters = searchParameters;
 	}
 
-	private List<Long> search() {
-		List<Long> result = new ArrayList<Long>();
-
-		List<Long> nodesId = mNh.getChildrenIdsById(mParameters.getFolderId());
+	private void search(long folderId) {
+		List<Long> nodesId = mNh.getChildrenIdsById(folderId);
 		for (Long id : nodesId) {
 			if (id == null) {
 				continue;
@@ -54,14 +52,30 @@ public class SearchTask extends AsyncTask<Void, String, List<Long>> {
 				mParameters.setText(mParameters.getText().toLowerCase());
 			}
 
-			if (mParameters.isSearchInText()) {
+			if (mParameters.isSearchInText() && n.getType() != NodeType.FOLDER) {
 				String tc = mNh.getTextContentById(id);
-				if (mParameters.isCaseSensitive() == false) {
-					tc = tc.toLowerCase();
-				}
 
-				if (tc.contains(mParameters.getText())) {
-					match = true;
+				if (n.getType() == NodeType.NOTE) {
+					if (mParameters.isCaseSensitive() == false) {
+						tc = tc.toLowerCase();
+					}
+
+					if (tc.contains(mParameters.getText())) {
+						match = true;
+					}
+				} else if (n.getType() == NodeType.CHECKLIST) {
+					CheckList cl = (CheckList) Serializer.deserialize(tc);
+					for (CheckListItem item : cl) {
+						String text = item.getText();
+						if (mParameters.isCaseSensitive() == false) {
+							text = text.toLowerCase();
+						}
+						if (text.contains(mParameters.getText())) {
+							match = true;
+							break;
+						}
+					}
+
 				}
 			}
 
@@ -79,14 +93,17 @@ public class SearchTask extends AsyncTask<Void, String, List<Long>> {
 			if (match) {
 				result.add(n.getId());
 			}
-		}
 
-		return result;
+			if (n.getType() == NodeType.FOLDER) {
+				search(n.getId());
+			}
+		}
 	}
 
 	@Override
 	protected List<Long> doInBackground(Void... arg0) {
-		result = search();
+		result = new ArrayList<Long>();
+		search(mParameters.getFolderId());
 		return result;
 	}
 
