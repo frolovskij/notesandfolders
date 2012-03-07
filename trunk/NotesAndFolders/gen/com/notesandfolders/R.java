@@ -115,25 +115,25 @@ public final class R {
         public static final int app_name=0x7f050000;
         public static final int app_version=0x7f050001;
         public static final int cancel=0x7f05000d;
-        public static final int checklist_add=0x7f05004d;
-        public static final int checklist_delete_prompt=0x7f050054;
-        public static final int checklist_delete_title=0x7f050053;
-        public static final int checklist_empty_placeholder=0x7f050055;
-        public static final int checklist_msg_save_before_exit=0x7f050050;
-        public static final int checklist_newitem_prompt=0x7f05004f;
-        public static final int checklist_newitem_title=0x7f05004e;
-        public static final int checklist_rename_prompt=0x7f050052;
-        public static final int checklist_rename_title=0x7f050051;
+        public static final int checklist_add=0x7f050051;
+        public static final int checklist_delete_prompt=0x7f050058;
+        public static final int checklist_delete_title=0x7f050057;
+        public static final int checklist_empty_placeholder=0x7f050059;
+        public static final int checklist_msg_save_before_exit=0x7f050054;
+        public static final int checklist_newitem_prompt=0x7f050053;
+        public static final int checklist_newitem_title=0x7f050052;
+        public static final int checklist_rename_prompt=0x7f050056;
+        public static final int checklist_rename_title=0x7f050055;
         /**  Checklist 
          */
-        public static final int checklist_title=0x7f05004c;
+        public static final int checklist_title=0x7f050050;
         public static final int copy=0x7f050019;
-        public static final int create_checklist=0x7f050047;
-        public static final int create_folder=0x7f050045;
+        public static final int create_checklist=0x7f05004a;
+        public static final int create_folder=0x7f050048;
         /**  Alert Dialog that pop-ups when user chooses "New" from Explorer's options menu 
          */
-        public static final int create_new=0x7f050044;
-        public static final int create_note=0x7f050046;
+        public static final int create_new=0x7f050047;
+        public static final int create_note=0x7f050049;
         public static final int cut=0x7f05001a;
         public static final int delete=0x7f05001b;
         public static final int edit=0x7f050018;
@@ -168,7 +168,7 @@ public final class R {
         public static final int fsimp=0x7f05001e;
         /**  Help 
          */
-        public static final int help_title=0x7f05004b;
+        public static final int help_title=0x7f05004f;
         public static final int import_go_back=0x7f050007;
         public static final int import_icon=0x7f050008;
         public static final int import_msg_cant_read=0x7f05000a;
@@ -195,51 +195,55 @@ public final class R {
         public static final int msg_importing_files=0x7f050003;
         public static final int msg_not_implemented_yet=0x7f050002;
         public static final int no=0x7f05000f;
-        public static final int noteseditor_msg_save_before_exit=0x7f050049;
+        public static final int noteseditor_msg_save_before_exit=0x7f05004c;
         /**  Notes editor 
          */
-        public static final int noteseditor_title=0x7f050048;
+        public static final int noteseditor_title=0x7f05004b;
+        public static final int notesviewer_empty_placeholder=0x7f05004e;
         /**  Notes viewer 
          */
-        public static final int notesviewer_empty_placeholder=0x7f05004a;
+        public static final int notesviewer_title=0x7f05004d;
         /**  Common 
          */
         public static final int ok=0x7f05000c;
         public static final int open=0x7f050017;
-        public static final int password_edit_confirmation=0x7f05003e;
-        public static final int password_edit_current=0x7f05003c;
-        public static final int password_edit_new=0x7f05003d;
-        public static final int password_edit_save_button=0x7f05003f;
+        public static final int password_edit_confirmation=0x7f050041;
+        public static final int password_edit_current=0x7f05003f;
+        public static final int password_edit_new=0x7f050040;
+        public static final int password_edit_save_button=0x7f050042;
         /**  Password settings activity 
          */
-        public static final int password_edit_title=0x7f05003b;
-        public static final int password_msg_password_confirmation_do_not_match=0x7f050043;
-        public static final int password_msg_password_was_saved=0x7f050040;
-        public static final int password_msg_save_error=0x7f050042;
-        public static final int password_msg_wrong_password=0x7f050041;
+        public static final int password_edit_title=0x7f05003e;
+        public static final int password_msg_password_confirmation_do_not_match=0x7f050046;
+        public static final int password_msg_password_was_saved=0x7f050043;
+        public static final int password_msg_save_error=0x7f050045;
+        public static final int password_msg_wrong_password=0x7f050044;
         public static final int properties=0x7f05001d;
         public static final int rename=0x7f05001c;
         public static final int save=0x7f05001f;
-        public static final int search_button=0x7f050058;
-        public static final int search_case_sensitive=0x7f050060;
-        public static final int search_msg_searching=0x7f050061;
-        public static final int search_text=0x7f050057;
+        public static final int search_button=0x7f05005c;
+        public static final int search_case_sensitive=0x7f050064;
+        public static final int search_msg_searching=0x7f050065;
+        public static final int search_text=0x7f05005b;
         /**  Search 
          */
-        public static final int search_title=0x7f050056;
-        public static final int search_type=0x7f050059;
-        public static final int search_type_by_content=0x7f05005b;
-        public static final int search_type_by_name=0x7f05005a;
-        public static final int search_type_by_name_and_content=0x7f05005c;
-        public static final int search_where=0x7f05005d;
-        public static final int search_where_current_folder=0x7f05005f;
-        public static final int search_where_everywhere=0x7f05005e;
-        public static final int searchresults_empty_placeholder=0x7f050063;
+        public static final int search_title=0x7f05005a;
+        public static final int search_type=0x7f05005d;
+        public static final int search_type_by_content=0x7f05005f;
+        public static final int search_type_by_name=0x7f05005e;
+        public static final int search_type_by_name_and_content=0x7f050060;
+        public static final int search_where=0x7f050061;
+        public static final int search_where_current_folder=0x7f050063;
+        public static final int search_where_everywhere=0x7f050062;
+        public static final int searchresults_empty_placeholder=0x7f050067;
         /**  Search results 
          */
-        public static final int searchresults_title=0x7f050062;
+        public static final int searchresults_title=0x7f050066;
         public static final int settings_documentation_summary=0x7f050038;
         public static final int settings_documentation_title=0x7f050037;
+        public static final int settings_editor=0x7f05003b;
+        public static final int settings_editor_cursor_to_end_summary=0x7f05003d;
+        public static final int settings_editor_cursor_to_end_title=0x7f05003c;
         public static final int settings_information=0x7f050036;
         public static final int settings_password=0x7f050034;
         public static final int settings_password_summary=0x7f050035;

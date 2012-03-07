@@ -34,13 +34,14 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 public class NotesEditorActivity extends BaseActivity {
 	private NodeHelper nh;
 	private EditText textContent;
 	private TextView name;
-	private Button saveButton;
+	private ImageButton saveButton;
 	private String initialText;
 	private long id;
 
@@ -68,18 +69,24 @@ public class NotesEditorActivity extends BaseActivity {
 			superOnBackPressed();
 		} else {
 			// if was changed
-			new AlertDialog.Builder(this).setTitle(R.string.noteseditor_title)
+			new AlertDialog.Builder(this)
+					.setTitle(R.string.noteseditor_title)
 					.setMessage(R.string.noteseditor_msg_save_before_exit)
-					.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
-						public void onClick(DialogInterface dialog, int whichButton) {
-							save();
-							superOnBackPressed();
-						}
-					}).setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
-						public void onClick(DialogInterface dialog, int whichButton) {
-							superOnBackPressed();
-						}
-					}).
+					.setPositiveButton(R.string.yes,
+							new DialogInterface.OnClickListener() {
+								public void onClick(DialogInterface dialog,
+										int whichButton) {
+									save();
+									superOnBackPressed();
+								}
+							})
+					.setNegativeButton(R.string.no,
+							new DialogInterface.OnClickListener() {
+								public void onClick(DialogInterface dialog,
+										int whichButton) {
+									superOnBackPressed();
+								}
+							}).
 					// setNeutralButton(R.string.cancel, new
 					// DialogInterface.OnClickListener() {
 					// public void onClick(DialogInterface dialog, int
@@ -105,11 +112,13 @@ public class NotesEditorActivity extends BaseActivity {
 		textContent = (EditText) findViewById(R.id.noteseditor_note_text);
 		textContent.setText(initialText);
 		registerForContextMenu(textContent);
-
+		
+		
 		name = (TextView) findViewById(R.id.noteseditor_name);
-		name.setText(nh.getFullPathById(id));
+		Node n = nh.getNodeById(id);
+		name.setText(n.getName());
 
-		saveButton = (Button) findViewById(R.id.noteseditor_save_button);
+		saveButton = (ImageButton) findViewById(R.id.noteseditor_save_button);
 		saveButton.setOnClickListener(saveButtonOnClickListener);
 	}
 
@@ -120,8 +129,8 @@ public class NotesEditorActivity extends BaseActivity {
 			menu.add(Menu.NONE, Menu.NONE, Menu.NONE, R.string.insert_date_time)
 					.setOnMenuItemClickListener(new OnMenuItemClickListener() {
 						public boolean onMenuItemClick(MenuItem item) {
-							textContent.append(new SimpleDateFormat("yyyy.MM.dd HH:mm:ss")
-									.format(new Date()));
+							textContent.append(new SimpleDateFormat(
+									"yyyy.MM.dd HH:mm:ss").format(new Date()));
 							return false;
 						}
 					});

@@ -32,7 +32,7 @@
         </activity>
         <activity
             android:name=".NotesViewerActivity"
-            android:label="@string/noteseditor_title" >
+            android:label="@string/notesviewer_title" >
         </activity>
         <activity
             android:name=".NotesEditorActivity"

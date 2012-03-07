@@ -82,6 +82,9 @@
     <string name="settings_documentation_summary">Offline html documentation</string>
     <string name="settings_version_title">Notes &amp; Folders</string>
     <string name="settings_version_summary">Offline html documentation</string>
+    <string name="settings_editor">Notes editor</string>
+    <string name="settings_editor_cursor_to_end_title">Cursor to end</string>
+    <string name="settings_editor_cursor_to_end_summary">When opening editor place cursor to the end of text</string>
 
     <!-- Password settings activity -->
     <string name="password_edit_title">Changing password</string>
@@ -105,6 +108,7 @@
     <string name="noteseditor_msg_save_before_exit">Save changes?</string>
 
     <!-- Notes viewer -->
+    <string name="notesviewer_title">Notes viewer</string>
     <string name="notesviewer_empty_placeholder">Note is empty</string>
 
     <!-- Help -->

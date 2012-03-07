@@ -25,13 +25,14 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 public class NotesViewerActivity extends BaseActivity {
 	private NodeHelper nh;
 	private TextView textContent;
 	private TextView name;
-	private Button editButton;
+	private ImageButton editButton;
 	private TextView placeholder;
 
 	private long id;
@@ -72,9 +73,10 @@ public class NotesViewerActivity extends BaseActivity {
 		textContent = (TextView) findViewById(R.id.notesviewer_note_text_view);
 
 		name = (TextView) findViewById(R.id.notesviewer_name);
-		name.setText(nh.getFullPathById(id));
+		Node n = nh.getNodeById(id);
+		name.setText(n.getName());
 
-		editButton = (Button) findViewById(R.id.notesviewer_edit_button);
+		editButton = (ImageButton) findViewById(R.id.notesviewer_edit_button);
 		editButton.setOnClickListener(editButtonOnClickListener);
 
 		placeholder = (TextView) findViewById(R.id.notesviewer_placeholder);
