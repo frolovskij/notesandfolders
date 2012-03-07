@@ -2,6 +2,7 @@ package com.notesandfolders.test;
 
 import com.notesandfolders.CheckList;
 import com.notesandfolders.CheckListItem;
+import com.notesandfolders.Serializer;
 
 import android.test.AndroidTestCase;
 
@@ -24,9 +25,9 @@ public class CheckListTest extends AndroidTestCase {
 		list.add(item2);
 		list.add(item3);
 
-		String serialized = list.serialize();
+		String serialized = Serializer.serialize(list);
 
-		CheckList list2 = CheckList.deserialize(serialized);
+		CheckList list2 = (CheckList) Serializer.deserialize(serialized);
 		assertEquals(3, list2.size());
 		assertEquals("First", ((CheckListItem) list2.get(0)).getText());
 		assertEquals(true, ((CheckListItem) list2.get(0)).isChecked());
