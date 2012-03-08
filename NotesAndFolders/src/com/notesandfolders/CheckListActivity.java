@@ -175,7 +175,8 @@ public class CheckListActivity extends ListActivity {
 
 		setListAdapter(adapter);
 
-		name.setText(nh.getFullPathById(id));
+		Node n = nh.getNodeById(id);
+		name.setText(n.getName());
 	}
 
 	public void onSave() {
