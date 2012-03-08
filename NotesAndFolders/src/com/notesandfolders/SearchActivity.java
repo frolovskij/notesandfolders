@@ -18,13 +18,10 @@ This file is a part of Notes & Folders project.
 
 package com.notesandfolders;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;

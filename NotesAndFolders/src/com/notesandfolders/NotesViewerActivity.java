@@ -22,15 +22,17 @@ import com.notesandfolders.R;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Html;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
 public class NotesViewerActivity extends BaseActivity {
 	private NodeHelper nh;
-	private TextView textContent;
+	private WebView textContent;
 	private TextView name;
 	private ImageButton editButton;
 	private TextView placeholder;
@@ -40,8 +42,7 @@ public class NotesViewerActivity extends BaseActivity {
 	final private OnClickListener editButtonOnClickListener = new OnClickListener() {
 		public void onClick(View v) {
 			if (v != null && v == editButton) {
-				Intent editor = new Intent(NotesViewerActivity.this,
-						NotesEditorActivity.class);
+				Intent editor = new Intent(NotesViewerActivity.this, NotesEditorActivity.class);
 				editor.putExtra("note_id", id);
 				startActivity(editor);
 			}
@@ -53,7 +54,17 @@ public class NotesViewerActivity extends BaseActivity {
 		super.onRestart();
 
 		String tc = nh.getTextContentById(id);
-		textContent.setText(tc);
+
+		StringBuilder sb = new StringBuilder();
+		sb.append("<html><body>");
+		for (String s : tc.split("\n")) {
+			sb.append("<p align=\"justify\">");
+			sb.append(Html.fromHtml(s).toString());
+			sb.append("</p>");
+		}
+		sb.append("</body></html>");
+
+		textContent.loadData(sb.toString(), "text/html", "utf-8");
 
 		if (tc.equals("")) {
 			placeholder.setVisibility(View.VISIBLE);
@@ -70,7 +81,7 @@ public class NotesViewerActivity extends BaseActivity {
 		nh = new NodeHelper(this, new TempStorage(this).getPassword());
 		id = getIntent().getExtras().getLong("note_id");
 
-		textContent = (TextView) findViewById(R.id.notesviewer_note_text_view);
+		textContent = (WebView) findViewById(R.id.notesviewer_note_text_view);
 
 		name = (TextView) findViewById(R.id.notesviewer_name);
 		Node n = nh.getNodeById(id);

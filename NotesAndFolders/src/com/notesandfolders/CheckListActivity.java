@@ -33,13 +33,11 @@ import android.content.DialogInterface;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.text.InputType;
-import android.util.Log;
 import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -79,15 +77,6 @@ public class CheckListActivity extends ListActivity {
 
 	private void setSelectedIndex(int selectedIndex) {
 		getIntent().putExtra("selected_index", selectedIndex);
-	}
-
-	// id_to_copy is id of the node to be copy/pasted
-	private long getIndexToCopy() {
-		return getIntent().getLongExtra("index_to_copy", -1);
-	}
-
-	private void setIndexToCopy(long indexToCopy) {
-		getIntent().putExtra("index_to_copy", indexToCopy);
 	}
 
 	/** Called when the activity is first created. */
