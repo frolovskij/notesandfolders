@@ -1,13 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
 
+    <PreferenceCategory android:title="@string/settings_color_scheme" >
+
+        <ListPreference
+            android:defaultValue="1"
+            android:entries="@array/color_schemes_names"
+            android:entryValues="@array/color_schemes_names"
+            android:key="color_scheme"
+            android:title="@string/settings_color_scheme" />
+    </PreferenceCategory>
+
     <PreferenceCategory android:title="@string/settings_editor" >
 
         <CheckBoxPreference
             android:key="editor_cursor_to_end"
             android:summary="@string/settings_editor_cursor_to_end_summary"
             android:title="@string/settings_editor_cursor_to_end_title" />
-    </PreferenceCategory>
+    </PreferenceCategory>
+
     <PreferenceCategory android:title="@string/settings_security" >
 
         <Preference
