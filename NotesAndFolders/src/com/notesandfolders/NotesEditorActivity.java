@@ -24,6 +24,8 @@ import java.util.Date;
 import com.notesandfolders.R;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -37,9 +39,12 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ListAdapter;
 import android.widget.TextView;
 
 public class NotesEditorActivity extends BaseActivity {
+	private static final int DIALOG_SAVE = 0;
+
 	private NodeHelper nh;
 	private EditText textContent;
 	private TextView name;
@@ -70,33 +75,7 @@ public class NotesEditorActivity extends BaseActivity {
 			// if text wasn't changed
 			superOnBackPressed();
 		} else {
-			// if was changed
-			new AlertDialog.Builder(this)
-					.setTitle(R.string.noteseditor_title)
-					.setMessage(R.string.noteseditor_msg_save_before_exit)
-					.setPositiveButton(R.string.yes,
-							new DialogInterface.OnClickListener() {
-								public void onClick(DialogInterface dialog,
-										int whichButton) {
-									save();
-									superOnBackPressed();
-								}
-							})
-					.setNegativeButton(R.string.no,
-							new DialogInterface.OnClickListener() {
-								public void onClick(DialogInterface dialog,
-										int whichButton) {
-									superOnBackPressed();
-								}
-							}).
-					// setNeutralButton(R.string.cancel, new
-					// DialogInterface.OnClickListener() {
-					// public void onClick(DialogInterface dialog, int
-					// whichButton) {
-					// dialog.cancel();
-					// }
-					// }).
-					show();
+			showDialog(DIALOG_SAVE);
 		}
 	}
 
@@ -115,8 +94,7 @@ public class NotesEditorActivity extends BaseActivity {
 		textContent.setText(initialText);
 		registerForContextMenu(textContent);
 
-		SharedPreferences sharedPrefs = PreferenceManager
-				.getDefaultSharedPreferences(this);
+		SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
 		if (sharedPrefs.getBoolean("editor_cursor_to_end", false)) {
 			textContent.setSelection(textContent.getText().length());
 		}
@@ -136,13 +114,32 @@ public class NotesEditorActivity extends BaseActivity {
 			menu.add(Menu.NONE, Menu.NONE, Menu.NONE, R.string.insert_date_time)
 					.setOnMenuItemClickListener(new OnMenuItemClickListener() {
 						public boolean onMenuItemClick(MenuItem item) {
-							textContent.append(new SimpleDateFormat(
-									"yyyy.MM.dd HH:mm:ss").format(new Date()));
+							textContent.append(new SimpleDateFormat("yyyy.MM.dd HH:mm:ss")
+									.format(new Date()));
 							return false;
 						}
 					});
 		}
 
 		super.onCreateContextMenu(menu, view, menuInfo);
+	}
+
+	@Override
+	protected Dialog onCreateDialog(int id) {
+		if (id == DIALOG_SAVE) {
+			return new AlertDialog.Builder(this).setTitle(R.string.noteseditor_title)
+					.setMessage(R.string.noteseditor_msg_save_before_exit)
+					.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int whichButton) {
+							save();
+							superOnBackPressed();
+						}
+					}).setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int whichButton) {
+							superOnBackPressed();
+						}
+					}).create();
+		}
+		return super.onCreateDialog(id);
 	}
 }
