@@ -85,6 +85,7 @@
     <string name="settings_editor">Notes editor</string>
     <string name="settings_editor_cursor_to_end_title">Cursor to end</string>
     <string name="settings_editor_cursor_to_end_summary">When opening editor place cursor to the end of text</string>
+    <string name="settings_color_scheme">Color scheme</string>
 
     <!-- Password settings activity -->
     <string name="password_edit_title">Changing password</string>
