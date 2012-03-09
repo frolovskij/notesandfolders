@@ -53,12 +53,14 @@ public class NotesViewerActivity extends BaseActivity {
 	public void onResume() {
 		super.onRestart();
 
+		final long t = System.currentTimeMillis();
+
 		String tc = nh.getTextContentById(id);
 
-		StringBuilder sb = new StringBuilder();
-		sb.append("<html><body>");
+		StringBuilder sb = new StringBuilder(2 * tc.length());
+		sb.append("<html><head><style>p {text-indent: 1em; text-align: justify;}</style></head><body>");
 		for (String s : tc.split("\n")) {
-			sb.append("<p align=\"justify\">");
+			sb.append("<p>");
 			sb.append(Html.fromHtml(s).toString());
 			sb.append("</p>");
 		}
@@ -71,6 +73,8 @@ public class NotesViewerActivity extends BaseActivity {
 		} else {
 			placeholder.setVisibility(View.GONE);
 		}
+
+		System.out.println(System.currentTimeMillis() - t);
 	}
 
 	@Override
