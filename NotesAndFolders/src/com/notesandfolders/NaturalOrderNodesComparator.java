@@ -30,7 +30,7 @@ public class NaturalOrderNodesComparator implements Comparator<Node> {
 			return 0;
 		}
 
-		if (first.getType() == second.getType()) {
+		if (first.getType() != NodeType.FOLDER && second.getType() != NodeType.FOLDER) {
 			return first.getName().compareTo(second.getName());
 		} else {
 			if (first.getType() == NodeType.FOLDER) {
