@@ -18,7 +18,10 @@ This file is a part of Notes & Folders project.
 
 package com.notesandfolders;
 
-public class SearchParameters {
+import java.io.Serializable;
+
+public class SearchParameters implements Serializable {
+	private static final long serialVersionUID = -4183340731066276938L;
 	private String text;
 	private long folderId;
 	private boolean caseSensitive;

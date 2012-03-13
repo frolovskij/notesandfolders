@@ -67,6 +67,12 @@ public class SearchResultsActivity extends BaseActivity implements OnItemClickLi
 	}
 
 	@Override
+	public void onDestroy() {
+		super.onDestroy();
+		new TempStorage(this).deleteSearchParameters();
+	}
+
+	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
@@ -153,7 +159,6 @@ public class SearchResultsActivity extends BaseActivity implements OnItemClickLi
 
 		Intent viewer = new Intent(this, NotesViewerActivity.class);
 		viewer.putExtra("note_id", id);
-		viewer.putExtra("highlight_text", getIntent().getExtras().getString("highlight_text"));
 		startActivity(viewer);
 	}
 

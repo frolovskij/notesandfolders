@@ -57,11 +57,11 @@ public class Serializer {
 
 			return object;
 		} catch (ClassNotFoundException cnfe) {
-			Log.e("deserializeObject", "class not found error", cnfe);
+			// Log.e("deserializeObject", "class not found error", cnfe);
 
 			return null;
 		} catch (IOException ioe) {
-			Log.e("deserializeObject", "io error", ioe);
+			// Log.e("deserializeObject", "io error", ioe);
 
 			return null;
 		}
