@@ -37,8 +37,6 @@ public class NotesViewerActivity extends BaseActivity {
 	private ImageButton editButton;
 	private TextView placeholder;
 
-	private String textToHighligth;
-
 	private long id;
 
 	final private OnClickListener editButtonOnClickListener = new OnClickListener() {
@@ -58,6 +56,9 @@ public class NotesViewerActivity extends BaseActivity {
 		final long t = System.currentTimeMillis();
 
 		String tc = nh.getTextContentById(id);
+
+		SearchParameters sp = new TempStorage(this).getSearchParameters();
+		String textToHighligth = (sp == null) ? null : (sp.isSearchInText()) ? sp.getText() : null;
 
 		StringBuilder sb = new StringBuilder(2 * tc.length());
 		sb.append("<html><head><style>p {text-indent: 1em; text-align: justify;} span.highlight {background-color: yellow;} </style></head><body>");
@@ -96,7 +97,6 @@ public class NotesViewerActivity extends BaseActivity {
 
 		nh = new NodeHelper(this, new TempStorage(this).getPassword());
 		id = getIntent().getExtras().getLong("note_id");
-		textToHighligth = getIntent().getExtras().getString("highlight_text");
 
 		textContent = (WebView) findViewById(R.id.notesviewer_note_text_view);
 

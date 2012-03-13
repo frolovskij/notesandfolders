@@ -30,7 +30,6 @@ import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ListAdapter;
 import android.widget.Spinner;
 
 public class SearchActivity extends BaseActivity implements OnClickListener {
@@ -106,7 +105,6 @@ public class SearchActivity extends BaseActivity implements OnClickListener {
 		if (mShownDialog) {
 			Intent results = new Intent(this, SearchResultsActivity.class);
 			results.putExtra("ids_list", Serializer.serialize(result));
-			results.putExtra("highlight_text", mTextToSearch.getText().toString());
 			startActivity(results);
 		}
 	}
@@ -139,6 +137,8 @@ public class SearchActivity extends BaseActivity implements OnClickListener {
 			// search everywhere
 			mParameters.setFolderId(0);
 		}
+
+		new TempStorage(this).setSearchParameters(mParameters);
 
 		searchTask = new SearchTask(this,
 				new NodeHelper(this, new TempStorage(this).getPassword()), mParameters);
