@@ -153,6 +153,7 @@ public class SearchResultsActivity extends BaseActivity implements OnItemClickLi
 
 		Intent viewer = new Intent(this, NotesViewerActivity.class);
 		viewer.putExtra("note_id", id);
+		viewer.putExtra("highlight_text", getIntent().getExtras().getString("highlight_text"));
 		startActivity(viewer);
 	}
 

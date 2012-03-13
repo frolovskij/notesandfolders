@@ -37,6 +37,8 @@ public class NotesViewerActivity extends BaseActivity {
 	private ImageButton editButton;
 	private TextView placeholder;
 
+	private String textToHighligth;
+
 	private long id;
 
 	final private OnClickListener editButtonOnClickListener = new OnClickListener() {
@@ -58,15 +60,25 @@ public class NotesViewerActivity extends BaseActivity {
 		String tc = nh.getTextContentById(id);
 
 		StringBuilder sb = new StringBuilder(2 * tc.length());
-		sb.append("<html><head><style>p {text-indent: 1em; text-align: justify;}</style></head><body>");
+		sb.append("<html><head><style>p {text-indent: 1em; text-align: justify;} span.highlight {background-color: yellow;} </style></head><body>");
 		for (String s : tc.split("\n")) {
 			sb.append("<p>");
-			sb.append(Html.fromHtml(s).toString());
+
+			String untagged = Html.fromHtml(s).toString();
+			if (textToHighligth != null) {
+				sb.append(untagged.replaceAll(textToHighligth, "<span class=\"highlight\">"
+						+ textToHighligth + "</span>"));
+			} else {
+				sb.append(untagged);
+			}
+
 			sb.append("</p>");
 		}
 		sb.append("</body></html>");
 
 		textContent.loadData(sb.toString(), "text/html", "utf-8");
+
+		System.out.println(sb.toString());
 
 		if (tc.equals("")) {
 			placeholder.setVisibility(View.VISIBLE);
@@ -84,6 +96,7 @@ public class NotesViewerActivity extends BaseActivity {
 
 		nh = new NodeHelper(this, new TempStorage(this).getPassword());
 		id = getIntent().getExtras().getLong("note_id");
+		textToHighligth = getIntent().getExtras().getString("highlight_text");
 
 		textContent = (WebView) findViewById(R.id.notesviewer_note_text_view);
 
