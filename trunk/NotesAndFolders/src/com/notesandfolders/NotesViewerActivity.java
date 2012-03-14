@@ -87,8 +87,7 @@ public class NotesViewerActivity extends BaseActivity {
 		sb.append("</body></html>");
 
 		textContent.loadData(sb.toString(), "text/html", "utf-8");
-
-		System.out.println(sb.toString());
+		textContent.reload();
 
 		if (tc.equals("")) {
 			placeholder.setVisibility(View.VISIBLE);
