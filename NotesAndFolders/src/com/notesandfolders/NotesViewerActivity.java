@@ -53,22 +53,26 @@ public class NotesViewerActivity extends BaseActivity {
 	public void onResume() {
 		super.onRestart();
 
-		final long t = System.currentTimeMillis();
-
 		String tc = nh.getTextContentById(id);
 
 		SearchParameters sp = new TempStorage(this).getSearchParameters();
 		String textToHighligth = (sp == null) ? null : (sp.isSearchInText()) ? sp.getText() : null;
 
 		StringBuilder sb = new StringBuilder(2 * tc.length());
-		sb.append("<html><head><style>p {text-indent: 1em; text-align: justify;} span.highlight {background-color: yellow;} </style></head><body>");
+		sb.append("<html><head><style>p {text-indent: 1em; text-align: justify;} span.highlight {background-color: #7FFF00;} </style></head><body>");
 		for (String s : tc.split("\n")) {
 			sb.append("<p>");
 
 			String untagged = Html.fromHtml(s).toString();
 			if (textToHighligth != null) {
-				sb.append(untagged.replaceAll(textToHighligth, "<span class=\"highlight\">"
-						+ textToHighligth + "</span>"));
+				if (sp.isCaseSensitive()) {
+					sb.append(untagged.replaceAll(textToHighligth, "<span class=\"highlight\">"
+							+ textToHighligth + "</span>"));
+				} else {
+					sb.append(untagged.replaceAll("(?i)" + textToHighligth,
+							"<span class=\"highlight\">$0</span>"));
+				}
+
 			} else {
 				sb.append(untagged);
 			}
@@ -86,8 +90,6 @@ public class NotesViewerActivity extends BaseActivity {
 		} else {
 			placeholder.setVisibility(View.GONE);
 		}
-
-		System.out.println(System.currentTimeMillis() - t);
 	}
 
 	@Override
