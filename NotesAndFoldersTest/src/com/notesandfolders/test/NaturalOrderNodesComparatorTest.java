@@ -35,6 +35,7 @@ public class NaturalOrderNodesComparatorTest extends AndroidTestCase {
 
 	public void testOrder() {
 		List<Node> list = new ArrayList<Node>();
+		list.add(nh.createFolder(root, "B"));
 		list.add(nh.createFolder(root, "x"));
 		list.add(nh.createFolder(root, "Z"));
 		list.add(nh.createNote(root, "A", ""));
@@ -49,7 +50,7 @@ public class NaturalOrderNodesComparatorTest extends AndroidTestCase {
 			sb.append(n.getName());
 		}
 
-		assertEquals("ZxADbc", sb.toString());
+		assertEquals("BZxADbc", sb.toString());
 	}
 
 }
