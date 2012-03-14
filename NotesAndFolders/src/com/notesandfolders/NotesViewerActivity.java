@@ -59,7 +59,12 @@ public class NotesViewerActivity extends BaseActivity {
 		String textToHighligth = (sp == null) ? null : (sp.isSearchInText()) ? sp.getText() : null;
 
 		StringBuilder sb = new StringBuilder(2 * tc.length());
-		sb.append("<html><head><style>p {text-indent: 1em; text-align: justify;} span.highlight {background-color: #7FFF00;} </style></head><body>");
+		sb.append("<html>\n" + "<head>\n"
+				+ "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">\n"
+				+ "<style>\n" + "p {text-indent: 1em; text-align: justify;}\n"
+				+ "span.highlight {background-color: #7FFF00;}\n" + "</style>\n" + "</head>\n"
+				+ "<body>");
+
 		for (String s : tc.split("\n")) {
 			sb.append("<p>");
 
