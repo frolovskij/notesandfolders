@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <PreferenceCategory android:title="@string/settings_color_scheme" >
+
+        <ListPreference
+            android:defaultValue="1"
+            android:entries="@array/color_schemes_names"
+            android:entryValues="@array/color_schemes_names"
+            android:key="color_scheme"
+            android:title="@string/settings_color_scheme" />
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/settings_editor" >
+
+        <CheckBoxPreference
+            android:key="editor_cursor_to_end"
+            android:summary="@string/settings_editor_cursor_to_end_summary"
+            android:title="@string/settings_editor_cursor_to_end_title" />
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/settings_security" >
+
+        <Preference
+            android:key="password"
+            android:summary="@string/settings_password_summary"
+            android:title="@string/settings_password" />
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/settings_information" >
+
+        <Preference
+            android:key="version"
+            android:summary="@string/app_version"
+            android:title="@string/app_name" />
+
+        <Preference
+            android:key="documentation"
+            android:summary="@string/settings_documentation_summary"
+            android:title="@string/settings_documentation_title" />
+    </PreferenceCategory>
+
+</PreferenceScreen>
