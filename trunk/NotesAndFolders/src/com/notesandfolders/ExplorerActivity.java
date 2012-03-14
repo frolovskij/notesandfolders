@@ -19,7 +19,6 @@ This file is a part of Notes & Folders project.
 package com.notesandfolders;
 
 import java.text.SimpleDateFormat;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -664,8 +663,6 @@ public class ExplorerActivity extends BaseActivity implements
 		} else {
 			placeholder.setVisibility(View.GONE);
 		}
-
-		Collections.sort(items, new NaturalOrderNodesComparator());
 
 		adapter = new NodeAdapter(this, R.layout.explorer_item, items);
 		lv.setAdapter(adapter);
