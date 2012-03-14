@@ -42,10 +42,12 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MenuItem.OnMenuItemClickListener;
 import android.view.View;
+import android.view.WindowManager.LayoutParams;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -61,8 +63,9 @@ public class ExplorerActivity extends BaseActivity implements
 	private static final int DIALOG_NEW_CHECKLIST = 5;
 	private static final int DIALOG_RENAME = 6;
 	private static final int DIALOG_DELETE = 7;
+	private static final int DIALOG_PROPERTIES = 8;
 
-	// private static final int MENU_PROPERTIES = 6;
+	private static final int MENU_PROPERTIES = 6;
 	private static final int MENU_DELETE = 5;
 	private static final int MENU_CUT = 3;
 	private static final int MENU_COPY = 2;
@@ -263,6 +266,10 @@ public class ExplorerActivity extends BaseActivity implements
 				setIdToCopy(-1);
 				setIdToMove(getSelectedId());
 				break;
+
+			case MENU_PROPERTIES:
+				showDialog(DIALOG_PROPERTIES);
+				break;
 			}
 		}
 	};
@@ -277,8 +284,8 @@ public class ExplorerActivity extends BaseActivity implements
 		iconContextMenu.addItem(res, R.string.cut, R.drawable.cut, MENU_CUT);
 		iconContextMenu.addItem(res, R.string.delete, R.drawable.delete,
 				MENU_DELETE);
-		// iconContextMenu.addItem(res, R.string.properties,
-		// R.drawable.properties, MENU_PROPERTIES);
+		iconContextMenu.addItem(res, R.string.properties,
+				R.drawable.properties, MENU_PROPERTIES);
 		iconContextMenu.setOnClickListener(contextMenuListener);
 	}
 
@@ -511,6 +518,54 @@ public class ExplorerActivity extends BaseActivity implements
 									// Do nothing.
 								}
 							}).create();
+		}
+
+		if (id == DIALOG_PROPERTIES) {
+			Node n = nh.getNodeById(getSelectedId());
+
+			Dialog dialog = new Dialog(ExplorerActivity.this);
+			dialog.setContentView(R.layout.properties);
+
+			LayoutParams params = dialog.getWindow().getAttributes();
+			params.width = LayoutParams.FILL_PARENT;
+			dialog.getWindow().setAttributes(
+					(android.view.WindowManager.LayoutParams) params);
+
+			dialog.setTitle(R.string.properties_title);
+			dialog.setCancelable(true);
+
+			ImageView icon = (ImageView) dialog
+					.findViewById(R.id.properties_file_icon);
+
+			if (icon != null) {
+				switch (n.getType()) {
+				case FOLDER:
+					icon.setImageResource(R.drawable.folder);
+					break;
+				case NOTE:
+					icon.setImageResource(R.drawable.note);
+					break;
+				case CHECKLIST:
+					icon.setImageResource(R.drawable.checklist);
+					break;
+				}
+			}
+
+			TextView name = (TextView) dialog
+					.findViewById(R.id.properties_file_name);
+			name.setText(nh.getFullPathById(n.getId()));
+
+			TextView dateCreated = (TextView) dialog
+					.findViewById(R.id.properties_date_created);
+			dateCreated.setText(new SimpleDateFormat().format(n
+					.getDateCreated()));
+
+			TextView dateModified = (TextView) dialog
+					.findViewById(R.id.properties_date_modified);
+			dateModified.setText(new SimpleDateFormat().format(n
+					.getDateModified()));
+
+			return dialog;
 		}
 
 		return super.onCreateDialog(id);
