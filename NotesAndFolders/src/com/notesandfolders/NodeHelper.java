@@ -19,6 +19,7 @@ This file is a part of Notes & Folders project.
 package com.notesandfolders;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Date;
 import net.sf.andhsli.hotspotlogin.SimpleCrypto;
@@ -218,19 +219,20 @@ public class NodeHelper {
 			return children;
 		}
 
+		for (long childId : getChildrenIdsById(id)) {
+			Node child = getNodeById(childId);
+			if (child != null) {
+				children.add(child);
+			}
+		}
+		Collections.sort(children, new NaturalOrderNodesComparator());
+
 		// adds ".." pseudo-directory to the listing
 		if (here.getParentId() != -1) {
 			Node parent = getNodeById(here.getParentId());
 			if (parent != null) {
 				parent.setName("..");
-				children.add(parent);
-			}
-		}
-
-		for (long childId : getChildrenIdsById(id)) {
-			Node child = getNodeById(childId);
-			if (child != null) {
-				children.add(child);
+				children.add(0, parent);
 			}
 		}
 
