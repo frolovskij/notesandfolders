@@ -145,4 +145,9 @@
     <string name="searchresults_title">Search results</string>
     <string name="searchresults_empty_placeholder">Nothing was found</string>
 
+    <!-- Properties -->
+    <string name="properties_title">Properties</string>
+    <string name="date_created">Created</string>
+    <string name="date_modified">Modified</string>
+
 </resources>

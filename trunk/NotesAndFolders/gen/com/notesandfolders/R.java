@@ -37,24 +37,24 @@ public final class R {
         public static final int btnLogin=0x7f080014;
         public static final int checklist_item_check=0x7f080003;
         public static final int checklist_item_text=0x7f080004;
-        public static final int checklist_menu_copy=0x7f08002c;
-        public static final int checklist_menu_delete=0x7f08002d;
-        public static final int checklist_menu_rename=0x7f08002b;
+        public static final int checklist_menu_copy=0x7f080035;
+        public static final int checklist_menu_delete=0x7f080036;
+        public static final int checklist_menu_rename=0x7f080034;
         public static final int checklist_name=0x7f080000;
-        public static final int checklist_options_add=0x7f08002e;
-        public static final int checklist_options_paste=0x7f08002f;
-        public static final int checklist_options_save=0x7f080030;
+        public static final int checklist_options_add=0x7f080037;
+        public static final int checklist_options_paste=0x7f080038;
+        public static final int checklist_options_save=0x7f080039;
         public static final int checklist_placeholder=0x7f080002;
         public static final int documentation=0x7f080005;
         public static final int explorer_file_icon=0x7f080009;
         public static final int explorer_file_name=0x7f08000a;
         public static final int explorer_listview=0x7f080008;
-        public static final int explorer_options_add=0x7f080031;
-        public static final int explorer_options_close=0x7f080036;
-        public static final int explorer_options_import=0x7f080033;
-        public static final int explorer_options_paste=0x7f080032;
-        public static final int explorer_options_search=0x7f080034;
-        public static final int explorer_options_settings=0x7f080035;
+        public static final int explorer_options_add=0x7f08003a;
+        public static final int explorer_options_close=0x7f08003f;
+        public static final int explorer_options_import=0x7f08003c;
+        public static final int explorer_options_paste=0x7f08003b;
+        public static final int explorer_options_search=0x7f08003d;
+        public static final int explorer_options_settings=0x7f08003e;
         public static final int explorer_path=0x7f080006;
         public static final int explorer_placeholder=0x7f080007;
         public static final int fsexplorer_file_icon=0x7f08000e;
@@ -76,15 +76,24 @@ public final class R {
         public static final int password_edit_current=0x7f08001d;
         public static final int password_edit_new=0x7f08001e;
         public static final int password_edit_save=0x7f080021;
-        public static final int search_button=0x7f080023;
-        public static final int search_case_sensitive=0x7f080026;
-        public static final int search_text=0x7f080022;
-        public static final int search_type_spinner=0x7f080025;
-        public static final int search_where_spinner=0x7f080024;
-        public static final int searchresults_file_icon=0x7f080029;
-        public static final int searchresults_file_name=0x7f08002a;
-        public static final int searchresults_listview=0x7f080028;
-        public static final int searchresults_placeholder=0x7f080027;
+        public static final int properties_0=0x7f080026;
+        public static final int properties_1=0x7f080029;
+        public static final int properties_date_created=0x7f080027;
+        public static final int properties_date_modified=0x7f08002a;
+        public static final int properties_file_icon=0x7f080022;
+        public static final int properties_file_name=0x7f080023;
+        public static final int search_button=0x7f08002c;
+        public static final int search_case_sensitive=0x7f08002f;
+        public static final int search_text=0x7f08002b;
+        public static final int search_type_spinner=0x7f08002e;
+        public static final int search_where_spinner=0x7f08002d;
+        public static final int searchresults_file_icon=0x7f080032;
+        public static final int searchresults_file_name=0x7f080033;
+        public static final int searchresults_listview=0x7f080031;
+        public static final int searchresults_placeholder=0x7f080030;
+        public static final int tableLayout1=0x7f080024;
+        public static final int tableRow1=0x7f080025;
+        public static final int tableRow2=0x7f080028;
         public static final int textView1=0x7f08001c;
         public static final int textView2=0x7f080011;
         public static final int textView3=0x7f08001f;
@@ -103,9 +112,10 @@ public final class R {
         public static final int notesviewer=0x7f030009;
         public static final int password_edit=0x7f03000a;
         public static final int preferences=0x7f03000b;
-        public static final int search=0x7f03000c;
-        public static final int searchresults=0x7f03000d;
-        public static final int searchresults_item=0x7f03000e;
+        public static final int properties=0x7f03000c;
+        public static final int search=0x7f03000d;
+        public static final int searchresults=0x7f03000e;
+        public static final int searchresults_item=0x7f03000f;
     }
     public static final class menu {
         public static final int checklist_context=0x7f070000;
@@ -139,6 +149,8 @@ public final class R {
         public static final int create_new=0x7f060048;
         public static final int create_note=0x7f06004a;
         public static final int cut=0x7f06001a;
+        public static final int date_created=0x7f06006a;
+        public static final int date_modified=0x7f06006b;
         public static final int delete=0x7f06001b;
         public static final int edit=0x7f060018;
         /**  Context menu operations on folders, files & checklists 
@@ -223,6 +235,9 @@ public final class R {
         public static final int password_msg_save_error=0x7f060046;
         public static final int password_msg_wrong_password=0x7f060045;
         public static final int properties=0x7f06001d;
+        /**  Properties 
+         */
+        public static final int properties_title=0x7f060069;
         public static final int rename=0x7f06001c;
         public static final int save=0x7f06001f;
         public static final int search_button=0x7f06005d;
