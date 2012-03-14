@@ -40,8 +40,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-public class SearchResultsActivity extends BaseActivity implements
-		OnItemClickListener {
+public class SearchResultsActivity extends BaseActivity implements OnItemClickListener {
 
 	private static final int DIALOG_CONTEXT_MENU = 0;
 	private static final int DIALOG_PROPERTIES = 8;
@@ -98,8 +97,8 @@ public class SearchResultsActivity extends BaseActivity implements
 	}
 
 	public void refresh() {
-		List<Long> idsToDisplay = (List<Long>) Serializer
-				.deserialize(getIntent().getExtras().getString("ids_list"));
+		List<Long> idsToDisplay = (List<Long>) Serializer.deserialize(getIntent().getExtras()
+				.getString("ids_list"));
 
 		items = new ArrayList<Node>();
 		for (Long id : idsToDisplay) {
@@ -142,14 +141,12 @@ public class SearchResultsActivity extends BaseActivity implements
 		Resources res = getResources();
 
 		iconContextMenu = new IconContextMenu(this, DIALOG_CONTEXT_MENU);
-		iconContextMenu.addItem(res, R.string.properties,
-				R.drawable.properties, MENU_PROPERTIES);
+		iconContextMenu.addItem(res, R.string.properties, R.drawable.properties, MENU_PROPERTIES);
 		iconContextMenu.setOnClickListener(contextMenuListener);
 	}
 
 	private OnItemLongClickListener itemLongClickHandler = new OnItemLongClickListener() {
-		public boolean onItemLongClick(AdapterView<?> parent, View view,
-				int position, long id) {
+		public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
 			setSelectedId(((Node) lv.getItemAtPosition(position)).getId());
 			showDialog(DIALOG_CONTEXT_MENU);
 			return true;
@@ -159,26 +156,35 @@ public class SearchResultsActivity extends BaseActivity implements
 	@Override
 	protected Dialog onCreateDialog(int id) {
 		if (id == DIALOG_CONTEXT_MENU) {
-			return iconContextMenu.createMenu(getText(
-					R.string.explorer_context_menu_title).toString());
+			return iconContextMenu.createMenu(getText(R.string.explorer_context_menu_title)
+					.toString());
 		}
 
 		if (id == DIALOG_PROPERTIES) {
-			Node n = nh.getNodeById(getSelectedId());
-
 			Dialog dialog = new Dialog(SearchResultsActivity.this);
 			dialog.setContentView(R.layout.properties);
 
 			LayoutParams params = dialog.getWindow().getAttributes();
 			params.width = LayoutParams.FILL_PARENT;
-			dialog.getWindow().setAttributes(
-					(android.view.WindowManager.LayoutParams) params);
+			dialog.getWindow().setAttributes((android.view.WindowManager.LayoutParams) params);
 
 			dialog.setTitle(R.string.properties_title);
 			dialog.setCancelable(true);
 
-			ImageView icon = (ImageView) dialog
-					.findViewById(R.id.properties_file_icon);
+			return dialog;
+		}
+
+		return super.onCreateDialog(id);
+	}
+
+	@Override
+	protected void onPrepareDialog(int id, Dialog dialog) {
+		super.onPrepareDialog(id, dialog);
+
+		if (id == DIALOG_PROPERTIES) {
+			Node n = nh.getNodeById(getSelectedId());
+
+			ImageView icon = (ImageView) dialog.findViewById(R.id.properties_file_icon);
 
 			if (icon != null) {
 				switch (n.getType()) {
@@ -194,24 +200,15 @@ public class SearchResultsActivity extends BaseActivity implements
 				}
 			}
 
-			TextView name = (TextView) dialog
-					.findViewById(R.id.properties_file_name);
+			TextView name = (TextView) dialog.findViewById(R.id.properties_file_name);
 			name.setText(nh.getFullPathById(n.getId()));
 
-			TextView dateCreated = (TextView) dialog
-					.findViewById(R.id.properties_date_created);
-			dateCreated.setText(new SimpleDateFormat().format(n
-					.getDateCreated()));
+			TextView dateCreated = (TextView) dialog.findViewById(R.id.properties_date_created);
+			dateCreated.setText(new SimpleDateFormat().format(n.getDateCreated()));
 
-			TextView dateModified = (TextView) dialog
-					.findViewById(R.id.properties_date_modified);
-			dateModified.setText(new SimpleDateFormat().format(n
-					.getDateModified()));
-
-			return dialog;
+			TextView dateModified = (TextView) dialog.findViewById(R.id.properties_date_modified);
+			dateModified.setText(new SimpleDateFormat().format(n.getDateModified()));
 		}
-
-		return super.onCreateDialog(id);
 	}
 
 	private void openNote(long id) {
@@ -245,8 +242,7 @@ public class SearchResultsActivity extends BaseActivity implements
 		}
 	}
 
-	public void onItemClick(AdapterView<?> parentView, View childView,
-			int position, long id) {
+	public void onItemClick(AdapterView<?> parentView, View childView, int position, long id) {
 		Node selected = (Node) lv.getItemAtPosition(position);
 		onOpen(selected.getId());
 	}
