@@ -50,7 +50,7 @@ public class SpeedTest extends InstrumentationTestCase {
 			Log.i("SpeedTest", "Unzipping (ms): " + (System.currentTimeMillis() - t));
 			t = System.currentTimeMillis();
 
-			Debug.startMethodTracing("import");
+//			Debug.startMethodTracing("import");
 			ImportHelper.doImport(outputDir, new ImportListener() {
 				public void publishProgress(int processed, int nodesCount) {
 				}
@@ -59,8 +59,12 @@ public class SpeedTest extends InstrumentationTestCase {
 					return getInstrumentation().getTargetContext();
 				}
 			});
-			Debug.stopMethodTracing();
+//			Debug.stopMethodTracing();
 
+			// r173: 53s
+			// r172: 61s 
+			// r169: 68s @ Pentium Dual CPU E2180 @ 2.00GHz
+			
 			Log.i("SpeedTest", "Importing (ms): " + (System.currentTimeMillis() - t));
 			t = System.currentTimeMillis();
 
