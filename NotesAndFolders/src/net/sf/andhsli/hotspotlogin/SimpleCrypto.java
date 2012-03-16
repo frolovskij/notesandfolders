@@ -20,15 +20,13 @@ import javax.crypto.spec.SecretKeySpec;
  */
 public class SimpleCrypto {
 
-	public static String encrypt(String seed, String cleartext)
-			throws Exception {
+	public static String encrypt(String seed, String cleartext) throws Exception {
 		byte[] rawKey = getRawKey(seed.getBytes());
 		byte[] result = encrypt(rawKey, cleartext.getBytes());
 		return toHex(result);
 	}
 
-	public static String decrypt(String seed, String encrypted)
-			throws Exception {
+	public static String decrypt(String seed, String encrypted) throws Exception {
 		byte[] rawKey = getRawKey(seed.getBytes());
 		byte[] enc = toByte(encrypted);
 		byte[] result = decrypt(rawKey, enc);
@@ -53,8 +51,7 @@ public class SimpleCrypto {
 		return encrypted;
 	}
 
-	private static byte[] decrypt(byte[] raw, byte[] encrypted)
-			throws Exception {
+	private static byte[] decrypt(byte[] raw, byte[] encrypted) throws Exception {
 		SecretKeySpec skeySpec = new SecretKeySpec(raw, "AES");
 		Cipher cipher = Cipher.getInstance("AES");
 		cipher.init(Cipher.DECRYPT_MODE, skeySpec);
@@ -74,24 +71,22 @@ public class SimpleCrypto {
 		int len = hexString.length() / 2;
 		byte[] result = new byte[len];
 		for (int i = 0; i < len; i++)
-			result[i] = Integer.valueOf(hexString.substring(2 * i, 2 * i + 2),
-					16).byteValue();
+			result[i] = Integer.valueOf(hexString.substring(2 * i, 2 * i + 2), 16).byteValue();
 		return result;
 	}
+
+	private final static char[] HEX = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B',
+			'C', 'D', 'E', 'F' };
 
 	public static String toHex(byte[] buf) {
 		if (buf == null)
 			return "";
-		StringBuffer result = new StringBuffer(2 * buf.length);
+		char[] result = new char[2 * buf.length];
 		for (int i = 0; i < buf.length; i++) {
-			appendHex(result, buf[i]);
+			byte b = buf[i];
+			result[i * 2] = HEX[(b >> 4) & 0x0f];
+			result[i * 2 + 1] = HEX[b & 0x0f];
 		}
-		return result.toString();
-	}
-
-	private final static String HEX = "0123456789ABCDEF";
-
-	private static void appendHex(StringBuffer sb, byte b) {
-		sb.append(HEX.charAt((b >> 4) & 0x0f)).append(HEX.charAt(b & 0x0f));
+		return new String(result);
 	}
 }
