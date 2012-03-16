@@ -19,6 +19,7 @@ This file is a part of Notes & Folders project.
 package com.notesandfolders;
 
 import java.text.SimpleDateFormat;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -33,6 +34,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.os.Debug;
 import android.text.InputType;
 import android.util.Log;
 import android.view.ContextMenu;
@@ -585,6 +587,17 @@ public class ExplorerActivity extends BaseActivity implements OnItemClickListene
 
 	private void refresh() {
 		items = nh.getChildrenById(getCurrentFolderId());
+		Collections.sort(items, new NaturalOrderNodesComparator());
+
+		// adds ".." pseudo-directory to the listing
+		Node here = nh.getNodeById(getCurrentFolderId());
+		if (here.getParentId() != -1) {
+			Node parent = nh.getNodeById(here.getParentId());
+			if (parent != null) {
+				parent.setName("..");
+				items.add(0, parent);
+			}
+		}
 
 		if (items.isEmpty()) {
 			placeholder.setVisibility(View.VISIBLE);

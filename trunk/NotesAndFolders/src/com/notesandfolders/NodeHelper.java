@@ -79,8 +79,7 @@ public class NodeHelper {
 		f.setType(type);
 		f.setTextContent(textContent);
 
-		DbOpenHelper dbOpenHelper = new DbOpenHelper(context);
-		SQLiteDatabase db = dbOpenHelper.getWritableDatabase();
+		SQLiteDatabase db = new DbOpenHelper(context).getWritableDatabase();
 
 		try {
 			ContentValues cv = new ContentValues();
@@ -136,8 +135,7 @@ public class NodeHelper {
 	}
 
 	public Node getNodeById(long id) {
-		DbOpenHelper dbOpenHelper = new DbOpenHelper(context);
-		SQLiteDatabase db = dbOpenHelper.getWritableDatabase();
+		SQLiteDatabase db = new DbOpenHelper(context).getReadableDatabase();
 
 		Node f = null;
 
@@ -186,8 +184,7 @@ public class NodeHelper {
 	public List<Long> getChildrenIdsById(long id) {
 		List<Long> childrenIds = new ArrayList<Long>();
 
-		DbOpenHelper dbOpenHelper = new DbOpenHelper(context);
-		SQLiteDatabase db = dbOpenHelper.getWritableDatabase();
+		SQLiteDatabase db = new DbOpenHelper(context).getReadableDatabase();
 
 		Cursor c = null;
 		try {
@@ -219,20 +216,44 @@ public class NodeHelper {
 			return children;
 		}
 
-		for (long childId : getChildrenIdsById(id)) {
-			Node child = getNodeById(childId);
-			if (child != null) {
-				children.add(child);
-			}
-		}
-		Collections.sort(children, new NaturalOrderNodesComparator());
+		SQLiteDatabase db = new DbOpenHelper(context).getReadableDatabase();
 
-		// adds ".." pseudo-directory to the listing
-		if (here.getParentId() != -1) {
-			Node parent = getNodeById(here.getParentId());
-			if (parent != null) {
-				parent.setName("..");
-				children.add(0, parent);
+		Cursor c = null;
+		try {
+			c = db.rawQuery(
+					"select id, name, parent_id, date_created, date_modified, type from data where parent_id = ?",
+					new String[] { Long.toString(id) });
+
+			for (boolean hasItem = c.moveToFirst(); hasItem; hasItem = c.moveToNext()) {
+				Node f = new Node();
+
+				f.setId(c.getLong(0));
+				f.setName(c.getString(1));
+				f.setParentId(c.getLong(2));
+				f.setDateCreated(new Date(c.getLong(3)));
+				f.setDateModified(new Date(c.getLong(4)));
+				switch (c.getInt(5)) {
+				case 0:
+					f.setType(NodeType.FOLDER);
+					break;
+				case 1:
+					f.setType(NodeType.NOTE);
+					break;
+				case 2:
+					f.setType(NodeType.CHECKLIST);
+					break;
+				}
+
+				children.add(f);
+			}
+		} catch (Exception ex) {
+			Log.i("getChildrenById", ex.toString());
+		} finally {
+			if (c != null) {
+				c.close();
+			}
+			if (db != null) {
+				db.close();
 			}
 		}
 
@@ -245,9 +266,7 @@ public class NodeHelper {
 			return;
 		}
 
-		DbOpenHelper dbOpenHelper = new DbOpenHelper(context);
-		SQLiteDatabase db = dbOpenHelper.getWritableDatabase();
-
+		SQLiteDatabase db = null;
 		try {
 			/**
 			 * Android 2.1 (sqlite version < 3.6.19) doesn't support ON CASCADE
@@ -258,6 +277,7 @@ public class NodeHelper {
 				deleteNodeById(childId);
 			}
 
+			db = new DbOpenHelper(context).getWritableDatabase();
 			db.execSQL("delete from data where id = ?", new Long[] { id });
 		} catch (Exception ex) {
 			Log.i("deleteNodeById", ex.toString());
@@ -269,8 +289,7 @@ public class NodeHelper {
 	}
 
 	public long getNodesCount() {
-		DbOpenHelper dbOpenHelper = new DbOpenHelper(context);
-		SQLiteDatabase db = dbOpenHelper.getWritableDatabase();
+		SQLiteDatabase db = new DbOpenHelper(context).getReadableDatabase();
 
 		Cursor c = null;
 		try {
@@ -295,8 +314,7 @@ public class NodeHelper {
 	}
 
 	public long getLastId() {
-		DbOpenHelper dbOpenHelper = new DbOpenHelper(context);
-		SQLiteDatabase db = dbOpenHelper.getWritableDatabase();
+		SQLiteDatabase db = new DbOpenHelper(context).getReadableDatabase();
 
 		Cursor c = null;
 		try {
@@ -337,8 +355,7 @@ public class NodeHelper {
 	}
 
 	public String getTextContentById(long id) {
-		DbOpenHelper dbOpenHelper = new DbOpenHelper(context);
-		SQLiteDatabase db = dbOpenHelper.getWritableDatabase();
+		SQLiteDatabase db = new DbOpenHelper(context).getReadableDatabase();
 
 		String textContent = "";
 		Cursor c = null;
@@ -370,8 +387,7 @@ public class NodeHelper {
 			textContent = "";
 		}
 
-		DbOpenHelper dbOpenHelper = new DbOpenHelper(context);
-		SQLiteDatabase db = dbOpenHelper.getWritableDatabase();
+		SQLiteDatabase db = new DbOpenHelper(context).getWritableDatabase();
 
 		try {
 			db.execSQL(
@@ -389,8 +405,7 @@ public class NodeHelper {
 
 	public void renameNodeById(long id, String newName) {
 		// name policies go here
-		DbOpenHelper dbOpenHelper = new DbOpenHelper(context);
-		SQLiteDatabase db = dbOpenHelper.getWritableDatabase();
+		SQLiteDatabase db = new DbOpenHelper(context).getWritableDatabase();
 
 		try {
 			db.execSQL("update data set name = ?, date_modified = ? where id = ?", new String[] {
@@ -409,8 +424,7 @@ public class NodeHelper {
 			return;
 		}
 
-		DbOpenHelper dbOpenHelper = new DbOpenHelper(context);
-		SQLiteDatabase db = dbOpenHelper.getWritableDatabase();
+		SQLiteDatabase db = new DbOpenHelper(context).getWritableDatabase();
 
 		ContentValues cv = new ContentValues();
 		cv.put("id", node.getId());
@@ -479,7 +493,7 @@ public class NodeHelper {
 		Node node = getNodeById(id);
 		Node newParent = getNodeById(newParentId);
 
-		if (node == null || newParent == null || node.getParentId() == newParentId
+		if (node == null || node.getParentId() == newParentId || newParent == null
 				|| newParent.getType() != NodeType.FOLDER) {
 			return RESULT_BAD_PARAMS;
 		}
@@ -501,8 +515,7 @@ public class NodeHelper {
 			}
 		}
 
-		DbOpenHelper dbOpenHelper = new DbOpenHelper(context);
-		SQLiteDatabase db = dbOpenHelper.getWritableDatabase();
+		SQLiteDatabase db = new DbOpenHelper(context).getWritableDatabase();
 
 		try {
 			db.execSQL("update data set parent_id = ?, date_modified = ? where id = ?",
@@ -528,8 +541,7 @@ public class NodeHelper {
 	 * @return id of the cloned node
 	 */
 	public long cloneNodeById(long id) {
-		DbOpenHelper dbOpenHelper = new DbOpenHelper(context);
-		SQLiteDatabase db = dbOpenHelper.getWritableDatabase();
+		SQLiteDatabase db = new DbOpenHelper(context).getWritableDatabase();
 
 		Cursor c = null;
 		try {
@@ -567,6 +579,35 @@ public class NodeHelper {
 		return -1;
 	}
 
+	// copy without checking params (it's faster)
+	private int copy0(Node node, long newParentId) {
+		// this check makes sense only for folders
+		if (node.getType() == NodeType.FOLDER) {
+			List<Long> parents = getParentsListById(newParentId);
+			if (parents.contains(node.getId())) {
+				return RESULT_CANT_PASTE_TO_OWN_SUBFOLDER;
+			}
+		}
+
+		long cloneId = cloneNodeById(node.getId());
+
+		// rename if copy goes into the same folder
+		if (newParentId == node.getParentId()) {
+			renameNodeById(cloneId, node.getName() + context.getText(R.string.filename_copy_suffix));
+		}
+
+		move(cloneId, newParentId);
+
+		if (node.getType() == NodeType.FOLDER) {
+			List<Node> children = this.getChildrenById(node.getId());
+			for (Node n : children) {
+				copy0(n, cloneId);
+			}
+		}
+
+		return RESULT_OK;
+	}
+
 	/**
 	 * Makes a copy of node and its children
 	 * 
@@ -589,34 +630,7 @@ public class NodeHelper {
 			return RESULT_CANT_PASTE_TO_ITSELF;
 		}
 
-		// If it would be proven to be slow then all copying would go into
-		// copy0() without this check
-
-		// this check makes sense only for folders
-		if (node.getType() == NodeType.FOLDER) {
-			List<Long> parents = getParentsListById(newParentId);
-			if (parents.contains(id)) {
-				return RESULT_CANT_PASTE_TO_OWN_SUBFOLDER;
-			}
-		}
-
-		long cloneId = cloneNodeById(id);
-
-		// rename if copy goes into the same folder
-		if (newParentId == node.getParentId()) {
-			renameNodeById(cloneId, node.getName() + context.getText(R.string.filename_copy_suffix));
-		}
-
-		move(cloneId, newParentId);
-
-		if (node.getType() == NodeType.FOLDER) {
-			List<Long> children = getChildrenIdsById(id);
-			for (Long childId : children) {
-				copy(childId, cloneId);
-			}
-		}
-
-		return RESULT_OK;
+		return copy0(node, newParentId);
 	}
 
 }
