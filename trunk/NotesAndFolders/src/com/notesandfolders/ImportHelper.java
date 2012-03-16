@@ -56,7 +56,7 @@ public class ImportHelper {
 
 	private static String getFileContents(File f) {
 		final String newLine = String.format("%n");
-		StringBuffer sb = new StringBuffer();
+		StringBuilder sb = new StringBuilder();
 		try {
 			BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(f),
 					"UTF-8"));
