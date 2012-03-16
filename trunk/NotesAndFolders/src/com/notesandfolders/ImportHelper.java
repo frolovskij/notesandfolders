@@ -23,6 +23,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
@@ -54,29 +55,22 @@ public class ImportHelper {
 		return (dot == -1) ? "" : fileName.substring(dot + 1);
 	}
 
-	private static String getFileContents(File f) {
-		final String newLine = String.format("%n");
-		StringBuilder sb = new StringBuilder();
+	public static String getFileContents(File theFile) {
 		try {
-			BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(f),
-					"UTF-8"));
-			try {
-				String s;
-				while ((s = br.readLine()) != null) {
-					sb.append(s);
-					sb.append(newLine);
-				}
-			} catch (IOException e) {
-				e.printStackTrace();
+			byte[] bytes = new byte[(int) theFile.length()];
+			InputStream in;
+			in = new FileInputStream(theFile);
+			int m = 0, n = 0;
+			while (m < bytes.length) {
+				n = in.read(bytes, m, bytes.length - m);
+				m += n;
 			}
-
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (UnsupportedEncodingException e) {
+			in.close();
+			return new String(bytes, "UTF-8");
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
-		return sb.toString();
+		return null;
 	}
 
 	private static Node getNodeFromFile(File file, long id, long parentId) {
