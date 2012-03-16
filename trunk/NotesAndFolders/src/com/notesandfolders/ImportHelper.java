@@ -25,9 +25,12 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.ArrayList;
+
+import android.content.Context;
 
 public class ImportHelper {
 
@@ -54,8 +57,8 @@ public class ImportHelper {
 	private static String getFileContents(File f) {
 		StringBuffer sb = new StringBuffer();
 		try {
-			BufferedReader br = new BufferedReader(new InputStreamReader(
-					new FileInputStream(f), "UTF-8"));
+			BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(f),
+					"UTF-8"));
 			try {
 				String s;
 				while ((s = br.readLine()) != null) {
@@ -86,8 +89,7 @@ public class ImportHelper {
 		n.setTextContent(getFileContents(file));
 
 		// remove *.txt extension
-		if (!file.isDirectory()
-				&& getFileNameExtension(file.getName()).equalsIgnoreCase("txt")) {
+		if (!file.isDirectory() && getFileNameExtension(file.getName()).equalsIgnoreCase("txt")) {
 			int nameLen = file.getName().length();
 			n.setName(n.getName().substring(0, nameLen - 4)); // ".txt".length()
 		}
@@ -104,9 +106,7 @@ public class ImportHelper {
 			return RESULT_NOT_EXISTS;
 		}
 
-		if (!file.isDirectory()
-				&& !getFileNameExtension(file.getName())
-						.equalsIgnoreCase("txt")) {
+		if (!file.isDirectory() && !getFileNameExtension(file.getName()).equalsIgnoreCase("txt")) {
 			return RESULT_NOT_TXT;
 		}
 
@@ -147,6 +147,43 @@ public class ImportHelper {
 		processPath(new File(path), files, parentId);
 
 		return files;
+	}
+
+	public interface ImportListener {
+		Context getContext();
+
+		void publishProgress(int processed, int nodesCount);
+	}
+
+	public static void doImport(File file, ImportListener listener) {
+		if (listener == null) {
+			return;
+		}
+
+		final NodeHelper nh = new NodeHelper(listener.getContext(), new TempStorage(
+				listener.getContext()).getPassword());
+
+		Node importRoot = nh.createFolder(nh.getRootFolder(), "Imported at "
+				+ new SimpleDateFormat("yyyy.MM.dd HH:mm:ss").format(new Date()));
+
+		final List<Node> nodes = ImportHelper.getFiles(file.getAbsolutePath(), nh.getLastId() + 1,
+				importRoot.getId());
+
+		// if there's nothing to import
+		if (nodes.size() == 0) {
+			nh.deleteNodeById(importRoot.getId());
+		} else {
+
+			int nodesCount = nodes.size();
+			listener.publishProgress(0, nodesCount);
+
+			for (int i = 0; i < nodesCount; i++) {
+				Node n = nodes.get(i);
+
+				nh.insertNode(n);
+				listener.publishProgress(i + 1, nodesCount);
+			}
+		}
 	}
 
 }

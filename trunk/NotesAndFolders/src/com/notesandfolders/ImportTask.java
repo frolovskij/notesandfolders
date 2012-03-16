@@ -23,9 +23,12 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+import com.notesandfolders.ImportHelper.ImportListener;
+
+import android.content.Context;
 import android.os.AsyncTask;
 
-public class ImportTask extends AsyncTask<Void, Integer, Integer> {
+public class ImportTask extends AsyncTask<Void, Integer, Integer> implements ImportListener {
 
 	private ImportActivity mExplorer;
 	private boolean completed;
@@ -50,34 +53,7 @@ public class ImportTask extends AsyncTask<Void, Integer, Integer> {
 
 	@Override
 	protected Integer doInBackground(Void... arg0) {
-		final NodeHelper nh = new NodeHelper(mExplorer, new TempStorage(
-				mExplorer).getPassword());
-
-		Node importRoot = nh.createFolder(
-				nh.getRootFolder(),
-				"Imported at "
-						+ new SimpleDateFormat("yyyy.MM.dd HH:mm:ss")
-								.format(new Date()));
-
-		final List<Node> nodes = ImportHelper.getFiles(mFile.getAbsolutePath(),
-				nh.getLastId() + 1, importRoot.getId());
-
-		// if there's nothing to import
-		if (nodes.size() == 0) {
-			nh.deleteNodeById(importRoot.getId());
-		} else {
-
-			int nodesCount = nodes.size();
-			publishProgress(0, nodesCount);
-
-			for (int i = 0; i < nodesCount; i++) {
-				Node n = nodes.get(i);
-
-				nh.insertNode(n);
-				publishProgress(i + 1, nodesCount);
-			}
-		}
-
+		ImportHelper.doImport(mFile, this);
 		return 0;
 	}
 
@@ -107,5 +83,13 @@ public class ImportTask extends AsyncTask<Void, Integer, Integer> {
 		if (null != mExplorer) {
 			mExplorer.onCopyTaskCompleted(result);
 		}
+	}
+
+	public Context getContext() {
+		return mExplorer;
+	}
+
+	public void publishProgress(int processed, int nodesCount) {
+		super.publishProgress(processed, nodesCount);
 	}
 }
