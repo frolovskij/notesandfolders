@@ -55,6 +55,7 @@ public class ImportHelper {
 	}
 
 	private static String getFileContents(File f) {
+		final String newLine = String.format("%n");
 		StringBuffer sb = new StringBuffer();
 		try {
 			BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(f),
@@ -63,7 +64,7 @@ public class ImportHelper {
 				String s;
 				while ((s = br.readLine()) != null) {
 					sb.append(s);
-					sb.append(String.format("%n"));
+					sb.append(newLine);
 				}
 			} catch (IOException e) {
 				e.printStackTrace();
