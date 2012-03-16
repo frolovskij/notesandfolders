@@ -1,9 +1,11 @@
 package com.notesandfolders.test;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import com.notesandfolders.DbOpenHelper;
+import com.notesandfolders.NaturalOrderNodesComparator;
 import com.notesandfolders.NodeHelper;
 import com.notesandfolders.NodeType;
 import com.notesandfolders.Node;
@@ -141,6 +143,7 @@ public class NodeHelperTest extends AndroidTestCase {
 		expected.add(f4);
 
 		List<Node> children = fh.getChildrenById(root.getId());
+		Collections.sort(children, new NaturalOrderNodesComparator());
 
 		assertEquals(expected.size(), children.size());
 
