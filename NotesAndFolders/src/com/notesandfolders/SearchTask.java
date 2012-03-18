@@ -36,8 +36,11 @@ public class SearchTask extends AsyncTask<Void, String, List<Long>> {
 		mSearchActivity = searchActivity;
 		mParameters = searchParameters;
 	}
-	
+
 	public List<Long> getSearchResults() {
+		if (mParameters.isCaseSensitive() == false) {
+			mParameters.setText(mParameters.getText().toLowerCase());
+		}
 		result = new ArrayList<Long>();
 		return search(mParameters.getFolderId());
 	}
@@ -52,10 +55,6 @@ public class SearchTask extends AsyncTask<Void, String, List<Long>> {
 			Node n = mNh.getNodeById(id);
 
 			boolean match = false;
-
-			if (mParameters.isCaseSensitive() == false) {
-				mParameters.setText(mParameters.getText().toLowerCase());
-			}
 
 			if (mParameters.isSearchInText() && n.getType() != NodeType.FOLDER) {
 				String tc = mNh.getTextContentById(id);
@@ -103,7 +102,7 @@ public class SearchTask extends AsyncTask<Void, String, List<Long>> {
 				search(n.getId());
 			}
 		}
-		
+
 		return result;
 	}
 

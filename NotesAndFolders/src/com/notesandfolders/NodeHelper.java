@@ -543,6 +543,7 @@ public class NodeHelper {
 	public long cloneNodeById(long id) {
 		SQLiteDatabase db = new DbOpenHelper(context).getWritableDatabase();
 
+		// using "insert into ... select ... is slower!
 		Cursor c = null;
 		try {
 			c = db.rawQuery(
