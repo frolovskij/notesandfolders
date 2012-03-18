@@ -17,22 +17,21 @@ import com.notesandfolders.ImportHelper;
 import com.notesandfolders.ImportHelper.ImportListener;
 import com.notesandfolders.Node;
 import com.notesandfolders.NodeHelper;
+import com.notesandfolders.SearchParameters;
+import com.notesandfolders.SearchTask;
 import com.notesandfolders.Settings;
 import com.notesandfolders.TempStorage;
 
 public class SpeedTest extends InstrumentationTestCase {
 	@Override
 	protected void setUp() {
-		if (true) {
-			DbOpenHelper dbOpenHelper = new DbOpenHelper(this.getInstrumentation()
-					.getTargetContext());
-			SQLiteDatabase db = dbOpenHelper.getWritableDatabase();
-			dbOpenHelper.dropAllTables(db);
-			dbOpenHelper.createAllTables(db);
-			db.close();
+		DbOpenHelper dbOpenHelper = new DbOpenHelper(this.getInstrumentation().getTargetContext());
+		SQLiteDatabase db = dbOpenHelper.getWritableDatabase();
+		dbOpenHelper.dropAllTables(db);
+		dbOpenHelper.createAllTables(db);
+		db.close();
 
-			prepareFilesToImport();
-		}
+		prepareFilesToImport();
 	}
 
 	private void prepareFilesToImport() {
@@ -79,31 +78,52 @@ public class SpeedTest extends InstrumentationTestCase {
 			// r169: 68s @2
 
 			Log.i("SpeedTest", "Importing (ms): " + (System.currentTimeMillis() - t));
-			t = System.currentTimeMillis();
 		}
 
-		// Debug.startMethodTracing("listing");
+		if (false) {
+			t = System.currentTimeMillis();
+			// Debug.startMethodTracing("listing");
+			// /Imported at ...../files/
+			List<Node> items = nh.getChildrenById(2);
+			// Debug.stopMethodTracing();
 
-		List<Node> items = nh.getChildrenById(2); // /Imported at ...../files/
+			// Listing:
+			// r175: 0.35s
+			// r173: 12s
+			Log.i("SpeedTest", "Listing (ms): " + (System.currentTimeMillis() - t) + ", count:"
+					+ items.size());
+		}
+
+		if (false) {
+			t = System.currentTimeMillis();
+			// Debug.startMethodTracing("copying");
+			nh.copy(1, 0);
+			// Debug.stopMethodTracing();
+
+			// Copying:
+			// r175: 46.1s @1
+			// r173: 72s @1
+			Log.i("SpeedTest", "Copying (ms): " + (System.currentTimeMillis() - t));
+		}
+
+		t = System.currentTimeMillis();
+		// Debug.startMethodTracing("searching");
+		SearchParameters sp = new SearchParameters();
+		sp.setText(" я ");
+		sp.setCaseSensitive(false);
+		sp.setSearchInNames(true);
+		sp.setSearchInText(true);
+		sp.setFolderId(0);
+
+		SearchTask st = new SearchTask(null, nh, sp);
+		List<Long> results = st.getSearchResults();
 
 		// Debug.stopMethodTracing();
 
-		Log.i("SpeedTest",
-				"Listing (ms): " + (System.currentTimeMillis() - t) + ", count:" + items.size());
-		t = System.currentTimeMillis();
-		// Listing:
-		// r175: 0.35s
-		// r173: 12s
-
-		// Debug.startMethodTracing("copying");
-		nh.copy(1, 0);
-		// Debug.stopMethodTracing();
-
-		Log.i("SpeedTest", "Copying (ms): " + (System.currentTimeMillis() - t));
-		t = System.currentTimeMillis();
-		// Copying:
-		// r175: 46.1s @1
-		// r173: 72s @1
+		// r176: 31s @1
+		// r175: 60s @ 1
+		Log.i("SpeedTest", "Searching (ms): " + (System.currentTimeMillis() - t) + ", found: "
+				+ results.size());
 
 	}
 }
