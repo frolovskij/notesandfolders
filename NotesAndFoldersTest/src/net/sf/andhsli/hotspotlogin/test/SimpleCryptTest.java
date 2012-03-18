@@ -3,6 +3,7 @@ package net.sf.andhsli.hotspotlogin.test;
 import net.sf.andhsli.hotspotlogin.SimpleCrypto;
 import com.notesandfolders.KeyGenerator;
 import android.test.AndroidTestCase;
+import android.util.Log;
 
 public class SimpleCryptTest extends AndroidTestCase {
 	@Override
@@ -45,4 +46,14 @@ public class SimpleCryptTest extends AndroidTestCase {
 		assertEquals(plainText, decrypted);
 	}
 
+	public void testToBytePerformance() {
+		String hexed = SimpleCrypto
+				.toHex("Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet Lorem ipsum dolor sit amet");
+
+		final long t = System.currentTimeMillis();
+		for (int i = 0; i < 1000; i++) {
+			byte[] result = SimpleCrypto.toByte(hexed);
+		}
+		Log.i("testToBytePerformance", Long.toString(System.currentTimeMillis() - t));
+	}
 }
