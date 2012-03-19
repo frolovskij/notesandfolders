@@ -26,6 +26,7 @@ import com.notesandfolders.R;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Html;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.webkit.WebView;
@@ -45,8 +46,7 @@ public class NotesViewerActivity extends BaseActivity {
 	final private OnClickListener editButtonOnClickListener = new OnClickListener() {
 		public void onClick(View v) {
 			if (v != null && v == editButton) {
-				Intent editor = new Intent(NotesViewerActivity.this,
-						NotesEditorActivity.class);
+				Intent editor = new Intent(NotesViewerActivity.this, NotesEditorActivity.class);
 				editor.putExtra("note_id", id);
 				startActivity(editor);
 			}
@@ -57,22 +57,20 @@ public class NotesViewerActivity extends BaseActivity {
 		SearchParameters sp = new TempStorage(this).getSearchParameters();
 
 		StringBuilder sb = new StringBuilder(2 * tc.length());
-		sb.append("<html>\n"
-				+ "<head>\n"
+		sb.append("<html>\n" + "<head>\n"
 				+ "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">\n"
 				+ "<style>\n" + "p {text-indent: 1em; text-align: justify;}\n"
-				+ "span.highlight {background-color: #7FFF00;}\n"
-				+ "</style>\n" + "</head>\n" + "<body>");
+				+ "span.highlight {background-color: #7FFF00;}\n" + "</style>\n" + "</head>\n"
+				+ "<body>");
 
-		for (String s : tc.split("\n")) {
+		for (String s : TextUtils.htmlEncode(tc).split("\n")) {
 			sb.append("<p>");
 
-			String untagged = Html.fromHtml(s).toString();
+			String untagged = s;
 			if (textToHighligth != null) {
 				if (sp.isCaseSensitive()) {
-					sb.append(untagged.replaceAll(textToHighligth,
-							"<span class=\"highlight\">" + textToHighligth
-									+ "</span>"));
+					sb.append(untagged.replaceAll(textToHighligth, "<span class=\"highlight\">"
+							+ textToHighligth + "</span>"));
 				} else {
 					sb.append(untagged.replaceAll("(?i)" + textToHighligth,
 							"<span class=\"highlight\">$0</span>"));
@@ -85,8 +83,7 @@ public class NotesViewerActivity extends BaseActivity {
 		}
 		sb.append("</body></html>");
 		try {
-			return URLEncoder.encode(sb.toString(), "utf-8").replaceAll("\\+",
-					" ");
+			return URLEncoder.encode(sb.toString(), "utf-8").replaceAll("\\+", " ");
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}
@@ -101,11 +98,9 @@ public class NotesViewerActivity extends BaseActivity {
 		String tc = nh.getTextContentById(id);
 
 		SearchParameters sp = new TempStorage(this).getSearchParameters();
-		String textToHighligth = (sp == null) ? null
-				: (sp.isSearchInText()) ? sp.getText() : null;
+		String textToHighligth = (sp == null) ? null : (sp.isSearchInText()) ? sp.getText() : null;
 
-		textContent.loadData(textContentToHtml(tc, textToHighligth),
-				"text/html", "utf-8");
+		textContent.loadData(textContentToHtml(tc, textToHighligth), "text/html", "utf-8");
 		textContent.reload();
 
 		if (tc.equals("")) {
