@@ -53,15 +53,8 @@ public class NotesViewerActivity extends BaseActivity {
 		}
 	};
 
-	@Override
-	public void onResume() {
-		super.onRestart();
-
-		String tc = nh.getTextContentById(id);
-
+	public String textContentToHtml(String tc, String textToHighligth) {
 		SearchParameters sp = new TempStorage(this).getSearchParameters();
-		String textToHighligth = (sp == null) ? null
-				: (sp.isSearchInText()) ? sp.getText() : null;
 
 		StringBuilder sb = new StringBuilder(2 * tc.length());
 		sb.append("<html>\n"
@@ -84,7 +77,6 @@ public class NotesViewerActivity extends BaseActivity {
 					sb.append(untagged.replaceAll("(?i)" + textToHighligth,
 							"<span class=\"highlight\">$0</span>"));
 				}
-
 			} else {
 				sb.append(untagged);
 			}
@@ -93,11 +85,27 @@ public class NotesViewerActivity extends BaseActivity {
 		}
 		sb.append("</body></html>");
 		try {
-			textContent.loadData(URLEncoder.encode(sb.toString(), "utf-8")
-					.replaceAll("\\+", " "), "text/html", "utf-8");
+			return URLEncoder.encode(sb.toString(), "utf-8").replaceAll("\\+",
+					" ");
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}
+
+		return "";
+	}
+
+	@Override
+	public void onResume() {
+		super.onRestart();
+
+		String tc = nh.getTextContentById(id);
+
+		SearchParameters sp = new TempStorage(this).getSearchParameters();
+		String textToHighligth = (sp == null) ? null
+				: (sp.isSearchInText()) ? sp.getText() : null;
+
+		textContent.loadData(textContentToHtml(tc, textToHighligth),
+				"text/html", "utf-8");
 		textContent.reload();
 
 		if (tc.equals("")) {
