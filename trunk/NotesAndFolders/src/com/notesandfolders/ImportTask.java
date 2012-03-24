@@ -27,24 +27,24 @@ import android.os.AsyncTask;
 
 public class ImportTask extends AsyncTask<Void, Integer, Integer> implements ImportListener {
 
-	private ImportActivity mExplorer;
+	private ImportActivity ia;
 	private boolean completed;
 	private Integer result;
 	private File mFile;
 
-	public ImportTask(ImportActivity explorer, File file) {
-		mExplorer = explorer;
+	public ImportTask(ImportActivity ia, File file) {
+		this.ia = ia;
 		mFile = file;
 	}
 
 	protected void onProgressUpdate(Integer... progress) {
 		if (progress.length == 1) {
-			mExplorer.getImportingDialog().setProgress(progress[0]);
+			ia.getImportingDialog().setProgress(progress[0]);
 		}
 
 		if (progress.length == 2) {
-			mExplorer.getImportingDialog().setProgress(progress[0]);
-			mExplorer.getImportingDialog().setMax(progress[1]);
+			ia.getImportingDialog().setProgress(progress[0]);
+			ia.getImportingDialog().setMax(progress[1]);
 		}
 	}
 
@@ -56,18 +56,18 @@ public class ImportTask extends AsyncTask<Void, Integer, Integer> implements Imp
 
 	@Override
 	protected void onPreExecute() {
-		mExplorer.showDialog(ImportActivity.IMPORTING_DIALOG_ID);
+		ia.showDialog(ImportActivity.IMPORTING_DIALOG_ID);
 	}
 
 	@Override
 	protected void onPostExecute(Integer res) {
-		mExplorer.dismissDialog(ImportActivity.IMPORTING_DIALOG_ID);
+		ia.dismissDialog(ImportActivity.IMPORTING_DIALOG_ID);
 
 		notifyActivityTaskCompleted();
 	}
 
 	public void setActivity(ImportActivity explorer) {
-		this.mExplorer = explorer;
+		this.ia = explorer;
 		if (completed) {
 			notifyActivityTaskCompleted();
 		}
@@ -77,13 +77,13 @@ public class ImportTask extends AsyncTask<Void, Integer, Integer> implements Imp
 	 * Helper method to notify the activity that this task was completed.
 	 */
 	private void notifyActivityTaskCompleted() {
-		if (null != mExplorer) {
-			mExplorer.onCopyTaskCompleted(result);
+		if (null != ia) {
+			ia.onCopyTaskCompleted(result);
 		}
 	}
 
 	public Context getContext() {
-		return mExplorer;
+		return ia;
 	}
 
 	public void publishProgress(int processed, int nodesCount) {

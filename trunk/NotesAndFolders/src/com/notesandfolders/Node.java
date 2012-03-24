@@ -18,9 +18,11 @@ This file is a part of Notes & Folders project.
 
 package com.notesandfolders;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Node {
+public class Node implements Serializable {
+	private static final long serialVersionUID = 1249482606261653819L;
 
 	private long id;
 	private long parentId;
