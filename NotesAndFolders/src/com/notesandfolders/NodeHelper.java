@@ -197,6 +197,32 @@ public class NodeHelper {
 		return childrenIds;
 	}
 
+	public List<Long> getAllIds() {
+		List<Long> childrenIds = new ArrayList<Long>();
+
+		SQLiteDatabase db = new DbOpenHelper(context).getReadableDatabase();
+
+		Cursor c = null;
+		try {
+			c = db.rawQuery("select id from data", new String[] {});
+
+			for (boolean hasItem = c.moveToFirst(); hasItem; hasItem = c.moveToNext()) {
+				childrenIds.add(c.getLong(0));
+			}
+		} catch (Exception ex) {
+			Log.i("getAllIds", ex.toString());
+		} finally {
+			if (c != null) {
+				c.close();
+			}
+			if (db != null) {
+				db.close();
+			}
+		}
+
+		return childrenIds;
+	}
+
 	public List<Node> getChildrenById(long id) {
 		List<Node> children = new ArrayList<Node>();
 
@@ -348,6 +374,34 @@ public class NodeHelper {
 			}
 		} catch (Exception ex) {
 			Log.i("getTextContentById", ex.toString());
+		} finally {
+			if (c != null) {
+				c.close();
+			}
+			if (db != null) {
+				db.close();
+			}
+		}
+
+		return textContent;
+	}
+
+	public String getEncryptedTextContentById(long id) {
+		SQLiteDatabase db = new DbOpenHelper(context).getReadableDatabase();
+
+		String textContent = "";
+		Cursor c = null;
+		try {
+			c = db.rawQuery("select text_content from data where id = ?",
+					new String[] { Long.toString(id) });
+
+			if (c.moveToFirst()) {
+				textContent = c.getString(0);
+			} else {
+				Log.i("getEncryptedTextContentById", "Cursor is empty");
+			}
+		} catch (Exception ex) {
+			Log.i("getEncryptedTextContentById", ex.toString());
 		} finally {
 			if (c != null) {
 				c.close();
@@ -611,5 +665,16 @@ public class NodeHelper {
 
 		return copy0(node, newParentId);
 	}
+	
+	public String getNodeAsString(long id) {
+		Node n = getNodeById(id);
+		if (n == null) {
+			return null;
+		}
 
+		String textContent = getEncryptedTextContentById(id);
+		n.setTextContent(textContent);
+
+		return Serializer.serialize(n);
+	}	
 }
