@@ -49,7 +49,7 @@ public class SpeedTest extends InstrumentationTestCase {
 	protected void tearDown() {
 	}
 
-	public void testPerformance() {
+	public void notestPerformance() {
 		long t = System.currentTimeMillis();
 		NodeHelper nh = new NodeHelper(getInstrumentation().getTargetContext(), new TempStorage(
 				getInstrumentation().getTargetContext()).getPassword());

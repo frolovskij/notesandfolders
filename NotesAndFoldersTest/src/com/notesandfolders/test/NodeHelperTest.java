@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import net.sf.andhsli.hotspotlogin.SimpleCrypto;
+
 import com.notesandfolders.DbOpenHelper;
 import com.notesandfolders.NaturalOrderNodesComparator;
 import com.notesandfolders.NodeHelper;
@@ -303,5 +305,45 @@ public class NodeHelperTest extends AndroidTestCase {
 		fh.move(f1.getId(), f3.getId());
 
 		assertEquals(root.getId(), f1.getParentId());
+	}
+
+	public void testGetEncryptedTextContentById() {
+		String plain = "text to encrypt";
+		Node n = fh.createNote(root, "test.txt", plain);
+
+		String encryptedKey = s.getString(Settings.SETTINGS_ENCRYPTED_KEY, "");
+		String key;
+		try {
+			key = SimpleCrypto.decrypt("", encryptedKey);
+			String encryptedFromDb = fh.getEncryptedTextContentById(n.getId());
+			String encryptedByHand = SimpleCrypto.encrypt(key, plain);
+
+			assertEquals(encryptedByHand, encryptedFromDb);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void testGetAllIds() {
+		Node f1 = fh.createFolder(root, "1");
+		Node f2 = fh.createFolder(f1, "2");
+		Node f3 = fh.createFolder(f2, "3");
+		Node f4 = fh.createFolder(f3, "4");
+
+		Node n1 = fh.createNote(root, "test.txt", "");
+		Node n2 = fh.createNote(f1, "test2.txt", "");
+		Node n3 = fh.createNote(f2, "test3.txt", "");
+		
+		List<Long> allIds = fh.getAllIds();
+		
+		assertEquals(8, allIds.size()); // 4 folders + 3 notes + 1 root folder
+		assertTrue(allIds.contains(0L));
+		assertTrue(allIds.contains(f1.getId()));
+		assertTrue(allIds.contains(f2.getId()));
+		assertTrue(allIds.contains(f3.getId()));
+		assertTrue(allIds.contains(f4.getId()));
+		assertTrue(allIds.contains(n1.getId()));
+		assertTrue(allIds.contains(n2.getId()));
+		assertTrue(allIds.contains(n3.getId()));
 	}
 }
