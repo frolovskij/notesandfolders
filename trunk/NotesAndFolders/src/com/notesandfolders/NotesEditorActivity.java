@@ -23,9 +23,9 @@ import java.util.Date;
 
 import com.notesandfolders.R;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -36,13 +36,11 @@ import android.view.MenuItem;
 import android.view.MenuItem.OnMenuItemClickListener;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ListAdapter;
 import android.widget.TextView;
 
-public class NotesEditorActivity extends BaseActivity {
+public class NotesEditorActivity extends Activity {
 	private static final int DIALOG_SAVE = 0;
 
 	private NodeHelper nh;

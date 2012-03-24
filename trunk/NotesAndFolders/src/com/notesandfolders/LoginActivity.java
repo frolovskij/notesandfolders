@@ -20,6 +20,7 @@ package com.notesandfolders;
 
 import com.notesandfolders.R;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -27,7 +28,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 
-public class LoginActivity extends BaseActivity implements OnClickListener {
+public class LoginActivity extends Activity implements OnClickListener {
 	private Login login;
 	private Settings settings;
 	private Button okButton;
@@ -84,12 +85,10 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
 			if (login.isPasswordValid(password.getText().toString())) {
 
 				Intent explorer = new Intent(this, ExplorerActivity.class);
-				new TempStorage(this)
-						.setPassword(password.getText().toString());
+				new TempStorage(this).setPassword(password.getText().toString());
 				startActivity(explorer);
 
 			} else {
-				// showAlert(R.string.login_msg_password_incorrect);
 				password.setText("");
 			}
 		}

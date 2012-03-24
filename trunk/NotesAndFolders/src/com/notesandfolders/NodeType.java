@@ -19,15 +19,17 @@ This file is a part of Notes & Folders project.
 package com.notesandfolders;
 
 public enum NodeType {
-	FOLDER(0), NOTE(1), CHECKLIST(2);
+	FOLDER, NOTE, CHECKLIST;
 
-	private int type;
-
-	NodeType(int type) {
-		this.type = type;
-	}
-
-	public int getType() {
-		return type;
+	public static NodeType getByOrdinal(int ordinal) {
+		switch (ordinal) {
+		case 1:
+			return NOTE;
+		case 2:
+			return CHECKLIST;
+		case 0:
+		default:
+			return FOLDER;
+		}
 	}
 }

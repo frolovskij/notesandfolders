@@ -89,9 +89,8 @@ public class Node {
 	public String toString() {
 		return String
 				.format("{id: '%d', parent_id: '%s', name: '%s', date_created: '%d', date_modified: '%d', type: '%d'}",
-						getId(), getParentId(), getName(), getDateCreated()
-								.getTime(), getDateModified().getTime(),
-						getType().getType());
+						getId(), getParentId(), getName(), getDateCreated().getTime(),
+						getDateModified().getTime(), getType().ordinal());
 	}
 
 	public boolean equalsTo(Node file) {
@@ -100,10 +99,9 @@ public class Node {
 		}
 
 		return (getId() == file.getId() && getParentId() == file.getParentId()
-				&& getType() == file.getType()
-				&& getName().equals(file.getName())
-				&& getDateCreated().equals(file.getDateCreated()) && getDateModified()
-				.equals(file.getDateModified()));
+				&& getType() == file.getType() && getName().equals(file.getName())
+				&& getDateCreated().equals(file.getDateCreated()) && getDateModified().equals(
+				file.getDateModified()));
 	}
 
 }

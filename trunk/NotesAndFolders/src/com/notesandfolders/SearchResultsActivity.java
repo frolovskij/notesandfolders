@@ -27,6 +27,7 @@ import com.notesandfolders.R;
 import com.tani.app.ui.IconContextMenu;
 import com.tani.app.ui.IconContextMenu.IconContextMenuOnClickListener;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -40,7 +41,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-public class SearchResultsActivity extends BaseActivity implements OnItemClickListener {
+public class SearchResultsActivity extends Activity implements OnItemClickListener {
 
 	private static final int DIALOG_CONTEXT_MENU = 0;
 	private static final int DIALOG_PROPERTIES = 8;
