@@ -19,7 +19,6 @@ This file is a part of Notes & Folders project.
 package com.notesandfolders;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Date;
 import net.sf.andhsli.hotspotlogin.SimpleCrypto;
@@ -87,7 +86,7 @@ public class NodeHelper {
 			cv.put("parent_id", f.getParentId());
 			cv.put("date_created", f.getDateCreated().getTime());
 			cv.put("date_modified", f.getDateModified().getTime());
-			cv.put("type", f.getType().getType());
+			cv.put("type", f.getType().ordinal());
 
 			long id = db.insertOrThrow("data", null, cv);
 			if (id != -1) {
@@ -153,17 +152,7 @@ public class NodeHelper {
 				f.setParentId(c.getLong(1));
 				f.setDateCreated(new Date(c.getLong(2)));
 				f.setDateModified(new Date(c.getLong(3)));
-				switch (c.getInt(4)) {
-				case 0:
-					f.setType(NodeType.FOLDER);
-					break;
-				case 1:
-					f.setType(NodeType.NOTE);
-					break;
-				case 2:
-					f.setType(NodeType.CHECKLIST);
-					break;
-				}
+				f.setType(NodeType.getByOrdinal(c.getInt(4)));
 			} else {
 				Log.i("getNodeById", "Cursor is empty");
 			}
@@ -232,18 +221,7 @@ public class NodeHelper {
 				f.setParentId(c.getLong(2));
 				f.setDateCreated(new Date(c.getLong(3)));
 				f.setDateModified(new Date(c.getLong(4)));
-				switch (c.getInt(5)) {
-				case 0:
-					f.setType(NodeType.FOLDER);
-					break;
-				case 1:
-					f.setType(NodeType.NOTE);
-					break;
-				case 2:
-					f.setType(NodeType.CHECKLIST);
-					break;
-				}
-
+				f.setType(NodeType.getByOrdinal(c.getInt(5)));
 				children.add(f);
 			}
 		} catch (Exception ex) {
@@ -432,7 +410,7 @@ public class NodeHelper {
 		cv.put("name", node.getName());
 		cv.put("date_created", node.getDateCreated().getTime());
 		cv.put("date_modified", node.getDateModified().getTime());
-		cv.put("type", node.getType().getType());
+		cv.put("type", node.getType().ordinal());
 
 		try {
 			db.insert("data", null, cv);

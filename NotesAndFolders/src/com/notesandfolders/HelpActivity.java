@@ -9,10 +9,11 @@ import java.net.URLEncoder;
 
 import com.notesandfolders.R;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.webkit.WebView;
 
-public class HelpActivity extends BaseActivity {
+public class HelpActivity extends Activity {
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {

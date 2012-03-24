@@ -19,9 +19,6 @@ This file is a part of Notes & Folders project.
 package com.notesandfolders;
 
 import java.io.File;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
 
 import com.notesandfolders.ImportHelper.ImportListener;
 

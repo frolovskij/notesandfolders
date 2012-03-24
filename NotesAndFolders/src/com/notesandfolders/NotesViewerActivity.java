@@ -23,18 +23,17 @@ import java.net.URLEncoder;
 
 import com.notesandfolders.R;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.Html;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.webkit.WebView;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-public class NotesViewerActivity extends BaseActivity {
+public class NotesViewerActivity extends Activity {
 	private NodeHelper nh;
 	private WebView textContent;
 	private TextView name;

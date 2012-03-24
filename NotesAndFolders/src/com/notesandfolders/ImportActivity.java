@@ -26,10 +26,12 @@ import java.util.List;
 import com.notesandfolders.R;
 import com.tani.app.ui.IconContextMenu;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
@@ -38,10 +40,10 @@ import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
-public class ImportActivity extends BaseActivity implements
-		IconContextMenu.IconContextMenuOnClickListener, OnItemClickListener,
-		OnClickListener {
+public class ImportActivity extends Activity implements
+		IconContextMenu.IconContextMenuOnClickListener, OnItemClickListener, OnClickListener {
 	private static final int CONTEXT_MENU_ID = 0;
 	public static final int IMPORTING_DIALOG_ID = 1;
 	private static final int MENU_IMPORT = 1;
@@ -115,14 +117,12 @@ public class ImportActivity extends BaseActivity implements
 		Resources res = getResources();
 
 		iconContextMenu = new IconContextMenu(this, CONTEXT_MENU_ID);
-		iconContextMenu.addItem(res, R.string.fsimp, R.drawable.fsimp,
-				MENU_IMPORT);
+		iconContextMenu.addItem(res, R.string.fsimp, R.drawable.fsimp, MENU_IMPORT);
 		iconContextMenu.setOnClickListener(this);
 	}
 
 	private OnItemLongClickListener itemLongClickHandler = new OnItemLongClickListener() {
-		public boolean onItemLongClick(AdapterView<?> parent, View view,
-				int position, long id) {
+		public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
 			selectedFile = ((File) lv.getItemAtPosition(position));
 
 			createContextMenu();
@@ -138,8 +138,8 @@ public class ImportActivity extends BaseActivity implements
 	@Override
 	protected Dialog onCreateDialog(int id) {
 		if (id == CONTEXT_MENU_ID) {
-			return iconContextMenu.createMenu(getText(
-					R.string.explorer_context_menu_title).toString());
+			return iconContextMenu.createMenu(getText(R.string.explorer_context_menu_title)
+					.toString());
 		}
 
 		if (id == IMPORTING_DIALOG_ID) {
@@ -204,8 +204,7 @@ public class ImportActivity extends BaseActivity implements
 		}
 	}
 
-	public void onItemClick(AdapterView<?> parentView, View childView,
-			int position, long id) {
+	public void onItemClick(AdapterView<?> parentView, View childView, int position, long id) {
 		File clicked = (File) lv.getItemAtPosition(position);
 		if (clicked.isDirectory() && clicked.canRead()) {
 			directory = clicked;
@@ -221,5 +220,11 @@ public class ImportActivity extends BaseActivity implements
 				update();
 			}
 		}
+	}
+
+	public void showToast(int stringResId) {
+		Toast toast = Toast.makeText(getApplicationContext(), stringResId, Toast.LENGTH_SHORT);
+		toast.setGravity(Gravity.CENTER, 0, 0);
+		toast.show();
 	}
 }

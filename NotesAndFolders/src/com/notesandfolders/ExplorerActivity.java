@@ -27,6 +27,7 @@ import com.notesandfolders.R;
 import com.tani.app.ui.IconContextMenu;
 import com.tani.app.ui.IconContextMenu.IconContextMenuOnClickListener;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
@@ -34,10 +35,10 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
-import android.os.Debug;
 import android.text.InputType;
 import android.util.Log;
 import android.view.ContextMenu;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -52,8 +53,9 @@ import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
-public class ExplorerActivity extends BaseActivity implements OnItemClickListener {
+public class ExplorerActivity extends Activity implements OnItemClickListener {
 
 	private static final int DIALOG_CONTEXT_MENU = 0;
 	public static final int DIALOG_COPY = 1;
@@ -731,5 +733,11 @@ public class ExplorerActivity extends BaseActivity implements OnItemClickListene
 		new TempStorage(this).setExiting();
 
 		finish();
+	}
+
+	public void showToast(int stringResId) {
+		Toast toast = Toast.makeText(getApplicationContext(), stringResId, Toast.LENGTH_SHORT);
+		toast.setGravity(Gravity.CENTER, 0, 0);
+		toast.show();
 	}
 }

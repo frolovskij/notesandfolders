@@ -20,6 +20,8 @@ package com.notesandfolders;
 
 import com.notesandfolders.R;
 
+import android.app.Activity;
+import android.app.AlertDialog;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
@@ -28,7 +30,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-public class PasswordActivity extends BaseActivity implements OnClickListener {
+public class PasswordActivity extends Activity implements OnClickListener {
 	private Button saveButton;
 	private EditText currentPasswordEdit;
 	private EditText newPasswordEdit;
@@ -59,10 +61,12 @@ public class PasswordActivity extends BaseActivity implements OnClickListener {
 			String newPasswordConfirmation = newPasswordConfirmationEdit.getText().toString();
 
 			if (!realCurrentPasswordHash.equals(currentPasswordHash)) {
-				showAlert(R.string.password_msg_wrong_password);
+				new AlertDialog.Builder(this).setMessage(R.string.password_msg_wrong_password)
+						.show();
 			} else {
 				if (!newPassword.equals(newPasswordConfirmation)) {
-					showAlert(R.string.password_msg_password_confirmation_do_not_match);
+					new AlertDialog.Builder(this).setMessage(
+							R.string.password_msg_password_confirmation_do_not_match).show();
 				} else {
 					boolean result = s.setPassword(newPassword, currentPasswordEdit.getText()
 							.toString());

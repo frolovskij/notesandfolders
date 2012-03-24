@@ -20,6 +20,7 @@ package com.notesandfolders;
 
 import java.util.List;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -32,7 +33,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 
-public class SearchActivity extends BaseActivity implements OnClickListener {
+public class SearchActivity extends Activity implements OnClickListener {
 	public static final int DIALOG_SEARCH = 0;
 
 	private Spinner mTypeSpinner;
