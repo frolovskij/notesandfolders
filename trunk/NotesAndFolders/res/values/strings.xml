@@ -16,12 +16,6 @@
     <string name="import_msg_cant_read">Can\'t import not readable item</string>
     <string name="import_msg_not_txt_file">Only *.txt files can be imported</string>
 
-    <!-- Common -->
-    <string name="ok">Ok</string>
-    <string name="cancel">Cancel</string>
-    <string name="yes">Yes</string>
-    <string name="no">No</string>
-
     <!-- Explorer options menu -->
     <string name="menu_new">New</string>
     <string name="menu_search">Search</string>
@@ -29,6 +23,7 @@
     <string name="menu_settings">Settings</string>
     <string name="menu_close">Close</string>
     <string name="menu_paste">Paste</string>
+    <string name="menu_backupandrestore">Backup &amp; Restore</string>
 
     <!-- Context menu operations on folders, files & checklists -->
     <string name="explorer_context_menu_title">Actions</string>
@@ -149,5 +144,18 @@
     <string name="properties_title">Properties</string>
     <string name="date_created">Created</string>
     <string name="date_modified">Modified</string>
+
+    <!-- Backup and Restore -->
+    <string name="backupandrestore_title">Backup &amp; Restore</string>
+    <string name="backup_title">Backup</string>
+    <string name="backup_button">Backup</string>
+    <string name="backup_info">        <![CDATA[<p>Your encrypted data and password hash will be saved in a single file in <b>/sdcard/Notes &amp; Folders</b>
+ directory. </p><p>You can use it later to restore the data. Save a copy of that file in a safe place.</p>]]>
+    </string>
+    <string name="restore_title">Restore</string>
+    <string name="restore_select_file">Select a file</string>
+    <string name="restore_button">Restore</string>
+    <string name="restore_info">        <![CDATA[<p>You can restore your data from a backup file (it should be placed in <b>/sdcard/Notes &amp; Folders</b> directory to be found).</p><p>Your current data will be lost.</p>]]>
+    </string>
 
 </resources>

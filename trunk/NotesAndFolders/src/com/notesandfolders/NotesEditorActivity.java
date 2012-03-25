@@ -127,12 +127,12 @@ public class NotesEditorActivity extends Activity {
 		if (id == DIALOG_SAVE) {
 			return new AlertDialog.Builder(this).setTitle(R.string.noteseditor_title)
 					.setMessage(R.string.noteseditor_msg_save_before_exit)
-					.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+					.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
 						public void onClick(DialogInterface dialog, int whichButton) {
 							save();
 							superOnBackPressed();
 						}
-					}).setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+					}).setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
 						public void onClick(DialogInterface dialog, int whichButton) {
 							superOnBackPressed();
 						}

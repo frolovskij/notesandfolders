@@ -349,7 +349,7 @@ public class ExplorerActivity extends Activity implements OnItemClickListener {
 		if (id == DIALOG_NEW_FOLDER) {
 			return new AlertDialog.Builder(this).setTitle(R.string.explorer_newfolder_title)
 					.setMessage(R.string.explorer_newfolder_prompt).setView(inputNewFolder)
-					.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+					.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
 						public void onClick(DialogInterface dialog, int whichButton) {
 							String folderName = inputNewFolder.getText().toString();
 
@@ -362,7 +362,7 @@ public class ExplorerActivity extends Activity implements OnItemClickListener {
 								refresh();
 							}
 						}
-					}).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+					}).setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
 						public void onClick(DialogInterface dialog, int whichButton) {
 							// Do nothing.
 						}
@@ -372,7 +372,7 @@ public class ExplorerActivity extends Activity implements OnItemClickListener {
 		if (id == DIALOG_NEW_NOTE) {
 			return new AlertDialog.Builder(this).setTitle(R.string.explorer_newnote_title)
 					.setMessage(R.string.explorer_newnote_prompt).setView(inputNewNote)
-					.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+					.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
 						public void onClick(DialogInterface dialog, int whichButton) {
 							String noteName = inputNewNote.getText().toString();
 
@@ -386,7 +386,7 @@ public class ExplorerActivity extends Activity implements OnItemClickListener {
 								refresh();
 							}
 						}
-					}).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+					}).setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
 						public void onClick(DialogInterface dialog, int whichButton) {
 							// Do nothing.
 						}
@@ -396,7 +396,7 @@ public class ExplorerActivity extends Activity implements OnItemClickListener {
 		if (id == DIALOG_NEW_CHECKLIST) {
 			return new AlertDialog.Builder(this).setTitle(R.string.explorer_newchecklist_title)
 					.setMessage(R.string.explorer_newchecklist_prompt).setView(inputNewCheckList)
-					.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+					.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
 						public void onClick(DialogInterface dialog, int whichButton) {
 							String checkListName = inputNewCheckList.getText().toString();
 
@@ -410,7 +410,7 @@ public class ExplorerActivity extends Activity implements OnItemClickListener {
 								refresh();
 							}
 						}
-					}).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+					}).setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
 						public void onClick(DialogInterface dialog, int whichButton) {
 							// Do nothing.
 						}
@@ -421,7 +421,7 @@ public class ExplorerActivity extends Activity implements OnItemClickListener {
 		if (id == DIALOG_RENAME) {
 			return new AlertDialog.Builder(this).setTitle(R.string.explorer_rename_title)
 					.setMessage(R.string.explorer_rename_prompt).setView(inputRename)
-					.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+					.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
 						public void onClick(DialogInterface dialog, int whichButton) {
 							final Node selectedNode = nh.getNodeById(getSelectedId());
 							if (selectedNode != null) {
@@ -431,7 +431,7 @@ public class ExplorerActivity extends Activity implements OnItemClickListener {
 								refresh();
 							}
 						}
-					}).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+					}).setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
 						public void onClick(DialogInterface dialog, int whichButton) {
 							// Do nothing.
 						}
@@ -441,7 +441,7 @@ public class ExplorerActivity extends Activity implements OnItemClickListener {
 		if (id == DIALOG_DELETE) {
 			return new AlertDialog.Builder(this).setTitle(R.string.explorer_delete_title)
 					.setMessage(R.string.explorer_delete_prompt)
-					.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+					.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
 						public void onClick(DialogInterface dialog, int whichButton) {
 							final Node selectedNode = nh.getNodeById(getSelectedId());
 							if (selectedNode != null) {
@@ -450,7 +450,7 @@ public class ExplorerActivity extends Activity implements OnItemClickListener {
 								refresh();
 							}
 						}
-					}).setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+					}).setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
 						public void onClick(DialogInterface dialog, int whichButton) {
 							// Do nothing.
 						}
@@ -568,6 +568,11 @@ public class ExplorerActivity extends Activity implements OnItemClickListener {
 			search.putExtra("current_folder_id", getCurrentFolderId());
 			startActivity(search);
 			return true;
+			
+		case R.id.explorer_options_backupandrestore:
+			Intent backupandrestore = new Intent(this, BackupAndRestoreActivity.class);
+			startActivity(backupandrestore);
+			break;
 
 		case R.id.explorer_options_settings:
 			Intent settings = new Intent(this, SettingsActivity.class);

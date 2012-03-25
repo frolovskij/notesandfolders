@@ -26,6 +26,12 @@
         android:title="@string/menu_search">
     </item>
     <item
+        android:id="@+id/explorer_options_backupandrestore"
+        android:enabled="true"
+        android:icon="@android:drawable/ic_menu_save"
+        android:title="@string/menu_backupandrestore">
+    </item>
+    <item
         android:id="@+id/explorer_options_settings"
         android:enabled="true"
         android:icon="@android:drawable/ic_menu_preferences"
