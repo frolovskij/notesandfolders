@@ -199,23 +199,16 @@ public class CheckListActivity extends ListActivity {
 			// if was changed
 			new AlertDialog.Builder(this).setTitle(R.string.checklist_title)
 					.setMessage(R.string.checklist_msg_save_before_exit)
-					.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+					.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
 						public void onClick(DialogInterface dialog, int whichButton) {
 							onSave();
 							superOnBackPressed();
 						}
-					}).setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+					}).setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
 						public void onClick(DialogInterface dialog, int whichButton) {
 							superOnBackPressed();
 						}
 					}).
-					// setNeutralButton(R.string.cancel, new
-					// DialogInterface.OnClickListener() {
-					// public void onClick(DialogInterface dialog, int
-					// whichButton) {
-					// dialog.cancel();
-					// }
-					// }).
 					show();
 		}
 	}
@@ -259,13 +252,13 @@ public class CheckListActivity extends ListActivity {
 		if (id == DIALOG_NEW) {
 			return new AlertDialog.Builder(this).setTitle(R.string.checklist_newitem_title)
 					.setMessage(R.string.checklist_newitem_prompt).setView(inputNewItem)
-					.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+					.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
 						public void onClick(DialogInterface dialog, int whichButton) {
 							String itemName = inputNewItem.getText().toString();
 							checkList.add(new CheckListItem(itemName, false));
 							refresh();
 						}
-					}).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+					}).setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
 						public void onClick(DialogInterface dialog, int whichButton) {
 							// Do nothing.
 						}
@@ -278,7 +271,7 @@ public class CheckListActivity extends ListActivity {
 			if (selectedItem != null) {
 				return new AlertDialog.Builder(this).setTitle(R.string.checklist_rename_title)
 						.setMessage(R.string.checklist_rename_prompt).setView(inputRename)
-						.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+						.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
 							public void onClick(DialogInterface dialog, int whichButton) {
 								if (selectedItem != null) {
 									selectedItem.setText(inputRename.getText().toString());
@@ -287,7 +280,7 @@ public class CheckListActivity extends ListActivity {
 								}
 							}
 						})
-						.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+						.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
 							public void onClick(DialogInterface dialog, int whichButton) {
 							}
 						}).create();
@@ -300,7 +293,7 @@ public class CheckListActivity extends ListActivity {
 			if (selectedItem != null) {
 				return new AlertDialog.Builder(this).setTitle(R.string.checklist_delete_title)
 						.setMessage(R.string.checklist_delete_prompt)
-						.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+						.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
 							public void onClick(DialogInterface dialog, int whichButton) {
 								if (selectedItem != null) {
 									checkList.remove(getSelectedIndex());
@@ -308,7 +301,7 @@ public class CheckListActivity extends ListActivity {
 									refresh();
 								}
 							}
-						}).setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+						}).setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
 							public void onClick(DialogInterface dialog, int whichButton) {
 								// Do nothing.
 							}
