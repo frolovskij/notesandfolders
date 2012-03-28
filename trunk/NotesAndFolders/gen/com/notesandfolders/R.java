@@ -146,7 +146,8 @@ public final class R {
         public static final int app_name=0x7f060000;
         public static final int app_version=0x7f060001;
         public static final int backup_button=0x7f06006b;
-        public static final int backup_info=0x7f06006c;
+        public static final int backup_info=0x7f06006d;
+        public static final int backup_msg_in_progress=0x7f06006c;
         public static final int backup_title=0x7f06006a;
         /**  Backup and Restore 
          */
@@ -258,10 +259,10 @@ public final class R {
          */
         public static final int properties_title=0x7f060066;
         public static final int rename=0x7f060019;
-        public static final int restore_button=0x7f06006f;
-        public static final int restore_info=0x7f060070;
-        public static final int restore_select_file=0x7f06006e;
-        public static final int restore_title=0x7f06006d;
+        public static final int restore_button=0x7f060070;
+        public static final int restore_info=0x7f060071;
+        public static final int restore_select_file=0x7f06006f;
+        public static final int restore_title=0x7f06006e;
         public static final int save=0x7f06001c;
         public static final int search_button=0x7f06005a;
         public static final int search_case_sensitive=0x7f060062;
