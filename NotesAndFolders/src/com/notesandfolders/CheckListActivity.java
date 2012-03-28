@@ -56,6 +56,7 @@ public class CheckListActivity extends ListActivity {
 	private static final int DIALOG_NEW = 4;
 	private static final int DIALOG_RENAME = 5;
 	private static final int DIALOG_DELETE = 6;
+	private static final int DIALOG_CLOSE = 7;
 
 	private CheckList initialCheckList;
 	CheckListItemAdapter adapter;
@@ -70,13 +71,14 @@ public class CheckListActivity extends ListActivity {
 	private EditText inputNewItem;
 	private EditText inputRename;
 
-	// selected_id is id of the selected node to pass to context menu operation
+	private int selectedIndex;
+
 	private int getSelectedIndex() {
-		return getIntent().getIntExtra("selected_index", -1);
+		return selectedIndex;
 	}
 
 	private void setSelectedIndex(int selectedIndex) {
-		getIntent().putExtra("selected_index", selectedIndex);
+		this.selectedIndex = selectedIndex;
 	}
 
 	/** Called when the activity is first created. */
@@ -127,23 +129,6 @@ public class CheckListActivity extends ListActivity {
 		inputRename = new EditText(this);
 		inputRename
 				.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
-		if (savedInstanceState != null) {
-			String inputValue = savedInstanceState.getString("input_new_item");
-			if (inputValue != null) {
-				inputNewItem.setText(inputValue);
-			}
-
-			inputValue = savedInstanceState.getString("input_rename");
-			if (inputValue != null) {
-				inputRename.setText(inputValue);
-			}
-
-			// Restoring checklist
-			String checkListSerialized = savedInstanceState.getString("checklist");
-			if (checkListSerialized != null) {
-				checkList = (CheckList) Serializer.deserialize(checkListSerialized);
-			}
-		}
 
 		refresh();
 	}
@@ -181,9 +166,7 @@ public class CheckListActivity extends ListActivity {
 
 	public void onSave() {
 		initialCheckList = checkList.clone();
-
-		String serialized = Serializer.serialize(checkList);
-		nh.setTextContentById(id, serialized);
+		nh.setTextContentById(id, Serializer.serialize(checkList));
 	}
 
 	public void superOnBackPressed() {
@@ -193,23 +176,9 @@ public class CheckListActivity extends ListActivity {
 	@Override
 	public void onBackPressed() {
 		if (checkList.equals(initialCheckList)) {
-			// wasn't changed
 			superOnBackPressed();
 		} else {
-			// if was changed
-			new AlertDialog.Builder(this).setTitle(R.string.checklist_title)
-					.setMessage(R.string.checklist_msg_save_before_exit)
-					.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-						public void onClick(DialogInterface dialog, int whichButton) {
-							onSave();
-							superOnBackPressed();
-						}
-					}).setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-						public void onClick(DialogInterface dialog, int whichButton) {
-							superOnBackPressed();
-						}
-					}).
-					show();
+			showDialog(DIALOG_CLOSE);
 		}
 	}
 
@@ -232,16 +201,6 @@ public class CheckListActivity extends ListActivity {
 		iconContextMenu.setOnClickListener(contextMenuListener);
 	}
 
-	protected void onSaveInstanceState(Bundle outState) {
-		// Alert dialogs EditText used to input new item or to rename an
-		// existing
-		outState.putString("input_new_item", inputNewItem.getText().toString());
-		outState.putString("input_rename", inputRename.getText().toString());
-
-		// Current not saved checklist
-		outState.putString("checklist", Serializer.serialize(checkList));
-	}
-
 	@Override
 	protected Dialog onCreateDialog(int id) {
 		if (id == CONTEXT_MENU_ID) {
@@ -249,41 +208,67 @@ public class CheckListActivity extends ListActivity {
 					.toString());
 		}
 
+		if (id == DIALOG_CLOSE) {
+			return new AlertDialog.Builder(this).setTitle(R.string.checklist_title)
+					.setMessage(R.string.checklist_msg_save_before_exit)
+					.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int whichButton) {
+							onSave();
+							superOnBackPressed();
+						}
+					})
+					.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int whichButton) {
+							superOnBackPressed();
+						}
+					}).create();
+
+		}
+
 		if (id == DIALOG_NEW) {
-			return new AlertDialog.Builder(this).setTitle(R.string.checklist_newitem_title)
-					.setMessage(R.string.checklist_newitem_prompt).setView(inputNewItem)
+
+			return new AlertDialog.Builder(this)
+					.setTitle(R.string.checklist_newitem_title)
+					.setMessage(R.string.checklist_newitem_prompt)
+					.setView(inputNewItem)
 					.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
 						public void onClick(DialogInterface dialog, int whichButton) {
 							String itemName = inputNewItem.getText().toString();
 							checkList.add(new CheckListItem(itemName, false));
 							refresh();
 						}
-					}).setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-						public void onClick(DialogInterface dialog, int whichButton) {
-							// Do nothing.
-						}
-					}).create();
+					})
+					.setNegativeButton(android.R.string.cancel,
+							new DialogInterface.OnClickListener() {
+								public void onClick(DialogInterface dialog, int whichButton) {
+									// Do nothing.
+								}
+							}).create();
 		}
 
 		if (id == DIALOG_RENAME) {
 			final CheckListItem selectedItem = this.adapter.getItem(getSelectedIndex());
 
 			if (selectedItem != null) {
-				return new AlertDialog.Builder(this).setTitle(R.string.checklist_rename_title)
-						.setMessage(R.string.checklist_rename_prompt).setView(inputRename)
-						.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-							public void onClick(DialogInterface dialog, int whichButton) {
-								if (selectedItem != null) {
-									selectedItem.setText(inputRename.getText().toString());
+				return new AlertDialog.Builder(this)
+						.setTitle(R.string.checklist_rename_title)
+						.setMessage(R.string.checklist_rename_prompt)
+						.setView(inputRename)
+						.setPositiveButton(android.R.string.ok,
+								new DialogInterface.OnClickListener() {
+									public void onClick(DialogInterface dialog, int whichButton) {
+										if (selectedItem != null) {
+											selectedItem.setText(inputRename.getText().toString());
 
-									refresh();
-								}
-							}
-						})
-						.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-							public void onClick(DialogInterface dialog, int whichButton) {
-							}
-						}).create();
+											refresh();
+										}
+									}
+								})
+						.setNegativeButton(android.R.string.cancel,
+								new DialogInterface.OnClickListener() {
+									public void onClick(DialogInterface dialog, int whichButton) {
+									}
+								}).create();
 			}
 		}
 
@@ -291,21 +276,25 @@ public class CheckListActivity extends ListActivity {
 			final CheckListItem selectedItem = this.adapter.getItem(getSelectedIndex());
 
 			if (selectedItem != null) {
-				return new AlertDialog.Builder(this).setTitle(R.string.checklist_delete_title)
+				return new AlertDialog.Builder(this)
+						.setTitle(R.string.checklist_delete_title)
 						.setMessage(R.string.checklist_delete_prompt)
-						.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-							public void onClick(DialogInterface dialog, int whichButton) {
-								if (selectedItem != null) {
-									checkList.remove(getSelectedIndex());
+						.setPositiveButton(android.R.string.yes,
+								new DialogInterface.OnClickListener() {
+									public void onClick(DialogInterface dialog, int whichButton) {
+										if (selectedItem != null) {
+											checkList.remove(getSelectedIndex());
 
-									refresh();
-								}
-							}
-						}).setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-							public void onClick(DialogInterface dialog, int whichButton) {
-								// Do nothing.
-							}
-						}).create();
+											refresh();
+										}
+									}
+								})
+						.setNegativeButton(android.R.string.no,
+								new DialogInterface.OnClickListener() {
+									public void onClick(DialogInterface dialog, int whichButton) {
+										// Do nothing.
+									}
+								}).create();
 			}
 		}
 
