@@ -19,23 +19,21 @@ This file is a part of Notes & Folders project.
 package com.notesandfolders;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.Html;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.WindowManager.LayoutParams;
 import android.widget.Button;
-import android.widget.ListAdapter;
 import android.widget.TextView;
 
-public class BackupActivity extends Activity {
+public class BackupActivity extends Activity implements OnClickListener {
 	public static final int DIALOG_BACKUP = 1;
 	private TextView info;
 	private Button backupButton;
+
+	private BackupTask backupTask;
 	private boolean mShownDialog;
 	private ProgressDialog backupDialog;
 
@@ -49,7 +47,11 @@ public class BackupActivity extends Activity {
 		info.setText(Html.fromHtml(getText(R.string.backup_info).toString()));
 
 		backupButton = (Button) findViewById(R.id.backup_button);
-		backupButton.setOnClickListener(onBackupButtonListener);
+		backupButton.setOnClickListener(this);
+	}
+
+	public ProgressDialog getImportingDialog() {
+		return backupDialog;
 	}
 
 	@Override
@@ -66,8 +68,15 @@ public class BackupActivity extends Activity {
 
 			return backupDialog;
 		}
-
 		return super.onCreateDialog(id);
+	}
+
+	@Override
+	protected void onPrepareDialog(int id, Dialog dialog) {
+		super.onPrepareDialog(id, dialog);
+		if (id == DIALOG_BACKUP) {
+			mShownDialog = true;
+		}
 	}
 
 	public void onBackupTaskCompleted(Integer result) {
@@ -80,16 +89,9 @@ public class BackupActivity extends Activity {
 		System.out.println(result);
 	}
 
-	private final OnClickListener onBackupButtonListener = new OnClickListener() {
-		public void onClick(View v) {
-			BackupTask task = new BackupTask(BackupActivity.this,
-					new NodeHelper(BackupActivity.this, new TempStorage(
-							BackupActivity.this).getPassword()));
-			task.execute();
-		}
-	};
-	
-	public ProgressDialog getBackupDialog() {
-		return backupDialog;
+	public void onClick(View v) {
+		backupTask = new BackupTask(this, new NodeHelper(this, new TempStorage(
+				this).getPassword()));
+		backupTask.execute();
 	}
 }

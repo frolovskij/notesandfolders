@@ -20,7 +20,7 @@ package com.notesandfolders;
 
 import android.os.AsyncTask;
 
-public class BackupTask extends AsyncTask<Void, String, Integer> {
+public class BackupTask extends AsyncTask<Void, Integer, Integer> {
 
 	public static final int BACKUP_OK = 0;
 	public static final int BACKUP_CANT_CREATE_OUTPUT_DIRECTORY = 1;
@@ -43,19 +43,20 @@ public class BackupTask extends AsyncTask<Void, String, Integer> {
 		for (int i = 0; i < nodesCount; i++) {
 			try {
 				Thread.sleep(50);
-				onProgressUpdate(i + 1);
+				publishProgress(i + 1);
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
 
-		return BACKUP_OK;
+		result = BACKUP_OK;
+
+		return result;
 	}
 
 	protected void onProgressUpdate(Integer... progress) {
 		if (progress.length > 0) {
-			ba.getBackupDialog().setProgress(progress[0]);
+			ba.getImportingDialog().setProgress(progress[0]);
 		}
 	}
 
@@ -78,11 +79,8 @@ public class BackupTask extends AsyncTask<Void, String, Integer> {
 		}
 	}
 
-	/**
-	 * Helper method to notify the activity that this task was completed.
-	 */
 	private void notifyActivityTaskCompleted() {
-		if (null != ba) {
+		if (ba != null) {
 			ba.onBackupTaskCompleted(result);
 		}
 	}
