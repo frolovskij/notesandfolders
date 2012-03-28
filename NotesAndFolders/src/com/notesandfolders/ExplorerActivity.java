@@ -161,7 +161,8 @@ public class ExplorerActivity extends Activity implements OnItemClickListener {
 				| InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
 		if (savedInstanceState != null) {
 			// Restoring edittext in new/rename alert dialogs
-			String inputValue = savedInstanceState.getString("input_new_folder");
+			String inputValue = savedInstanceState
+					.getString("input_new_folder");
 			if (inputValue != null) {
 				inputNewFolder.setText(inputValue);
 			}
@@ -183,15 +184,16 @@ public class ExplorerActivity extends Activity implements OnItemClickListener {
 				| InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
 		if (savedInstanceState != null) {
 			// Restoring edittext in new/rename alert dialogs
-			String inputValue = savedInstanceState.getString("input_new_checklist");
+			String inputValue = savedInstanceState
+					.getString("input_new_checklist");
 			if (inputValue != null) {
 				inputNewCheckList.setText(inputValue);
 			}
 		}
 
 		inputRename = new EditText(this);
-		inputRename
-				.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
+		inputRename.setInputType(InputType.TYPE_CLASS_TEXT
+				| InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
 		if (savedInstanceState != null) {
 			// Restoring edittext in new/rename alert dialogs
 			String inputValue = savedInstanceState.getString("input_rename");
@@ -278,16 +280,20 @@ public class ExplorerActivity extends Activity implements OnItemClickListener {
 		Resources res = getResources();
 
 		iconContextMenu = new IconContextMenu(this, DIALOG_CONTEXT_MENU);
-		iconContextMenu.addItem(res, R.string.rename, R.drawable.rename, MENU_RENAME);
+		iconContextMenu.addItem(res, R.string.rename, R.drawable.rename,
+				MENU_RENAME);
 		iconContextMenu.addItem(res, R.string.copy, R.drawable.copy, MENU_COPY);
 		iconContextMenu.addItem(res, R.string.cut, R.drawable.cut, MENU_CUT);
-		iconContextMenu.addItem(res, R.string.delete, R.drawable.delete, MENU_DELETE);
-		iconContextMenu.addItem(res, R.string.properties, R.drawable.properties, MENU_PROPERTIES);
+		iconContextMenu.addItem(res, R.string.delete, R.drawable.delete,
+				MENU_DELETE);
+		iconContextMenu.addItem(res, R.string.properties,
+				R.drawable.properties, MENU_PROPERTIES);
 		iconContextMenu.setOnClickListener(contextMenuListener);
 	}
 
 	private OnItemLongClickListener itemLongClickHandler = new OnItemLongClickListener() {
-		public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+		public boolean onItemLongClick(AdapterView<?> parent, View view,
+				int position, long id) {
 			setSelectedId(((Node) lv.getItemAtPosition(position)).getId());
 
 			// Not showing context menu for ..'s
@@ -305,8 +311,8 @@ public class ExplorerActivity extends Activity implements OnItemClickListener {
 	@Override
 	protected Dialog onCreateDialog(int id) {
 		if (id == DIALOG_CONTEXT_MENU) {
-			return iconContextMenu.createMenu(getText(R.string.explorer_context_menu_title)
-					.toString());
+			return iconContextMenu.createMenu(getText(
+					R.string.explorer_context_menu_title).toString());
 		}
 
 		if (id == DIALOG_COPY) {
@@ -320,15 +326,19 @@ public class ExplorerActivity extends Activity implements OnItemClickListener {
 
 		if (id == DIALOG_NEW) {
 			final IconListItem[] items = {
-					new IconListItem(getText(R.string.create_folder).toString(), R.drawable.folder),
-					new IconListItem(getText(R.string.create_note).toString(), R.drawable.note),
-					new IconListItem(getText(R.string.create_checklist).toString(),
-							R.drawable.checklist) };
+					new IconListItem(
+							getText(R.string.create_folder).toString(),
+							R.drawable.folder),
+					new IconListItem(getText(R.string.create_note).toString(),
+							R.drawable.note),
+					new IconListItem(getText(R.string.create_checklist)
+							.toString(), R.drawable.checklist) };
 
 			ListAdapter adapter = new IconListItemAdapter(this,
 					android.R.layout.select_dialog_item, items);
 
-			return new AlertDialog.Builder(this).setTitle(getText(R.string.create_new))
+			return new AlertDialog.Builder(this)
+					.setTitle(getText(R.string.create_new))
 					.setAdapter(adapter, new DialogInterface.OnClickListener() {
 						public void onClick(DialogInterface dialog, int item) {
 							switch (item) {
@@ -347,114 +357,169 @@ public class ExplorerActivity extends Activity implements OnItemClickListener {
 		}
 
 		if (id == DIALOG_NEW_FOLDER) {
-			return new AlertDialog.Builder(this).setTitle(R.string.explorer_newfolder_title)
-					.setMessage(R.string.explorer_newfolder_prompt).setView(inputNewFolder)
-					.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-						public void onClick(DialogInterface dialog, int whichButton) {
-							String folderName = inputNewFolder.getText().toString();
+			return new AlertDialog.Builder(this)
+					.setTitle(R.string.explorer_newfolder_title)
+					.setMessage(R.string.explorer_newfolder_prompt)
+					.setView(inputNewFolder)
+					.setPositiveButton(android.R.string.ok,
+							new DialogInterface.OnClickListener() {
+								public void onClick(DialogInterface dialog,
+										int whichButton) {
+									String folderName = inputNewFolder
+											.getText().toString();
 
-							Node parent = nh.getNodeById(getCurrentFolderId());
-							if ((parent != null) && parent.getType() == NodeType.FOLDER) {
-								Node created = nh.createFolder(parent, folderName);
-								if (created != null) {
-									ExplorerActivity.this.setIdToSetFocusTo(created.getId());
+									Node parent = nh
+											.getNodeById(getCurrentFolderId());
+									if ((parent != null)
+											&& parent.getType() == NodeType.FOLDER) {
+										Node created = nh.createFolder(parent,
+												folderName);
+										if (created != null) {
+											ExplorerActivity.this
+													.setIdToSetFocusTo(created
+															.getId());
+										}
+										refresh();
+									}
 								}
-								refresh();
-							}
-						}
-					}).setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-						public void onClick(DialogInterface dialog, int whichButton) {
-							// Do nothing.
-						}
-					}).create();
+							})
+					.setNegativeButton(android.R.string.cancel,
+							new DialogInterface.OnClickListener() {
+								public void onClick(DialogInterface dialog,
+										int whichButton) {
+									// Do nothing.
+								}
+							}).create();
 		}
 
 		if (id == DIALOG_NEW_NOTE) {
-			return new AlertDialog.Builder(this).setTitle(R.string.explorer_newnote_title)
-					.setMessage(R.string.explorer_newnote_prompt).setView(inputNewNote)
-					.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-						public void onClick(DialogInterface dialog, int whichButton) {
-							String noteName = inputNewNote.getText().toString();
+			return new AlertDialog.Builder(this)
+					.setTitle(R.string.explorer_newnote_title)
+					.setMessage(R.string.explorer_newnote_prompt)
+					.setView(inputNewNote)
+					.setPositiveButton(android.R.string.ok,
+							new DialogInterface.OnClickListener() {
+								public void onClick(DialogInterface dialog,
+										int whichButton) {
+									String noteName = inputNewNote.getText()
+											.toString();
 
-							Node parent = nh.getNodeById(getCurrentFolderId());
-							if ((parent != null) && parent.getType() == NodeType.FOLDER) {
-								Node created = nh.createNote(parent, noteName, "");
-								if (created != null) {
-									ExplorerActivity.this.setIdToSetFocusTo(created.getId());
+									Node parent = nh
+											.getNodeById(getCurrentFolderId());
+									if ((parent != null)
+											&& parent.getType() == NodeType.FOLDER) {
+										Node created = nh.createNote(parent,
+												noteName, "");
+										if (created != null) {
+											ExplorerActivity.this
+													.setIdToSetFocusTo(created
+															.getId());
+										}
+
+										refresh();
+									}
 								}
-
-								refresh();
-							}
-						}
-					}).setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-						public void onClick(DialogInterface dialog, int whichButton) {
-							// Do nothing.
-						}
-					}).create();
+							})
+					.setNegativeButton(android.R.string.cancel,
+							new DialogInterface.OnClickListener() {
+								public void onClick(DialogInterface dialog,
+										int whichButton) {
+									// Do nothing.
+								}
+							}).create();
 		}
 
 		if (id == DIALOG_NEW_CHECKLIST) {
-			return new AlertDialog.Builder(this).setTitle(R.string.explorer_newchecklist_title)
-					.setMessage(R.string.explorer_newchecklist_prompt).setView(inputNewCheckList)
-					.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-						public void onClick(DialogInterface dialog, int whichButton) {
-							String checkListName = inputNewCheckList.getText().toString();
+			return new AlertDialog.Builder(this)
+					.setTitle(R.string.explorer_newchecklist_title)
+					.setMessage(R.string.explorer_newchecklist_prompt)
+					.setView(inputNewCheckList)
+					.setPositiveButton(android.R.string.ok,
+							new DialogInterface.OnClickListener() {
+								public void onClick(DialogInterface dialog,
+										int whichButton) {
+									String checkListName = inputNewCheckList
+											.getText().toString();
 
-							Node parent = nh.getNodeById(getCurrentFolderId());
-							if ((parent != null) && parent.getType() == NodeType.FOLDER) {
-								Node created = nh.createCheckList(parent, checkListName);
-								if (created != null) {
-									ExplorerActivity.this.setIdToSetFocusTo(created.getId());
+									Node parent = nh
+											.getNodeById(getCurrentFolderId());
+									if ((parent != null)
+											&& parent.getType() == NodeType.FOLDER) {
+										Node created = nh.createCheckList(
+												parent, checkListName);
+										if (created != null) {
+											ExplorerActivity.this
+													.setIdToSetFocusTo(created
+															.getId());
+										}
+
+										refresh();
+									}
 								}
-
-								refresh();
-							}
-						}
-					}).setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-						public void onClick(DialogInterface dialog, int whichButton) {
-							// Do nothing.
-						}
-					}).create();
+							})
+					.setNegativeButton(android.R.string.cancel,
+							new DialogInterface.OnClickListener() {
+								public void onClick(DialogInterface dialog,
+										int whichButton) {
+									// Do nothing.
+								}
+							}).create();
 
 		}
 
 		if (id == DIALOG_RENAME) {
-			return new AlertDialog.Builder(this).setTitle(R.string.explorer_rename_title)
-					.setMessage(R.string.explorer_rename_prompt).setView(inputRename)
-					.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-						public void onClick(DialogInterface dialog, int whichButton) {
-							final Node selectedNode = nh.getNodeById(getSelectedId());
-							if (selectedNode != null) {
-								nh.renameNodeById(selectedNode.getId(), inputRename.getText()
-										.toString());
+			return new AlertDialog.Builder(this)
+					.setTitle(R.string.explorer_rename_title)
+					.setMessage(R.string.explorer_rename_prompt)
+					.setView(inputRename)
+					.setPositiveButton(android.R.string.ok,
+							new DialogInterface.OnClickListener() {
+								public void onClick(DialogInterface dialog,
+										int whichButton) {
+									final Node selectedNode = nh
+											.getNodeById(getSelectedId());
+									if (selectedNode != null) {
+										nh.renameNodeById(selectedNode.getId(),
+												inputRename.getText()
+														.toString());
 
-								refresh();
-							}
-						}
-					}).setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-						public void onClick(DialogInterface dialog, int whichButton) {
-							// Do nothing.
-						}
-					}).create();
+										refresh();
+									}
+								}
+							})
+					.setNegativeButton(android.R.string.cancel,
+							new DialogInterface.OnClickListener() {
+								public void onClick(DialogInterface dialog,
+										int whichButton) {
+									// Do nothing.
+								}
+							}).create();
 		}
 
 		if (id == DIALOG_DELETE) {
-			return new AlertDialog.Builder(this).setTitle(R.string.explorer_delete_title)
+			return new AlertDialog.Builder(this)
+					.setTitle(R.string.explorer_delete_title)
 					.setMessage(R.string.explorer_delete_prompt)
-					.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-						public void onClick(DialogInterface dialog, int whichButton) {
-							final Node selectedNode = nh.getNodeById(getSelectedId());
-							if (selectedNode != null) {
-								nh.deleteNodeById(selectedNode.getId());
+					.setPositiveButton(android.R.string.yes,
+							new DialogInterface.OnClickListener() {
+								public void onClick(DialogInterface dialog,
+										int whichButton) {
+									final Node selectedNode = nh
+											.getNodeById(getSelectedId());
+									if (selectedNode != null) {
+										nh.deleteNodeById(selectedNode.getId());
 
-								refresh();
-							}
-						}
-					}).setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-						public void onClick(DialogInterface dialog, int whichButton) {
-							// Do nothing.
-						}
-					}).create();
+										refresh();
+									}
+								}
+							})
+					.setNegativeButton(android.R.string.no,
+							new DialogInterface.OnClickListener() {
+								public void onClick(DialogInterface dialog,
+										int whichButton) {
+									// Do nothing.
+								}
+							}).create();
 		}
 
 		if (id == DIALOG_PROPERTIES) {
@@ -463,7 +528,8 @@ public class ExplorerActivity extends Activity implements OnItemClickListener {
 
 			LayoutParams params = dialog.getWindow().getAttributes();
 			params.width = LayoutParams.FILL_PARENT;
-			dialog.getWindow().setAttributes((android.view.WindowManager.LayoutParams) params);
+			dialog.getWindow().setAttributes(
+					(android.view.WindowManager.LayoutParams) params);
 
 			dialog.setTitle(R.string.properties_title);
 			dialog.setCancelable(true);
@@ -518,7 +584,8 @@ public class ExplorerActivity extends Activity implements OnItemClickListener {
 		if (id == DIALOG_PROPERTIES) {
 			Node n = nh.getNodeById(getSelectedId());
 
-			ImageView icon = (ImageView) dialog.findViewById(R.id.properties_file_icon);
+			ImageView icon = (ImageView) dialog
+					.findViewById(R.id.properties_file_icon);
 
 			if (icon != null) {
 				switch (n.getType()) {
@@ -534,14 +601,19 @@ public class ExplorerActivity extends Activity implements OnItemClickListener {
 				}
 			}
 
-			TextView name = (TextView) dialog.findViewById(R.id.properties_file_name);
+			TextView name = (TextView) dialog
+					.findViewById(R.id.properties_file_name);
 			name.setText(nh.getFullPathById(n.getId()));
 
-			TextView dateCreated = (TextView) dialog.findViewById(R.id.properties_date_created);
-			dateCreated.setText(new SimpleDateFormat().format(n.getDateCreated()));
+			TextView dateCreated = (TextView) dialog
+					.findViewById(R.id.properties_date_created);
+			dateCreated.setText(new SimpleDateFormat().format(n
+					.getDateCreated()));
 
-			TextView dateModified = (TextView) dialog.findViewById(R.id.properties_date_modified);
-			dateModified.setText(new SimpleDateFormat().format(n.getDateModified()));
+			TextView dateModified = (TextView) dialog
+					.findViewById(R.id.properties_date_modified);
+			dateModified.setText(new SimpleDateFormat().format(n
+					.getDateModified()));
 		}
 	}
 
@@ -554,7 +626,8 @@ public class ExplorerActivity extends Activity implements OnItemClickListener {
 
 		case R.id.explorer_options_paste:
 			if (getIdToCopy() != -1) {
-				copyTask = new CopyTask(this, nh, getIdToCopy(), getCurrentFolderId());
+				copyTask = new CopyTask(this, nh, getIdToCopy(),
+						getCurrentFolderId());
 				copyTask.execute();
 			} else if (getIdToMove() != -1) {
 				int result = nh.move(getIdToMove(), getCurrentFolderId());
@@ -568,9 +641,10 @@ public class ExplorerActivity extends Activity implements OnItemClickListener {
 			search.putExtra("current_folder_id", getCurrentFolderId());
 			startActivity(search);
 			return true;
-			
+
 		case R.id.explorer_options_backupandrestore:
-			Intent backupandrestore = new Intent(this, BackupAndRestoreActivity.class);
+			Intent backupandrestore = new Intent(this,
+					BackupAndRestoreActivity.class);
 			startActivity(backupandrestore);
 			break;
 
@@ -700,9 +774,11 @@ public class ExplorerActivity extends Activity implements OnItemClickListener {
 		// Alert dialogs EditText used to input new item or to rename an
 		// existing
 
-		outState.putString("input_new_folder", inputNewFolder.getText().toString());
+		outState.putString("input_new_folder", inputNewFolder.getText()
+				.toString());
 		outState.putString("input_new_note", inputNewNote.getText().toString());
-		outState.putString("input_new_checklist", inputNewCheckList.getText().toString());
+		outState.putString("input_new_checklist", inputNewCheckList.getText()
+				.toString());
 		outState.putString("input_rename", inputRename.getText().toString());
 	}
 
@@ -714,9 +790,10 @@ public class ExplorerActivity extends Activity implements OnItemClickListener {
 			menu.add(Menu.NONE, Menu.NONE, Menu.NONE, R.string.insert_date_time)
 					.setOnMenuItemClickListener(new OnMenuItemClickListener() {
 						public boolean onMenuItemClick(MenuItem item) {
-							Log.v(getClass().getName(), "Insert date+time" + item);
-							edit.append(new SimpleDateFormat("yyyy.MM.dd HH:mm:ss")
-									.format(new Date()));
+							Log.v(getClass().getName(), "Insert date+time"
+									+ item);
+							edit.append(new SimpleDateFormat(
+									"yyyy.MM.dd HH:mm:ss").format(new Date()));
 							return false;
 						}
 					});
@@ -729,7 +806,8 @@ public class ExplorerActivity extends Activity implements OnItemClickListener {
 		showDialog(DIALOG_NEW);
 	}
 
-	public void onItemClick(AdapterView<?> parentView, View childView, int position, long id) {
+	public void onItemClick(AdapterView<?> parentView, View childView,
+			int position, long id) {
 		Node selected = (Node) lv.getItemAtPosition(position);
 		onOpen(selected.getId());
 	}
@@ -741,7 +819,8 @@ public class ExplorerActivity extends Activity implements OnItemClickListener {
 	}
 
 	public void showToast(int stringResId) {
-		Toast toast = Toast.makeText(getApplicationContext(), stringResId, Toast.LENGTH_SHORT);
+		Toast toast = Toast.makeText(getApplicationContext(), stringResId,
+				Toast.LENGTH_SHORT);
 		toast.setGravity(Gravity.CENTER, 0, 0);
 		toast.show();
 	}
