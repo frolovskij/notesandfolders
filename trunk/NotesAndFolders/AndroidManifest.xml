@@ -50,6 +50,7 @@
         </activity>
         <activity
             android:name=".CheckListActivity"
+            android:configChanges="keyboardHidden|orientation"
             android:label="@string/checklist_title" >
         </activity>
         <activity
