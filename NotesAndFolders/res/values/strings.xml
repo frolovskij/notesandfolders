@@ -149,6 +149,7 @@
     <string name="backupandrestore_title">Backup &amp; Restore</string>
     <string name="backup_title">Backup</string>
     <string name="backup_button">Backup</string>
+    <string name="backup_msg_in_progress">Backup in progress. Please wait…</string>
     <string name="backup_info">        <![CDATA[<p>Your encrypted data and password hash will be saved in a single file in <b>/sdcard/Notes &amp; Folders</b>
  directory. </p><p>You can use it later to restore the data. Save a copy of that file in a safe place.</p>]]>
     </string>
