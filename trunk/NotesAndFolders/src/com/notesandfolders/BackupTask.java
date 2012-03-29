@@ -18,18 +18,31 @@ This file is a part of Notes & Folders project.
 
 package com.notesandfolders;
 
-import android.os.AsyncTask;
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.Date;
 
-public class BackupTask extends AsyncTask<Void, Integer, Integer> {
+import android.os.AsyncTask;
+import android.os.Environment;
+
+enum BackupResult {
+	OK, CANT_CREATE_OUTPUT_DIRECTORY, CANT_CREATE_OUTPUT_FILE, FILE_ALREADY_EXISTS, CANT_WRITE_TO_OUTPUT_FILE, IO_ERROR
+}
+
+public class BackupTask extends AsyncTask<Void, Integer, BackupResult> {
 
 	public static final int BACKUP_OK = 0;
 	public static final int BACKUP_CANT_CREATE_OUTPUT_DIRECTORY = 1;
 	public static final int BACKUP_CANT_CREATE_OUTPUT_FILE = 2;
+	public static final int BACKUP_FILE_ALREADY_EXISTS = 3;
+	public static final int BACKUP_CANT_WRITE_TO_OUTPUT_FILE = 4;
+	public static final int BACKUP_IO_ERROR = 5;
+
+	public static final String OUTPUT_DIR = "NotesAndFolders";
 
 	private BackupActivity ba;
 	private NodeHelper nh;
-	private boolean completed;
-	private Integer result;
 
 	public BackupTask(BackupActivity ba, NodeHelper nh) {
 		this.ba = ba;
@@ -37,21 +50,60 @@ public class BackupTask extends AsyncTask<Void, Integer, Integer> {
 	}
 
 	@Override
-	protected Integer doInBackground(Void... arg0) {
-		int nodesCount = (int) nh.getNodesCount();
+	protected BackupResult doInBackground(Void... arg0) {
+		File root = Environment.getExternalStorageDirectory();
 
-		for (int i = 0; i < nodesCount; i++) {
-			try {
-				Thread.sleep(50);
-				publishProgress(i + 1);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
+		File outputDir = new File(root, OUTPUT_DIR);
+		if (!outputDir.exists()) {
+			if (outputDir.mkdirs() == false) {
+				return BackupResult.CANT_CREATE_OUTPUT_DIRECTORY;
 			}
 		}
 
-		result = BACKUP_OK;
+		File backupFile = new File(outputDir, String.format("%d.nf1",
+				new Date().getTime()));
+		if (backupFile.exists()) {
+			return BackupResult.FILE_ALREADY_EXISTS;
+		}
 
-		return result;
+		try {
+			if (backupFile.createNewFile() == false) {
+				return BackupResult.CANT_CREATE_OUTPUT_FILE;
+			}
+		} catch (IOException ex) {
+			ex.printStackTrace();
+			return BackupResult.CANT_CREATE_OUTPUT_FILE;
+		}
+
+		if (backupFile.canWrite() == false) {
+			return BackupResult.CANT_WRITE_TO_OUTPUT_FILE;
+		}
+
+		Settings s = new Settings(ba);
+		final String password = s.getPasswordSha1Hash();
+		final String key = s.getEncryptedKey();
+		final int nodesCount = (int) nh.getNodesCount();
+
+		PrintWriter pw = null;
+		try {
+			pw = new PrintWriter(backupFile);
+			pw.println(password);
+			pw.println(key);
+
+			for (int i = 0; i < nodesCount; i++) {
+				pw.println(nh.getNodeAsString(i));
+				publishProgress(i + 1);
+			}
+		} catch (IOException e1) {
+			e1.printStackTrace();
+			return BackupResult.IO_ERROR;
+		} finally {
+			if (pw != null) {
+				pw.close();
+			}
+		}
+
+		return BackupResult.OK;
 	}
 
 	protected void onProgressUpdate(Integer... progress) {
@@ -66,22 +118,15 @@ public class BackupTask extends AsyncTask<Void, Integer, Integer> {
 	}
 
 	@Override
-	protected void onPostExecute(Integer res) {
+	protected void onPostExecute(BackupResult result) {
 		ba.dismissDialog(BackupActivity.DIALOG_BACKUP);
 
-		notifyActivityTaskCompleted();
+		if (ba != null) {
+			ba.onBackupTaskCompleted(result);
+		}
 	}
 
 	public void setActivity(BackupActivity explorer) {
 		this.ba = explorer;
-		if (completed) {
-			notifyActivityTaskCompleted();
-		}
-	}
-
-	private void notifyActivityTaskCompleted() {
-		if (ba != null) {
-			ba.onBackupTaskCompleted(result);
-		}
 	}
 }

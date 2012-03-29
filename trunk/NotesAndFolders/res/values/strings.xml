@@ -153,6 +153,12 @@
     <string name="backup_info">        <![CDATA[<p>Your encrypted data and password hash will be saved in a single file in <b>/sdcard/Notes &amp; Folders</b>
  directory. </p><p>You can use it later to restore the data. Save a copy of that file in a safe place.</p>]]>
     </string>
+    <string name="backup_result_ok">Backup file was successfully created</string>
+    <string name="backup_result_cant_create_output_directory">Can\'t create output directory for backup file</string>
+    <string name="backup_result_cant_create_output_file">Can\'t create output file</string>
+    <string name="backup_result_file_aready_exists">Target file already exists</string>
+    <string name="backup_result_cant_write_to_output_file">Can\'t write to output file</string>
+    <string name="backup_result_io_error">IO error occurred while writing to backup file</string>
     <string name="restore_title">Restore</string>
     <string name="restore_select_file">Select a file</string>
     <string name="restore_button">Restore</string>
