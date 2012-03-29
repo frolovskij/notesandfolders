@@ -63,19 +63,9 @@
             android:label="@string/searchresults_title" >
         </activity>
         <activity
-            android:name=".BackupAndRestoreActivity"
+            android:name=".BackupManagerActivity"
             android:configChanges="keyboardHidden|orientation"
-            android:label="@string/backupandrestore_title" >
-        </activity>
-        <activity
-            android:name=".BackupActivity"
-            android:configChanges="keyboardHidden|orientation"
-            android:label="@string/backup_title" >
-        </activity>
-        <activity
-            android:name=".RestoreActivity"
-            android:configChanges="keyboardHidden|orientation"
-            android:label="@string/restore_title" >
+            android:label="@string/backupmanager_title" >
         </activity>
     </application>
 
