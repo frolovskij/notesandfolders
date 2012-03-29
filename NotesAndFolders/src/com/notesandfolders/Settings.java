@@ -23,7 +23,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-
 public class Settings {
 	public static final String SETTINGS_PASSWORD_SHA1_HASH = "password_sha1_hash";
 	public static final String SETTINGS_ENCRYPTED_KEY = "encrypted_key";
@@ -39,6 +38,10 @@ public class Settings {
 	public String getPasswordSha1Hash() {
 		return getString(Settings.SETTINGS_PASSWORD_SHA1_HASH,
 				EMPTY_PASSWORD_SHA1_HASH);
+	}
+
+	public String getEncryptedKey() {
+		return getString(Settings.SETTINGS_ENCRYPTED_KEY, "");
 	}
 
 	/**

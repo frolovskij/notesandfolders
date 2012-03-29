@@ -23,10 +23,12 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.text.Html;
+import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class BackupActivity extends Activity implements OnClickListener {
 	public static final int DIALOG_BACKUP = 1;
@@ -79,13 +81,33 @@ public class BackupActivity extends Activity implements OnClickListener {
 		}
 	}
 
-	public void onBackupTaskCompleted(Integer result) {
+	public void onBackupTaskCompleted(BackupResult result) {
 		if (mShownDialog) {
 			checkBackupResult(result);
 		}
 	}
 
-	public void checkBackupResult(int result) {
+	public void checkBackupResult(BackupResult result) {
+		switch (result) {
+		case OK:
+			showToast(R.string.backup_result_ok);
+			break;
+		case CANT_CREATE_OUTPUT_DIRECTORY:
+			showToast(R.string.backup_result_cant_create_output_directory);
+			break;
+		case CANT_CREATE_OUTPUT_FILE:
+			showToast(R.string.backup_result_cant_create_output_file);
+			break;
+		case CANT_WRITE_TO_OUTPUT_FILE:
+			showToast(R.string.backup_result_cant_write_to_output_file);
+			break;
+		case FILE_ALREADY_EXISTS:
+			showToast(R.string.backup_result_file_aready_exists);
+			break;
+		case IO_ERROR:
+			showToast(R.string.backup_result_io_error);
+			break;
+		}
 		System.out.println(result);
 	}
 
@@ -93,5 +115,12 @@ public class BackupActivity extends Activity implements OnClickListener {
 		backupTask = new BackupTask(this, new NodeHelper(this, new TempStorage(
 				this).getPassword()));
 		backupTask.execute();
+	}
+
+	public void showToast(int stringResId) {
+		Toast toast = Toast.makeText(getApplicationContext(), stringResId,
+				Toast.LENGTH_LONG);
+		toast.setGravity(Gravity.CENTER, 0, 0);
+		toast.show();
 	}
 }
