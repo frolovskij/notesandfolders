@@ -36,6 +36,7 @@
     <string name="properties">Properties</string>
     <string name="fsimp">Import</string>
     <string name="save">Save</string>
+    <string name="restore">Restore</string>
 
     <!-- Login activity -->
     <string name="login_prompt">Password</string>
@@ -145,11 +146,11 @@
     <string name="date_created">Created</string>
     <string name="date_modified">Modified</string>
 
-    <!-- Backup and Restore -->
+    <!-- Backup Manager -->
     <string name="backupmanager_title">Backup manager</string>
     <string name="backupmanager_empty_placeholder">There are no backup files yet</string>
     <string name="backupandrestore_title">Backup Manager</string>
-    <string name="backup_button">Backup</string>
+    <string name="backup_button">Create new backup file</string>
     <string name="backup_msg_in_progress">Backup in progress. Please wait…</string>
     <string name="backup_result_ok">Backup file was successfully created</string>
     <string name="backup_result_cant_create_output_directory">Can\'t create output directory for backup file</string>
@@ -157,7 +158,5 @@
     <string name="backup_result_file_aready_exists">Target file already exists</string>
     <string name="backup_result_cant_write_to_output_file">Can\'t write to output file</string>
     <string name="backup_result_io_error">IO error occurred while writing to backup file</string>
-    <string name="restore_select_file">Select a file</string>
-    <string name="restore_button">Restore</string>
 
 </resources>
