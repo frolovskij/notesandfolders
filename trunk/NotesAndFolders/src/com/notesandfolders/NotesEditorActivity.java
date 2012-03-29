@@ -93,7 +93,7 @@ public class NotesEditorActivity extends Activity {
 		registerForContextMenu(textContent);
 
 		SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
-		if (sharedPrefs.getBoolean("editor_cursor_to_end", false)) {
+		if (sharedPrefs.getBoolean("editor_cursor_to_end", true)) {
 			textContent.setSelection(textContent.getText().length());
 		}
 
