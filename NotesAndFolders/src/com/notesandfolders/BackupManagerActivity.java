@@ -18,11 +18,12 @@ This file is a part of Notes & Folders project.
 
 package com.notesandfolders;
 
+import com.notesandfolders.BackupTask.BackupResult;
+
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.os.Bundle;
-import android.text.Html;
 import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -30,10 +31,10 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class BackupActivity extends Activity implements OnClickListener {
+public class BackupManagerActivity extends Activity implements OnClickListener {
 	public static final int DIALOG_BACKUP = 1;
-	private TextView info;
 	private Button backupButton;
+	private TextView emptyPlaceholder;
 
 	private BackupTask backupTask;
 	private boolean mShownDialog;
@@ -43,16 +44,16 @@ public class BackupActivity extends Activity implements OnClickListener {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		setContentView(R.layout.backup);
+		setContentView(R.layout.backupmanager);
 
-		info = (TextView) findViewById(R.id.backup_info);
-		info.setText(Html.fromHtml(getText(R.string.backup_info).toString()));
+		emptyPlaceholder = (TextView) findViewById(R.id.backupmanager_placeholder);
+		emptyPlaceholder.setVisibility(View.VISIBLE);
 
-		backupButton = (Button) findViewById(R.id.backup_button);
+		backupButton = (Button) findViewById(R.id.backupmanager_button);
 		backupButton.setOnClickListener(this);
 	}
 
-	public ProgressDialog getImportingDialog() {
+	public ProgressDialog getBackupDialog() {
 		return backupDialog;
 	}
 

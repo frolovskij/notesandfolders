@@ -539,7 +539,7 @@ public class ExplorerActivity extends Activity implements OnItemClickListener {
 
 		case R.id.explorer_options_backupandrestore:
 			Intent backupandrestore = new Intent(this,
-					BackupAndRestoreActivity.class);
+					BackupManagerActivity.class);
 			startActivity(backupandrestore);
 			break;
 

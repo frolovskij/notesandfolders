@@ -26,26 +26,20 @@ import java.util.Date;
 import android.os.AsyncTask;
 import android.os.Environment;
 
-enum BackupResult {
-	OK, CANT_CREATE_OUTPUT_DIRECTORY, CANT_CREATE_OUTPUT_FILE, FILE_ALREADY_EXISTS, CANT_WRITE_TO_OUTPUT_FILE, IO_ERROR
-}
+public class BackupTask extends
+		AsyncTask<Void, Integer, BackupTask.BackupResult> {
 
-public class BackupTask extends AsyncTask<Void, Integer, BackupResult> {
-
-	public static final int BACKUP_OK = 0;
-	public static final int BACKUP_CANT_CREATE_OUTPUT_DIRECTORY = 1;
-	public static final int BACKUP_CANT_CREATE_OUTPUT_FILE = 2;
-	public static final int BACKUP_FILE_ALREADY_EXISTS = 3;
-	public static final int BACKUP_CANT_WRITE_TO_OUTPUT_FILE = 4;
-	public static final int BACKUP_IO_ERROR = 5;
+	public enum BackupResult {
+		OK, CANT_CREATE_OUTPUT_DIRECTORY, CANT_CREATE_OUTPUT_FILE, FILE_ALREADY_EXISTS, CANT_WRITE_TO_OUTPUT_FILE, IO_ERROR
+	};
 
 	public static final String OUTPUT_DIR = "NotesAndFolders";
 
-	private BackupActivity ba;
+	private BackupManagerActivity bm;
 	private NodeHelper nh;
 
-	public BackupTask(BackupActivity ba, NodeHelper nh) {
-		this.ba = ba;
+	public BackupTask(BackupManagerActivity bm, NodeHelper nh) {
+		this.bm = bm;
 		this.nh = nh;
 	}
 
@@ -79,7 +73,7 @@ public class BackupTask extends AsyncTask<Void, Integer, BackupResult> {
 			return BackupResult.CANT_WRITE_TO_OUTPUT_FILE;
 		}
 
-		Settings s = new Settings(ba);
+		Settings s = new Settings(bm);
 		final String password = s.getPasswordSha1Hash();
 		final String key = s.getEncryptedKey();
 		final int nodesCount = (int) nh.getNodesCount();
@@ -108,25 +102,25 @@ public class BackupTask extends AsyncTask<Void, Integer, BackupResult> {
 
 	protected void onProgressUpdate(Integer... progress) {
 		if (progress.length > 0) {
-			ba.getImportingDialog().setProgress(progress[0]);
+			bm.getBackupDialog().setProgress(progress[0]);
 		}
 	}
 
 	@Override
 	protected void onPreExecute() {
-		ba.showDialog(BackupActivity.DIALOG_BACKUP);
+		bm.showDialog(BackupManagerActivity.DIALOG_BACKUP);
 	}
 
 	@Override
 	protected void onPostExecute(BackupResult result) {
-		ba.dismissDialog(BackupActivity.DIALOG_BACKUP);
+		bm.dismissDialog(BackupManagerActivity.DIALOG_BACKUP);
 
-		if (ba != null) {
-			ba.onBackupTaskCompleted(result);
+		if (bm != null) {
+			bm.onBackupTaskCompleted(result);
 		}
 	}
 
-	public void setActivity(BackupActivity explorer) {
-		this.ba = explorer;
+	public void setActivity(BackupManagerActivity bm) {
+		this.bm = bm;
 	}
 }
