@@ -24,6 +24,7 @@ import java.util.Collections;
 import java.util.List;
 
 import com.notesandfolders.BackupTask.BackupResult;
+import com.notesandfolders.RestoreTask.RestoreResult;
 import com.tani.app.ui.IconContextMenu;
 import com.tani.app.ui.IconContextMenu.IconContextMenuOnClickListener;
 
@@ -50,22 +51,26 @@ import android.widget.AdapterView.OnItemLongClickListener;
 public class BackupManagerActivity extends Activity implements OnClickListener {
 	private static final int DIALOG_CONTEXT_MENU = 0;
 	public static final int DIALOG_BACKUP = 1;
+	private static final int DIALOG_DELETE = 2;
+	public static final int DIALOG_RESTORE = 3;
+
+	private static final int MENU_RESTORE = 0;
+	private static final int MENU_DELETE = 1;
 
 	private Button backupButton;
 	private TextView emptyPlaceholder;
 	private ListView lv;
 
 	private BackupTask backupTask;
+	private RestoreTask restoreTask;
 	private boolean mShownDialog;
 	private ProgressDialog backupDialog;
+	private ProgressDialog restoreDialog;
 
 	private File selectedFile;
 	private List<File> items;
 	private FileAdapter adapter;
 
-	private static final int MENU_RESTORE = 0;
-	private static final int MENU_RENAME = 1;
-	private static final int MENU_DELETE = 2;
 	private IconContextMenu iconContextMenu = null;
 
 	@Override
@@ -90,6 +95,10 @@ public class BackupManagerActivity extends Activity implements OnClickListener {
 		return backupDialog;
 	}
 
+	public ProgressDialog getRestoreDialog() {
+		return restoreDialog;
+	}
+
 	@Override
 	protected Dialog onCreateDialog(int id) {
 		if (id == DIALOG_CONTEXT_MENU) {
@@ -109,6 +118,35 @@ public class BackupManagerActivity extends Activity implements OnClickListener {
 
 			return backupDialog;
 		}
+
+		if (id == DIALOG_RESTORE) {
+			restoreDialog = new ProgressDialog(this);
+			restoreDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+			restoreDialog.setMessage(getText(R.string.restore_msg_in_progress));
+			restoreDialog.setCancelable(false);
+
+			return restoreDialog;
+		}
+
+		if (id == DIALOG_DELETE) {
+			return new AlertDialog.Builder(this)
+					.setTitle(R.string.backupmanager_delete_title)
+					.setMessage(R.string.backupmanager_delete_prompt)
+					.setPositiveButton(android.R.string.yes,
+							new DialogInterface.OnClickListener() {
+								public void onClick(DialogInterface dialog,
+										int whichButton) {
+									if (selectedFile.delete()) {
+										showToast(R.string.backupmanager_msg_backup_file_deleted);
+										refresh();
+									} else {
+										showToast(R.string.backupmanager_msg_backup_file_cant_delete);
+									}
+								}
+							})
+					.setNegativeButton(android.R.string.no,
+							ExplorerActivity.DUMMY_LISTENER).create();
+		}
 		return super.onCreateDialog(id);
 	}
 
@@ -123,6 +161,13 @@ public class BackupManagerActivity extends Activity implements OnClickListener {
 	public void onBackupTaskCompleted(BackupResult result) {
 		if (mShownDialog) {
 			checkBackupResult(result);
+			refresh();
+		}
+	}
+
+	public void onRestoreTaskCompleted(RestoreResult result) {
+		if (mShownDialog) {
+			checkRestoreResult(result);
 			refresh();
 		}
 	}
@@ -151,10 +196,21 @@ public class BackupManagerActivity extends Activity implements OnClickListener {
 		System.out.println(result);
 	}
 
+	public void checkRestoreResult(RestoreResult result) {
+		switch (result) {
+		case OK:
+			showToast(R.string.restore_result_ok);
+			break;
+		}
+		System.out.println(result);
+	}
+
 	public void onClick(View v) {
-		backupTask = new BackupTask(this, new NodeHelper(this, new TempStorage(
-				this).getPassword()));
-		backupTask.execute();
+		if (v == backupButton) {
+			backupTask = new BackupTask(this, new NodeHelper(this,
+					new TempStorage(this).getPassword()));
+			backupTask.execute();
+		}
 	}
 
 	public void showToast(int stringResId) {
@@ -181,8 +237,6 @@ public class BackupManagerActivity extends Activity implements OnClickListener {
 		iconContextMenu = new IconContextMenu(this, DIALOG_CONTEXT_MENU);
 		iconContextMenu.addItem(res, R.string.restore, R.drawable.restore,
 				MENU_RESTORE);
-		iconContextMenu.addItem(res, R.string.rename, R.drawable.rename,
-				MENU_RENAME);
 		iconContextMenu.addItem(res, R.string.delete, R.drawable.delete,
 				MENU_DELETE);
 		iconContextMenu.setOnClickListener(contextMenuListener);
@@ -193,12 +247,31 @@ public class BackupManagerActivity extends Activity implements OnClickListener {
 		public void onClick(int menuId) {
 			switch (menuId) {
 			case MENU_RESTORE:
-				break;
+				new AlertDialog.Builder(BackupManagerActivity.this)
+						.setTitle(R.string.restore_confirm_title)
+						.setMessage(R.string.restore_confirm_text)
+						.setPositiveButton(android.R.string.yes,
+								new DialogInterface.OnClickListener() {
+									public void onClick(DialogInterface dialog,
+											int whichButton) {
+										restoreTask = new RestoreTask(
+												BackupManagerActivity.this,
+												new NodeHelper(
+														BackupManagerActivity.this,
+														new TempStorage(
+																BackupManagerActivity.this)
+																.getPassword()),
+												selectedFile);
+										restoreTask.execute();
+									}
+								})
+						.setNegativeButton(android.R.string.no,
+								ExplorerActivity.DUMMY_LISTENER).show();
 
-			case MENU_RENAME:
 				break;
 
 			case MENU_DELETE:
+				showDialog(DIALOG_DELETE);
 				break;
 			}
 		}

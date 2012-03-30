@@ -137,15 +137,19 @@ public final class R {
         public static final int app_version=0x7f060001;
         public static final int backup_button=0x7f06006d;
         public static final int backup_msg_in_progress=0x7f06006e;
-        public static final int backup_result_cant_create_output_directory=0x7f060070;
-        public static final int backup_result_cant_create_output_file=0x7f060071;
-        public static final int backup_result_cant_write_to_output_file=0x7f060073;
-        public static final int backup_result_file_aready_exists=0x7f060072;
-        public static final int backup_result_io_error=0x7f060074;
-        public static final int backup_result_ok=0x7f06006f;
+        public static final int backup_result_cant_create_output_directory=0x7f060073;
+        public static final int backup_result_cant_create_output_file=0x7f060074;
+        public static final int backup_result_cant_write_to_output_file=0x7f060076;
+        public static final int backup_result_file_aready_exists=0x7f060075;
+        public static final int backup_result_io_error=0x7f060077;
+        public static final int backup_result_ok=0x7f060072;
         public static final int backupandrestore_title=0x7f06006c;
+        public static final int backupmanager_delete_prompt=0x7f06007a;
+        public static final int backupmanager_delete_title=0x7f060079;
         public static final int backupmanager_empty_placeholder=0x7f06006b;
-        /**  Backup and Restore 
+        public static final int backupmanager_msg_backup_file_cant_delete=0x7f06007c;
+        public static final int backupmanager_msg_backup_file_deleted=0x7f06007b;
+        /**  Backup Manager 
          */
         public static final int backupmanager_title=0x7f06006a;
         public static final int checklist_add=0x7f060050;
@@ -256,6 +260,10 @@ public final class R {
         public static final int properties_title=0x7f060067;
         public static final int rename=0x7f060019;
         public static final int restore=0x7f06001d;
+        public static final int restore_confirm_text=0x7f060071;
+        public static final int restore_confirm_title=0x7f060070;
+        public static final int restore_msg_in_progress=0x7f06006f;
+        public static final int restore_result_ok=0x7f060078;
         public static final int save=0x7f06001c;
         public static final int search_button=0x7f06005b;
         public static final int search_case_sensitive=0x7f060063;
