@@ -151,12 +151,20 @@
     <string name="backupmanager_empty_placeholder">There are no backup files yet</string>
     <string name="backupandrestore_title">Backup Manager</string>
     <string name="backup_button">Create new backup file</string>
-    <string name="backup_msg_in_progress">Backup in progress. Please wait…</string>
+    <string name="backup_msg_in_progress">Backup is in progress. Please wait…</string>
+    <string name="restore_msg_in_progress">Restoring is in progress. Please wait…</string>
+    <string name="restore_confirm_title">Restoring</string>
+    <string name="restore_confirm_text">If you proceed, all your data (including password) will be replaced with the data from backup file. Restore data using this backup file?</string>
     <string name="backup_result_ok">Backup file was successfully created</string>
     <string name="backup_result_cant_create_output_directory">Can\'t create output directory for backup file</string>
     <string name="backup_result_cant_create_output_file">Can\'t create output file</string>
     <string name="backup_result_file_aready_exists">Target file already exists</string>
     <string name="backup_result_cant_write_to_output_file">Can\'t write to output file</string>
     <string name="backup_result_io_error">IO error occurred while writing to backup file</string>
+    <string name="restore_result_ok">Data from backup file was successfully restored</string>
+    <string name="backupmanager_delete_title">Deleting</string>
+    <string name="backupmanager_delete_prompt">Are you sure you want to delete this backup file?</string>
+    <string name="backupmanager_msg_backup_file_deleted">Backup file was successfully deleted</string>
+    <string name="backupmanager_msg_backup_file_cant_delete">Cannot delete selected backup file</string>
 
 </resources>
