@@ -18,9 +18,11 @@ This file is a part of Notes & Folders project.
 
 package com.notesandfolders;
 
+import java.io.BufferedOutputStream;
+import java.io.DataOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.Date;
 
 import android.os.AsyncTask;
@@ -43,6 +45,11 @@ public class BackupTask extends
 		this.nh = nh;
 	}
 
+	// PrintWriter, strings - 5056k
+	// DataOutputStream(BufferedOutputStream(FileOutputStream))), string - 5057k
+	// DataOutputStream(BufferedOutputStream(FileOutputStream))), byte[] - 3794
+	// DataOutputStream(GZIPOutputStream(BufferedOutputStream(FileOutputStream)))),
+	// byte[] -
 	@Override
 	protected BackupResult doInBackground(Void... arg0) {
 		File root = Environment.getExternalStorageDirectory();
@@ -76,24 +83,35 @@ public class BackupTask extends
 		Settings s = new Settings(bm);
 		final String password = s.getPasswordSha1Hash();
 		final String key = s.getEncryptedKey();
-		final int nodesCount = (int) nh.getNodesCount();
 
-		PrintWriter pw = null;
+		DataOutputStream dos = null;
 		try {
-			pw = new PrintWriter(backupFile);
-			pw.println(password);
-			pw.println(key);
+			dos = new DataOutputStream(new BufferedOutputStream(
+					new FileOutputStream(backupFile)));
 
-			for (int i = 0; i < nodesCount; i++) {
-				pw.println(nh.getNodeAsString(i));
-				publishProgress(i + 1);
+			dos.writeUTF(password);
+			dos.writeUTF(key);
+
+			int count = 0;
+			for (long id : nh.getAllIds()) {
+				byte[] nodeData = nh.getNodeAsByteArray(id);
+				if (nodeData != null) {
+					dos.writeInt(nodeData.length);
+					dos.write(nodeData);
+				}
+
+				publishProgress(count++ + 1);
 			}
 		} catch (IOException e1) {
 			e1.printStackTrace();
 			return BackupResult.IO_ERROR;
 		} finally {
-			if (pw != null) {
-				pw.close();
+			if (dos != null) {
+				try {
+					dos.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 			}
 		}
 

@@ -18,6 +18,10 @@ This file is a part of Notes & Folders project.
 
 package com.notesandfolders;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Date;
@@ -47,14 +51,17 @@ public class NodeHelper {
 		// decrypting key with password
 		try {
 			Settings s = new Settings(context);
-			String encryptedKey = s.getString(Settings.SETTINGS_ENCRYPTED_KEY, "");
+			String encryptedKey = s.getString(Settings.SETTINGS_ENCRYPTED_KEY,
+					"");
 			this.key = SimpleCrypto.decrypt(password, encryptedKey);
 		} catch (Exception e) {
-			Log.i("NodeHelper", "Can't decrypt key with password '" + password + "'");
+			Log.i("NodeHelper", "Can't decrypt key with password '" + password
+					+ "'");
 		}
 	}
 
-	private Node createNode(Node parent, String name, String textContent, NodeType type) {
+	private Node createNode(Node parent, String name, String textContent,
+			NodeType type) {
 		if (parent == null) {
 			Log.i("createNode", "parent is null");
 			return null;
@@ -180,7 +187,8 @@ public class NodeHelper {
 			c = db.rawQuery("select id from data where parent_id = ?",
 					new String[] { Long.toString(id) });
 
-			for (boolean hasItem = c.moveToFirst(); hasItem; hasItem = c.moveToNext()) {
+			for (boolean hasItem = c.moveToFirst(); hasItem; hasItem = c
+					.moveToNext()) {
 				childrenIds.add(c.getLong(0));
 			}
 		} catch (Exception ex) {
@@ -206,7 +214,8 @@ public class NodeHelper {
 		try {
 			c = db.rawQuery("select id from data", new String[] {});
 
-			for (boolean hasItem = c.moveToFirst(); hasItem; hasItem = c.moveToNext()) {
+			for (boolean hasItem = c.moveToFirst(); hasItem; hasItem = c
+					.moveToNext()) {
 				childrenIds.add(c.getLong(0));
 			}
 		} catch (Exception ex) {
@@ -239,7 +248,8 @@ public class NodeHelper {
 					"select id, name, parent_id, date_created, date_modified, type from data where parent_id = ?",
 					new String[] { Long.toString(id) });
 
-			for (boolean hasItem = c.moveToFirst(); hasItem; hasItem = c.moveToNext()) {
+			for (boolean hasItem = c.moveToFirst(); hasItem; hasItem = c
+					.moveToNext()) {
 				Node f = new Node();
 
 				f.setId(c.getLong(0));
@@ -351,7 +361,8 @@ public class NodeHelper {
 	}
 
 	public Node createCheckList(Node parent, String name) {
-		return createNode(parent, name, Serializer.serialize(new CheckList()), NodeType.CHECKLIST);
+		return createNode(parent, name, Serializer.serialize(new CheckList()),
+				NodeType.CHECKLIST);
 	}
 
 	public Node getRootFolder() {
@@ -425,7 +436,8 @@ public class NodeHelper {
 			db.execSQL(
 					"update data set text_content = ?, date_modified = ? where id = ?",
 					new String[] { SimpleCrypto.encrypt(key, textContent),
-							Long.toString(new Date().getTime()), Long.toString(id) });
+							Long.toString(new Date().getTime()),
+							Long.toString(id) });
 		} catch (Exception ex) {
 			Log.i("setTextContentById", ex.toString());
 		} finally {
@@ -440,8 +452,11 @@ public class NodeHelper {
 		SQLiteDatabase db = new DbOpenHelper(context).getWritableDatabase();
 
 		try {
-			db.execSQL("update data set name = ?, date_modified = ? where id = ?", new String[] {
-					newName, Long.toString(new Date().getTime()), Long.toString(id) });
+			db.execSQL(
+					"update data set name = ?, date_modified = ? where id = ?",
+					new String[] { newName,
+							Long.toString(new Date().getTime()),
+							Long.toString(id) });
 		} catch (Exception ex) {
 			Log.i("renameNodeById", ex.toString());
 		} finally {
@@ -525,8 +540,8 @@ public class NodeHelper {
 		Node node = getNodeById(id);
 		Node newParent = getNodeById(newParentId);
 
-		if (node == null || node.getParentId() == newParentId || newParent == null
-				|| newParent.getType() != NodeType.FOLDER) {
+		if (node == null || node.getParentId() == newParentId
+				|| newParent == null || newParent.getType() != NodeType.FOLDER) {
 			return RESULT_BAD_PARAMS;
 		}
 
@@ -550,8 +565,10 @@ public class NodeHelper {
 		SQLiteDatabase db = new DbOpenHelper(context).getWritableDatabase();
 
 		try {
-			db.execSQL("update data set parent_id = ?, date_modified = ? where id = ?",
-					new String[] { Long.toString(newParentId), Long.toString(new Date().getTime()),
+			db.execSQL(
+					"update data set parent_id = ?, date_modified = ? where id = ?",
+					new String[] { Long.toString(newParentId),
+							Long.toString(new Date().getTime()),
 							Long.toString(id) });
 		} catch (Exception ex) {
 			Log.i("move", ex.toString());
@@ -626,7 +643,10 @@ public class NodeHelper {
 
 		// rename if copy goes into the same folder
 		if (newParentId == node.getParentId()) {
-			renameNodeById(cloneId, node.getName() + context.getText(R.string.filename_copy_suffix));
+			renameNodeById(
+					cloneId,
+					node.getName()
+							+ context.getText(R.string.filename_copy_suffix));
 		}
 
 		move(cloneId, newParentId);
@@ -665,16 +685,74 @@ public class NodeHelper {
 
 		return copy0(node, newParentId);
 	}
-	
-	public String getNodeAsString(long id) {
+
+	public byte[] getNodeAsByteArray(long id) {
+		byte[] data = null;
+
 		Node n = getNodeById(id);
 		if (n == null) {
+			return data;
+		}
+
+		ByteArrayOutputStream baos = null;
+		DataOutputStream das = null;
+		try {
+			baos = new ByteArrayOutputStream();
+			das = new DataOutputStream(baos);
+
+			das.writeLong(n.getId());
+			das.writeLong(n.getParentId());
+			das.writeUTF(n.getName());
+
+			String textContent = getEncryptedTextContentById(id);
+			byte[] tc = SimpleCrypto.toByte(textContent);
+			das.writeInt(tc.length);
+			das.write(tc);
+
+			das.writeLong(n.getDateCreated().getTime());
+			das.writeLong(n.getDateModified().getTime());
+			das.writeInt(n.getType().ordinal());
+
+			data = baos.toByteArray();
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		} finally {
+
+		}
+
+		return data;
+	}
+
+	public Node getNodeFromByteArray(byte[] data) {
+		if (data == null) {
 			return null;
 		}
 
-		String textContent = getEncryptedTextContentById(id);
-		n.setTextContent(textContent);
+		Node n = new Node();
 
-		return Serializer.serialize(n);
-	}	
+		try {
+			ByteArrayInputStream bais = new ByteArrayInputStream(data, 0,
+					data.length);
+			DataInputStream dis = new DataInputStream(bais);
+
+			n.setId(dis.readLong());
+			n.setParentId(dis.readLong());
+			n.setName(dis.readUTF());
+
+			final int tcLength = dis.readInt();
+			byte[] tc = new byte[tcLength];
+			dis.read(tc);
+			n.setTextContent(SimpleCrypto.toHex(tc));
+
+			n.setDateCreated(new Date(dis.readLong()));
+			n.setDateModified(new Date(dis.readLong()));
+			n.setType(NodeType.getByOrdinal(dis.readInt()));
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+
+		return n;
+	}
 }
