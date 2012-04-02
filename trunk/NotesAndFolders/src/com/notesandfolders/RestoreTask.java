@@ -18,7 +18,11 @@ This file is a part of Notes & Folders project.
 
 package com.notesandfolders;
 
+import java.io.BufferedInputStream;
+import java.io.DataInputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 
 import android.os.AsyncTask;
 
@@ -37,9 +41,11 @@ public class RestoreTask extends
 
 	/**
 	 * 
-	 * @param bm parent activity that holds a progress dialog
-	 * @param nh 
-	 * @param file backup file that contains data to restore from
+	 * @param bm
+	 *            parent activity that holds a progress dialog
+	 * @param nh
+	 * @param file
+	 *            backup file that contains data to restore from
 	 */
 	public RestoreTask(BackupManagerActivity bm, NodeHelper nh, File file) {
 		this.bm = bm;
@@ -49,6 +55,40 @@ public class RestoreTask extends
 
 	@Override
 	protected RestoreResult doInBackground(Void... arg0) {
+		DataInputStream dis = null;
+		try {
+			dis = new DataInputStream(new BufferedInputStream(
+					new FileInputStream(backupFile)));
+
+			final String password = dis.readUTF();
+			final String key = dis.readUTF();
+
+			System.out.println(password);
+			System.out.println(key);
+
+			while (dis.available() != 0) {
+				int dataLen = dis.readInt();
+				if (dataLen > 0) {
+					byte[] data = new byte[dataLen];
+					dis.read(data);
+					Node n = nh.getNodeFromByteArray(data);
+
+					System.out.println(n.toString());
+				}
+			}
+		} catch (IOException e1) {
+			e1.printStackTrace();
+			return RestoreResult.IO_ERROR;
+		} finally {
+			if (dis != null) {
+				try {
+					dis.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+
 		return RestoreResult.OK;
 	}
 
@@ -60,12 +100,12 @@ public class RestoreTask extends
 
 	@Override
 	protected void onPreExecute() {
-		bm.showDialog(BackupManagerActivity.DIALOG_BACKUP);
+		bm.showDialog(BackupManagerActivity.DIALOG_RESTORE);
 	}
 
 	@Override
 	protected void onPostExecute(RestoreResult result) {
-		bm.dismissDialog(BackupManagerActivity.DIALOG_BACKUP);
+		bm.dismissDialog(BackupManagerActivity.DIALOG_RESTORE);
 
 		if (bm != null) {
 			bm.onRestoreTaskCompleted(result);
