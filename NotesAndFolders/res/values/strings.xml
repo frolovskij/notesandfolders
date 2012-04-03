@@ -166,5 +166,7 @@
     <string name="backupmanager_delete_prompt">Are you sure you want to delete this backup file?</string>
     <string name="backupmanager_msg_backup_file_deleted">Backup file was successfully deleted</string>
     <string name="backupmanager_msg_backup_file_cant_delete">Cannot delete selected backup file</string>
+    <string name="backupmanager_restart_title">Restart required</string>
+    <string name="backupmanager_restart_text">Data was successfully restored from a backup file. Application will be closed. You\'ll have to manually start it.</string>
 
 </resources>

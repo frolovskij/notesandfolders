@@ -50,6 +50,7 @@ public class BackupManagerActivity extends Activity implements OnClickListener {
 	public static final int DIALOG_BACKUP = 1;
 	private static final int DIALOG_DELETE = 2;
 	public static final int DIALOG_RESTORE = 3;
+	public static final int DIALOG_RESTART = 4;
 
 	private static final int MENU_RESTORE = 0;
 	private static final int MENU_DELETE = 1;
@@ -145,6 +146,20 @@ public class BackupManagerActivity extends Activity implements OnClickListener {
 							ExplorerActivity.DUMMY_LISTENER).create();
 		}
 
+		if (id == DIALOG_RESTART) {
+			return new AlertDialog.Builder(this)
+					.setTitle(R.string.backupmanager_restart_title)
+					.setMessage(R.string.backupmanager_restart_text)
+					.setCancelable(false)
+					.setPositiveButton(android.R.string.ok,
+							new DialogInterface.OnClickListener() {
+								public void onClick(DialogInterface dialog,
+										int whichButton) {
+								}
+							}).create();
+
+		}
+
 		return super.onCreateDialog(id);
 	}
 
@@ -196,7 +211,7 @@ public class BackupManagerActivity extends Activity implements OnClickListener {
 	public void checkRestoreResult(RestoreResult result) {
 		switch (result) {
 		case OK:
-			showToast(R.string.restore_result_ok);
+			showDialog(DIALOG_RESTART);
 			break;
 		}
 	}

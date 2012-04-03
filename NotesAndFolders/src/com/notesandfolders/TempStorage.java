@@ -30,7 +30,8 @@ public class TempStorage {
 	private static final String PREF_NAME = "temp";
 
 	public TempStorage(Context ctx) {
-		mPreferences = ctx.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+		mPreferences = ctx
+				.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
 	}
 
 	public String getPassword() {
@@ -72,14 +73,15 @@ public class TempStorage {
 
 	public CheckListItem getCheckListItem() {
 		String text = mPreferences.getString("checklist_item_text", null);
-		boolean isChecked = mPreferences.getBoolean("checklist_item_checked", false);
+		boolean isChecked = mPreferences.getBoolean("checklist_item_checked",
+				false);
 
 		return (text == null) ? null : new CheckListItem(text, isChecked);
 	}
 
 	public SearchParameters getSearchParameters() {
-		return (SearchParameters) Serializer.deserialize(mPreferences.getString(
-				"search_parameters", ""));
+		return (SearchParameters) Serializer.deserialize(mPreferences
+				.getString("search_parameters", ""));
 	}
 
 	public void setSearchParameters(SearchParameters sp) {
