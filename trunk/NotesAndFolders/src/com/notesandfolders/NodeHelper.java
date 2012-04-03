@@ -37,8 +37,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 public class NodeHelper {
-	Context context;
-	String key = null;
+	private Context context;
+	private String key = null;
 
 	public static final int RESULT_OK = 0;
 	public static final int RESULT_BAD_PARAMS = -9;
@@ -60,6 +60,24 @@ public class NodeHelper {
 		}
 	}
 
+	public void setKey(String key) {
+		this.key = key;
+	}
+
+	/**
+	 * Creates node and saves it in database
+	 * 
+	 * @param parent
+	 *            folder where node should be created
+	 * @param name
+	 *            name of the node
+	 * @param textContent
+	 *            text content
+	 * @param type
+	 *            type
+	 * 
+	 * @return node that was created or null in case of error
+	 */
 	private Node createNode(Node parent, String name, String textContent,
 			NodeType type) {
 		if (parent == null) {
@@ -120,6 +138,28 @@ public class NodeHelper {
 		return f;
 	}
 
+	public Node createFolder(Node parent, String name) {
+		return createNode(parent, name, null, NodeType.FOLDER);
+	}
+
+	public Node createNote(Node parent, String name, String textContent) {
+		return createNode(parent, name, textContent, NodeType.NOTE);
+	}
+
+	public Node createCheckList(Node parent, String name) {
+		return createNode(parent, name, Serializer.serialize(new CheckList()),
+				NodeType.CHECKLIST);
+	}
+
+	/**
+	 * Returns the fully qualified path name of the node. This name includes
+	 * names of all parents' names separated with /, e.g. /note, /folder,
+	 * /folder/checklist
+	 * 
+	 * @param id
+	 *            id of the note
+	 * @return fully qualified path name of the node
+	 */
 	public String getFullPathById(long id) {
 		StringBuffer path = new StringBuffer();
 
@@ -140,6 +180,17 @@ public class NodeHelper {
 		return path.toString();
 	}
 
+	/**
+	 * Reads a node with specified id and returns it. Text content of the node
+	 * is not returned.
+	 * 
+	 * @see getTextContentById
+	 * @see getEncryptedTextContentById
+	 * 
+	 * @param id
+	 *            id of the node
+	 * @return node with specified id or null if it doesn't exist
+	 */
 	public Node getNodeById(long id) {
 		SQLiteDatabase db = new DbOpenHelper(context).getReadableDatabase();
 
@@ -177,6 +228,13 @@ public class NodeHelper {
 		return f;
 	}
 
+	/**
+	 * Returns list of ids of direct children of node with specified id.
+	 * 
+	 * @param id
+	 *            id of the node (folder)
+	 * @return list of ids
+	 */
 	public List<Long> getChildrenIdsById(long id) {
 		List<Long> childrenIds = new ArrayList<Long>();
 
@@ -205,6 +263,12 @@ public class NodeHelper {
 		return childrenIds;
 	}
 
+	/**
+	 * Returns list of ids of all nodes. The number of ids equals to number of
+	 * rows in data table.
+	 * 
+	 * @return list of ids
+	 */
 	public List<Long> getAllIds() {
 		List<Long> childrenIds = new ArrayList<Long>();
 
@@ -274,6 +338,12 @@ public class NodeHelper {
 		return children;
 	}
 
+	/**
+	 * Permanently deletes the node with specified id from database.
+	 * 
+	 * @param id
+	 *            id of the node
+	 */
 	public void deleteNodeById(long id) {
 		if (id == 0) {
 			Log.i("deleteNodeById", "Won't delete root folder");
@@ -350,19 +420,6 @@ public class NodeHelper {
 		}
 
 		return -1;
-	}
-
-	public Node createFolder(Node parent, String name) {
-		return createNode(parent, name, null, NodeType.FOLDER);
-	}
-
-	public Node createNote(Node parent, String name, String textContent) {
-		return createNode(parent, name, textContent, NodeType.NOTE);
-	}
-
-	public Node createCheckList(Node parent, String name) {
-		return createNode(parent, name, Serializer.serialize(new CheckList()),
-				NodeType.CHECKLIST);
 	}
 
 	public Node getRootFolder() {
@@ -686,6 +743,17 @@ public class NodeHelper {
 		return copy0(node, newParentId);
 	}
 
+	/**
+	 * Returns all the data of a single node with specified id packed into a
+	 * byte array. Text content goes there encrypted, everything else stays not
+	 * encrypted.
+	 * 
+	 * @param id
+	 *            id of the node
+	 * 
+	 * @see getNodeFromByteArray
+	 * @return byte array that contains all the data of the node
+	 */
 	public byte[] getNodeAsByteArray(long id) {
 		byte[] data = null;
 
@@ -705,6 +773,9 @@ public class NodeHelper {
 			das.writeUTF(n.getName());
 
 			String textContent = getEncryptedTextContentById(id);
+			if (textContent == null) {
+				textContent = "";
+			}
 			byte[] tc = SimpleCrypto.toByte(textContent);
 			das.writeInt(tc.length);
 			das.write(tc);
@@ -723,6 +794,14 @@ public class NodeHelper {
 		return data;
 	}
 
+	/**
+	 * Returns the node reconstructed from byte array that contains its data
+	 * 
+	 * @see getNodeAsByteArray
+	 * 
+	 * @param data
+	 * @return
+	 */
 	public Node getNodeFromByteArray(byte[] data) {
 		if (data == null) {
 			return null;

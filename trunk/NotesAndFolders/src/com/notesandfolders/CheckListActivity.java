@@ -117,7 +117,6 @@ public class CheckListActivity extends ListActivity {
 
 					refresh();
 				} catch (IndexOutOfBoundsException ex) {
-					System.out.println(ex);
 				}
 			}
 		});

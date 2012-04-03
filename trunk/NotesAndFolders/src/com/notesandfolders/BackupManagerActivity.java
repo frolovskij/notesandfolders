@@ -144,13 +144,14 @@ public class BackupManagerActivity extends Activity implements OnClickListener {
 					.setNegativeButton(android.R.string.no,
 							ExplorerActivity.DUMMY_LISTENER).create();
 		}
+
 		return super.onCreateDialog(id);
 	}
 
 	@Override
 	protected void onPrepareDialog(int id, Dialog dialog) {
 		super.onPrepareDialog(id, dialog);
-		if (id == DIALOG_BACKUP) {
+		if (id == DIALOG_BACKUP || id == DIALOG_RESTORE) {
 			mShownDialog = true;
 		}
 	}
@@ -190,7 +191,6 @@ public class BackupManagerActivity extends Activity implements OnClickListener {
 			showToast(R.string.backup_result_io_error);
 			break;
 		}
-		System.out.println(result);
 	}
 
 	public void checkRestoreResult(RestoreResult result) {
@@ -199,7 +199,6 @@ public class BackupManagerActivity extends Activity implements OnClickListener {
 			showToast(R.string.restore_result_ok);
 			break;
 		}
-		System.out.println(result);
 	}
 
 	public void onClick(View v) {
