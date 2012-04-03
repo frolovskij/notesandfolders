@@ -149,6 +149,8 @@ public final class R {
         public static final int backupmanager_empty_placeholder=0x7f06006b;
         public static final int backupmanager_msg_backup_file_cant_delete=0x7f06007c;
         public static final int backupmanager_msg_backup_file_deleted=0x7f06007b;
+        public static final int backupmanager_restart_text=0x7f06007e;
+        public static final int backupmanager_restart_title=0x7f06007d;
         /**  Backup Manager 
          */
         public static final int backupmanager_title=0x7f06006a;
