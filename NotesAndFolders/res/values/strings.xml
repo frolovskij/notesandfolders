@@ -2,7 +2,7 @@
 <resources>
 
     <string name="app_name">Notes &amp; Folders</string>
-    <string name="app_version">0.6</string>
+    <string name="app_version">0.7</string>
     <string name="msg_not_implemented_yet">Not implemented yet</string>
     <string name="msg_importing_files">Importing files. Please wait…</string>
     <string name="insert_date_time">Insert date &amp; time</string>
