@@ -295,9 +295,13 @@ public class BackupManagerActivity extends Activity implements OnClickListener {
 	private void refresh() {
 		items = new ArrayList<File>();
 
-		for (File f : new File(Environment.getExternalStorageDirectory(),
-				BackupTask.OUTPUT_DIR).listFiles()) {
-			items.add(f);
+		File outputDir = new File(Environment.getExternalStorageDirectory(),
+				BackupTask.OUTPUT_DIR);
+
+		if (outputDir.exists()) {
+			for (File f : outputDir.listFiles()) {
+				items.add(f);
+			}
 		}
 
 		adapter = new FileAdapter(this, R.layout.import_list_item, items);
