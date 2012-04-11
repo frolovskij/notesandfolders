@@ -153,6 +153,9 @@ public class ExplorerActivity extends Activity implements OnItemClickListener {
 		registerForContextMenu(inputNewCheckList);
 		registerForContextMenu(inputRename);
 
+		idToCopy = -1;
+		idToMove = -1;
+
 		createContextMenu();
 	}
 
