@@ -124,12 +124,6 @@ public class RestoreTask extends
 		return RestoreResult.OK;
 	}
 
-	protected void onProgressUpdate(Integer... progress) {
-		if (progress.length > 0) {
-			bm.getBackupDialog().setProgress(progress[0]);
-		}
-	}
-
 	@Override
 	protected void onPreExecute() {
 		bm.showDialog(BackupManagerActivity.DIALOG_RESTORE);
