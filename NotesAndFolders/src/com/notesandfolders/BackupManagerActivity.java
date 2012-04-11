@@ -119,7 +119,7 @@ public class BackupManagerActivity extends Activity implements OnClickListener {
 
 		if (id == DIALOG_RESTORE) {
 			restoreDialog = new ProgressDialog(this);
-			restoreDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+			restoreDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
 			restoreDialog.setMessage(getText(R.string.restore_msg_in_progress));
 			restoreDialog.setCancelable(false);
 
@@ -155,6 +155,10 @@ public class BackupManagerActivity extends Activity implements OnClickListener {
 							new DialogInterface.OnClickListener() {
 								public void onClick(DialogInterface dialog,
 										int whichButton) {
+									// closing explorer and login activities
+									new TempStorage(BackupManagerActivity.this)
+											.setExiting();
+									finish();
 								}
 							}).create();
 

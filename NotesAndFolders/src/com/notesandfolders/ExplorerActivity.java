@@ -105,6 +105,15 @@ public class ExplorerActivity extends Activity implements OnItemClickListener {
 	protected void onResume() {
 		super.onResume();
 
+		Log.i("Explorer", "onResume");
+
+		// Closing application after data was restored from a backup file
+		if (new TempStorage(this).isExiting()) {
+			Log.i("Explorer", "isExiting()");
+			finish();
+			return;
+		}
+
 		openDir(currentFolderId);
 	}
 

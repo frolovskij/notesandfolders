@@ -23,6 +23,7 @@ import com.notesandfolders.R;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -37,9 +38,11 @@ public class LoginActivity extends Activity implements OnClickListener {
 	@Override
 	public void onResume() {
 		super.onResume();
+		Log.i("Login", "onResume");
 
 		// temp.close is set when Close is choosed in explorer's options menu
 		if (new TempStorage(this).isExiting()) {
+			Log.i("Login", "isExiting()");
 			finish();
 		}
 
@@ -85,7 +88,8 @@ public class LoginActivity extends Activity implements OnClickListener {
 			if (login.isPasswordValid(password.getText().toString())) {
 
 				Intent explorer = new Intent(this, ExplorerActivity.class);
-				new TempStorage(this).setPassword(password.getText().toString());
+				new TempStorage(this)
+						.setPassword(password.getText().toString());
 				startActivity(explorer);
 
 			} else {
