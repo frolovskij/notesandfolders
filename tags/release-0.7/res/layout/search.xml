@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/scrollView1"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content" >
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/textView1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/search_text"
+            android:textSize="20dip" />
+
+        <LinearLayout
+            android:id="@+id/linearLayout1"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" >
+
+            <EditText
+                android:id="@+id/search_text"
+                android:layout_width="0dip"
+                android:layout_height="fill_parent"
+                android:layout_weight="1"
+                android:inputType="textPersonName" />
+
+            <ImageButton
+                android:id="@+id/search_button"
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:src="@android:drawable/ic_menu_search" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/search_where"
+            android:textSize="20dip" />
+
+        <Spinner
+            android:id="@+id/search_where_spinner"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/search_type"
+            android:textSize="20dip" />
+
+        <Spinner
+            android:id="@+id/search_type_spinner"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" />
+
+        <CheckBox
+            android:id="@+id/search_case_sensitive"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/search_case_sensitive"
+            android:textSize="20dip" />
+    </LinearLayout>
+
+</ScrollView>
