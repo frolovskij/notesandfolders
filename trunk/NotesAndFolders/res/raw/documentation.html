@@ -18,6 +18,7 @@
 		<li>Password protection and 128-bit AES encryption</li>
 		<li>Importing UTF-8 *.txt files</li>
 		<li>Searching</li>
+		<li>Backup & Restore</li>
 	</ul>
 
 	<p>I'm planning to implement these:</p>
@@ -79,6 +80,23 @@
 
 	<h2>2.3. Checklists</h2>
 	<p>You can reorder items by drag'n'dropping them (to start dragging an item click it on the right side)</p>
+	
+	<h2>2.4. Backup & Restore</h2>
+	<p>Backup process saves data in a single file on sdcard. The data being saved is:</p>
+	<ul>
+		<li>SHA-1 hash of password</li>
+		<li>Key used to encrypted data (encrypted with password)</li>
+		<li>Data (folders, notes and checklists). Only text content is encrypted. Names and dates stay not encrypted.</li>
+	</ul>
+	<p>File is created in /mnt/sdcard/NotesAndFolders folder (it is created automatically if it doesn't exist). File has an 
+	*.nf1 extension.</p>
+	<p>You can use that files to restore data from them. The process of restoring data involves following steps: </p>
+	<ul>
+		<li>Deleting all data in database</li>
+		<li>Restoring password and encryption key</li>
+		<li>Restoring data</li>
+		<li>Restarting the application</li>
+	</ul>
 
 	<h1>3. License</h1>
 
