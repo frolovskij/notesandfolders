@@ -65,6 +65,7 @@ public class RestoreTask extends
 			db = dbOpenHelper.getWritableDatabase();
 			db.execSQL("delete from data");
 			db.execSQL("delete from settings");
+			db.execSQL("PRAGMA foreign_keys=OFF;");
 
 			dis = new DataInputStream(new BufferedInputStream(
 					new FileInputStream(backupFile)));
@@ -105,6 +106,8 @@ public class RestoreTask extends
 					}
 				}
 			}
+
+			db.execSQL("PRAGMA foreign_keys=ON;");
 		} catch (IOException e1) {
 			e1.printStackTrace();
 			return RestoreResult.IO_ERROR;
