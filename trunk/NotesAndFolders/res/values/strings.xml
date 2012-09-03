@@ -37,6 +37,7 @@
     <string name="fsimp">Import</string>
     <string name="save">Save</string>
     <string name="restore">Restore</string>
+    <string name="export">Export</string>
 
     <!-- Login activity -->
     <string name="login_prompt">Password</string>
