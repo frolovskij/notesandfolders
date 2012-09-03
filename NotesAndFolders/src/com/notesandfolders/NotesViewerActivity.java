@@ -84,14 +84,7 @@ public class NotesViewerActivity extends Activity {
 			sb.append("</p>");
 		}
 		sb.append("</body></html>");
-		try {
-			return URLEncoder.encode(sb.toString(), "utf-8").replaceAll("\\+",
-					" ");
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-		}
-
-		return "";
+		return sb.toString();
 	}
 
 	@Override
@@ -104,7 +97,7 @@ public class NotesViewerActivity extends Activity {
 		String textToHighligth = (sp == null) ? null
 				: (sp.isSearchInText()) ? sp.getText() : null;
 
-		textContent.loadDataWithBaseURL("data://",
+		textContent.loadDataWithBaseURL(null,
 				textContentToHtml(tc, textToHighligth), "text/html", "utf-8",
 				null);
 
