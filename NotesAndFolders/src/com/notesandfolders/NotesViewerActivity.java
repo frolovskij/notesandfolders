@@ -18,9 +18,6 @@ This file is a part of Notes & Folders project.
 
 package com.notesandfolders;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-
 import com.notesandfolders.R;
 
 import android.app.Activity;

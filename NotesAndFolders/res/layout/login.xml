@@ -57,8 +57,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dip"
-                android:inputType="number|textPassword"
-                android:password="true"
+                android:inputType="textPassword"
                 android:singleLine="true" />
 
             <!-- Login button -->
