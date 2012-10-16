@@ -2,9 +2,8 @@
 <resources>
 
     <string name="app_name">Notes &amp; Folders</string>
-    <string name="app_version">0.7.4</string>
+    <string name="app_version">0.7.5</string>
     <string name="msg_not_implemented_yet">Not implemented yet</string>
-    <string name="msg_importing_files">Importing files. Please wait…</string>
     <string name="insert_date_time">Insert date &amp; time</string>
     <string name="filename_copy_suffix">" - Copy"</string>
 
@@ -15,7 +14,8 @@
     <string name="import_msg_file_doesnt_exist">File does not exist</string>
     <string name="import_msg_cant_read">Can\'t import not readable item</string>
     <string name="import_msg_not_txt_file">Only *.txt files can be imported</string>
-
+    <string name="import_msg_importing_files">Importing files. Please wait…</string>
+    
     <!-- Explorer options menu -->
     <string name="menu_new">New</string>
     <string name="menu_search">Search</string>
@@ -77,8 +77,6 @@
     <string name="settings_information">Information</string>
     <string name="settings_documentation_title">Documentation</string>
     <string name="settings_documentation_summary">Offline html documentation</string>
-    <string name="settings_version_title">Notes &amp; Folders</string>
-    <string name="settings_version_summary">Offline html documentation</string>
     <string name="settings_editor">Notes editor</string>
     <string name="settings_editor_cursor_to_end_title">Cursor to end</string>
     <string name="settings_editor_cursor_to_end_summary">When opening editor place cursor to the end of text</string>
@@ -162,7 +160,6 @@
     <string name="backup_result_file_aready_exists">Target file already exists</string>
     <string name="backup_result_cant_write_to_output_file">Can\'t write to output file</string>
     <string name="backup_result_io_error">IO error occurred while writing to backup file</string>
-    <string name="restore_result_ok">Data from backup file was successfully restored</string>
     <string name="backupmanager_delete_title">Deleting</string>
     <string name="backupmanager_delete_prompt">Are you sure you want to delete this backup file?</string>
     <string name="backupmanager_msg_backup_file_deleted">Backup file was successfully deleted</string>
