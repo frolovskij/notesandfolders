@@ -145,7 +145,7 @@ public class ImportActivity extends Activity implements
 		if (id == IMPORTING_DIALOG_ID) {
 			pd = new ProgressDialog(ImportActivity.this);
 			pd.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-			pd.setMessage(getText(R.string.msg_importing_files));
+			pd.setMessage(getText(R.string.import_msg_importing_files));
 			pd.setCancelable(false);
 			pd.show();
 

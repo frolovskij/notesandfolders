@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="msg_not_implemented_yet">Пока не реализовано</string>
+    <string name="insert_date_time">Вставить дату и время</string>
+    <string name="filename_copy_suffix">" - копия"</string>
+
+    <!-- Import activity -->
+    <string name="import_title">Файловая система</string>
+    <string name="import_go_back">В родительский каталог</string>
+    <string name="import_icon">Иконка</string>
+    <string name="import_msg_file_doesnt_exist">Файл не существует</string>
+    <string name="import_msg_cant_read">Невозможно импортировать файл, потому что его нельзя прочесть</string>
+    <string name="import_msg_not_txt_file">Могут быть импортированы только *.TXT-файлы</string>
+    <string name="import_msg_importing_files">Идет импортирование файлов. Пожалуйста, подождите…</string>
+    
+    <!-- Explorer options menu -->
+    <string name="menu_new">Создать</string>
+    <string name="menu_search">Поиск</string>
+    <string name="menu_import">Импорт</string>
+    <string name="menu_settings">Настройки</string>
+    <string name="menu_close">Выход</string>
+    <string name="menu_paste">Вставить</string>
+    <string name="menu_backupmanager">Резервные копии</string>
+
+    <!-- Context menu operations on folders, files & checklists -->
+    <string name="explorer_context_menu_title">Действия</string>
+    <string name="open">Открыть</string>
+    <string name="edit">Редактировать</string>
+    <string name="copy">Копировать</string>
+    <string name="cut">Вырезать</string>
+    <string name="delete">Удалить</string>
+    <string name="rename">Переименовать</string>
+    <string name="properties">Свойства</string>
+    <string name="fsimp">Импорт</string>
+    <string name="save">Сохранить</string>
+    <string name="restore">Восстановить</string>
+    <string name="export">Экспорт</string>
+
+    <!-- Login activity -->
+    <string name="login_prompt">Пароль</string>
+    <string name="login_msg_password_incorrect">Неверный пароль</string>
+    <string name="login_button">OK</string>
+    <string name="login_logo">Логотип</string>
+
+    <!-- New folder alert dialog -->
+    <string name="explorer_newfolder_title">Создание каталога</string>
+    <string name="explorer_newfolder_prompt">Введите имя нового каталога</string>
+
+    <!-- New note alert dialog -->
+    <string name="explorer_newnote_title">Создание записи</string>
+    <string name="explorer_newnote_prompt">Введите имя новой записи</string>
+
+    <!-- New checklist alert dialog -->
+    <string name="explorer_newchecklist_title">Создание списка</string>
+    <string name="explorer_newchecklist_prompt">Введите имя нового списка</string>
+
+    <!-- Rename alert dialog -->
+    <string name="explorer_rename_title">Переименование</string>
+    <string name="explorer_rename_prompt">Введите новое имя</string>
+
+    <!-- Delete alert dialog -->
+    <string name="explorer_delete_title">Удаление</string>
+    <string name="explorer_delete_prompt">Вы уверены, что хотите это удалить?</string>
+    <string name="explorer_msg_destination_is_subfolder">Нельзя вставить каталог в свой же подкаталог</string>
+    <string name="explorer_msg_destination_is_source">Нельзя вставить каталог в самого себя</string>
+    <string name="explorer_msg_copying_files">Идет копирование файлов. Пожалуйста, подождите…</string>
+    <string name="explorer_empty_placeholder">Здесь пока ничего нет. Используйте меню, чтобы создать новые записи или импортировать их из файловой системы</string>
+
+    <!-- Settings activity -->
+    <string name="settings_title">Настойки</string>
+    <string name="settings_security">Безопасность</string>
+    <string name="settings_password">Пароль</string>
+    <string name="settings_password_summary">Если оставить пустым, то при запуске он не будет спрашиваться</string>
+    <string name="settings_information">Информация</string>
+    <string name="settings_documentation_title">Справка</string>
+    <string name="settings_documentation_summary">Не требует соединения с интернетом</string>
+    <string name="settings_editor">Редактор</string>
+    <string name="settings_editor_cursor_to_end_title">Курсор в конец текста</string>
+    <string name="settings_editor_cursor_to_end_summary">При открытии редактора ставить курсор в конец текста</string>
+    <string name="settings_color_scheme">Цветовая схема</string>
+
+    <!-- Password settings activity -->
+    <string name="password_edit_title">Смена пароля</string>
+    <string name="password_edit_current">Текущий пароль</string>
+    <string name="password_edit_new">Новый пароль</string>
+    <string name="password_edit_confirmation">Подтверждение</string>
+    <string name="password_edit_save_button">Сохранить</string>
+    <string name="password_msg_password_was_saved">Пароль был успешно сохранен</string>
+    <string name="password_msg_wrong_password">Текущий пароль указан неверно</string>
+    <string name="password_msg_save_error">Пароль не был сохранен из-за какой-то ошибки</string>
+    <string name="password_msg_password_confirmation_do_not_match">Пароль и подтверждение не совпадают</string>
+
+    <!-- Alert Dialog that pop-ups when user chooses "New" from Explorer's options menu -->
+    <string name="create_new">Создать</string>
+    <string name="create_folder">Каталог</string>
+    <string name="create_note">Запись</string>
+    <string name="create_checklist">Список</string>
+
+    <!-- Notes editor -->
+    <string name="noteseditor_title">Редактор</string>
+    <string name="noteseditor_msg_save_before_exit">Сохранить изменения?</string>
+
+    <!-- Notes viewer -->
+    <string name="notesviewer_title">Просмотр</string>
+    <string name="notesviewer_empty_placeholder">Запись пустая</string>
+
+    <!-- Help -->
+    <string name="help_title">Справка</string>
+
+    <!-- Checklist -->
+    <string name="checklist_title">Список</string>
+    <string name="checklist_add">Добавить</string>
+    <string name="checklist_newitem_title">Добавление элемента списка</string>
+    <string name="checklist_newitem_prompt">Текст элемента</string>
+    <string name="checklist_msg_save_before_exit">Сохранить изменения?</string>
+    <string name="checklist_rename_title">Переименование</string>
+    <string name="checklist_rename_prompt">Введите новый текст</string>
+    <string name="checklist_delete_title">Удаление</string>
+    <string name="checklist_delete_prompt">Вы уверены, что хотите удалить элемент списка?</string>
+    <string name="checklist_empty_placeholder">Используйте меню для добавления элементов списка</string>
+
+    <!-- Search -->
+    <string name="search_title">Поиск</string>
+    <string name="search_text">Текст для поиска</string>
+    <string name="search_button">Поиск</string>
+    <string name="search_type">Как искать</string>
+    <string name="search_type_by_name">По имени</string>
+    <string name="search_type_by_content">По содержимому</string>
+    <string name="search_type_by_name_and_content">По имени и содержимому</string>
+    <string name="search_where">Область поиска</string>
+    <string name="search_where_everywhere">Везде</string>
+    <string name="search_where_current_folder">В текущем каталоге и подкаталогах</string>
+    <string name="search_case_sensitive">С учетом регистра</string>
+    <string name="search_msg_searching">Идет поиск. Пожалуйста, подождите…</string>
+
+    <!-- Search results -->
+    <string name="searchresults_title">Результаты поиска</string>
+    <string name="searchresults_empty_placeholder">Ничего не найдено</string>
+
+    <!-- Properties -->
+    <string name="properties_title">Свойства</string>
+    <string name="date_created">Создан</string>
+    <string name="date_modified">Изменен</string>
+
+    <!-- Backup Manager -->
+    <string name="backupmanager_title">Резервные копии</string>
+    <string name="backupmanager_empty_placeholder">Пока нет ни одной резервной копии</string>
+    <string name="backupandrestore_title">Создание резервных копий</string>
+    <string name="backup_button">Создать резервную копию</string>
+    <string name="backup_msg_in_progress">Идет создание резервной копии. Пожалуйста, подождите…</string>
+    <string name="restore_msg_in_progress">Идет восстановление из резервной копии. Пожалуйста, подождите…</string>
+    <string name="restore_confirm_title">Восстановление</string>
+    <string name="restore_confirm_text">Все данные (включая пароль) будут заменены данными из выбранной резервной копии. Продолжить?</string>
+    <string name="backup_result_ok">Резервная копия была успешно создана</string>
+    <string name="backup_result_cant_create_output_directory">Невозможно создать папку для хранения резервных копий</string>
+    <string name="backup_result_cant_create_output_file">Невозможно создать файл резервной копии</string>
+    <string name="backup_result_file_aready_exists">Файл уже существует</string>
+    <string name="backup_result_cant_write_to_output_file">Невозможно сохранить данные в файл резервной копии</string>
+    <string name="backup_result_io_error">Во время создания резервной копии произошла ошибка ввода-вывода</string>
+    <string name="backupmanager_delete_title">Удаление</string>
+    <string name="backupmanager_delete_prompt">Вы уверены, что хотите удалить выбранную резервную копию?</string>
+    <string name="backupmanager_msg_backup_file_deleted">Резервная копия была успешно удалена</string>
+    <string name="backupmanager_msg_backup_file_cant_delete">Невозможно удалить резервную копию</string>
+    <string name="backupmanager_restart_title">Требуется перезапуск</string>
+    <string name="backupmanager_restart_text">Данные из резервной копии были успешно восстановлены. Приложение будет закрыто. Перезапустите его вручную</string>
+
+</resources>
