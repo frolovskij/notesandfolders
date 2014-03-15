@@ -86,7 +86,17 @@ public class ExplorerActivity extends Activity implements OnItemClickListener {
 	private long selectedId;
 	private long idToCopy;
 	private long idToMove;
+	
+	/**
+	 * When opening folder (or going back to the previous one) the item with this id will be selected
+	 */
 	private long idToSetFocusTo;
+	
+	/**
+	 * This is the y pos where the idToSetFocusTo-item will be 
+	 */
+	private int yToSetFocusTo;
+	
 	private long currentFolderId;
 
 	// used in new & rename alert dialogs
@@ -599,7 +609,7 @@ public class ExplorerActivity extends Activity implements OnItemClickListener {
 		for (int i = 0; i < adapter.getCount(); i++) {
 			Node n = adapter.getItem(i);
 			if (n != null && n.getId() == idToSetFocusTo) {
-				lv.setSelection(i);
+				lv.setSelectionFromTop(i, yToSetFocusTo);
 			}
 		}
 
@@ -607,27 +617,17 @@ public class ExplorerActivity extends Activity implements OnItemClickListener {
 	}
 
 	private void openDir(long id) {
-		Node node = nh.getNodeById(id);
-
-		if (node.getType() == NodeType.FOLDER) {
-			currentFolderId = id;
-			refresh();
-		}
+		currentFolderId = id;
+		refresh();
 	}
 
 	private void openNote(long id) {
-		// when going back from viewer/editor this item will be focused
-		idToSetFocusTo = id;
-
 		Intent viewer = new Intent(this, NotesViewerActivity.class);
 		viewer.putExtra("note_id", id);
 		startActivity(viewer);
 	}
 
 	public void openCheckList(long id) {
-		// when going back from viewer/editor this item will be focused
-		idToSetFocusTo = id;
-
 		Intent viewer = new Intent(this, CheckListActivity.class);
 		viewer.putExtra("checklist_id", id);
 		startActivity(viewer);
@@ -635,7 +635,7 @@ public class ExplorerActivity extends Activity implements OnItemClickListener {
 
 	private void onOpen(long id) {
 		Node node = nh.getNodeById(id);
-
+		
 		switch (node.getType()) {
 		case FOLDER:
 			openDir(node.getId());
@@ -681,6 +681,12 @@ public class ExplorerActivity extends Activity implements OnItemClickListener {
 	public void onItemClick(AdapterView<?> parentView, View childView,
 			int position, long id) {
 		Node selected = (Node) lv.getItemAtPosition(position);
+		
+		// Before opening something let's save its id and position so that when we come back
+		// to the parent folder we can restore the same position
+		idToSetFocusTo = selected.getId();
+		yToSetFocusTo = childView.getTop();
+		
 		onOpen(selected.getId());
 	}
 

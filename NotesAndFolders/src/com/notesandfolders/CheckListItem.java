@@ -74,4 +74,9 @@ public class CheckListItem implements Serializable {
 		return (CheckListItem) Serializer.deserializeObject(Serializer
 				.serializeObject(this));
 	}
+	
+	@Override
+	public String toString() {
+		return String.format("%s - %b", text, isChecked);
+	}
 }
