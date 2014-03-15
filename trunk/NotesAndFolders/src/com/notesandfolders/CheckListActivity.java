@@ -33,6 +33,7 @@ import android.content.DialogInterface;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.text.InputType;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -72,6 +73,10 @@ public class CheckListActivity extends ListActivity {
 	private EditText inputRename;
 
 	private int selectedIndex;
+	
+	private int positionToSetFocusTo = -1;
+	private int yToSetFocusTo;
+
 
 	private int getSelectedIndex() {
 		return selectedIndex;
@@ -114,6 +119,9 @@ public class CheckListActivity extends ListActivity {
 				try {
 					CheckListItem ctw = adapter.getItem(position);
 					ctw.setChecked(!ctw.isChecked());
+					
+					positionToSetFocusTo = position;
+					yToSetFocusTo = view.getTop();
 
 					refresh();
 				} catch (IndexOutOfBoundsException ex) {
@@ -158,6 +166,10 @@ public class CheckListActivity extends ListActivity {
 				R.id.checklist_item_check, R.id.checklist_item_text }, checkList);
 
 		setListAdapter(adapter);
+		
+		if (positionToSetFocusTo != -1) {
+			lv.setSelectionFromTop(positionToSetFocusTo, yToSetFocusTo);
+		}
 
 		Node n = nh.getNodeById(id);
 		name.setText(n.getName());
@@ -184,6 +196,7 @@ public class CheckListActivity extends ListActivity {
 	private OnItemLongClickListener itemLongClickHandler = new OnItemLongClickListener() {
 		public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
 			setSelectedIndex(position);
+			Log.i("NF", ""+position);
 			showDialog(CONTEXT_MENU_ID);
 
 			return false;
@@ -237,38 +250,24 @@ public class CheckListActivity extends ListActivity {
 							refresh();
 						}
 					})
-					.setNegativeButton(android.R.string.cancel,
-							new DialogInterface.OnClickListener() {
-								public void onClick(DialogInterface dialog, int whichButton) {
-									// Do nothing.
-								}
-							}).create();
+					.setNegativeButton(android.R.string.cancel, EMPTY_CLICK_LISTENER).create();
 		}
 
 		if (id == DIALOG_RENAME) {
-			final CheckListItem selectedItem = this.adapter.getItem(getSelectedIndex());
-
-			if (selectedItem != null) {
-				return new AlertDialog.Builder(this)
-						.setTitle(R.string.checklist_rename_title)
-						.setMessage(R.string.checklist_rename_prompt)
-						.setView(inputRename)
-						.setPositiveButton(android.R.string.ok,
-								new DialogInterface.OnClickListener() {
-									public void onClick(DialogInterface dialog, int whichButton) {
-										if (selectedItem != null) {
-											selectedItem.setText(inputRename.getText().toString());
-
-											refresh();
-										}
-									}
-								})
-						.setNegativeButton(android.R.string.cancel,
-								new DialogInterface.OnClickListener() {
-									public void onClick(DialogInterface dialog, int whichButton) {
-									}
-								}).create();
-			}
+			return new AlertDialog.Builder(this)
+					.setTitle(R.string.checklist_rename_title)
+					.setMessage(R.string.checklist_rename_prompt)
+					.setView(inputRename)
+					.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int whichButton) {
+							CheckListItem selectedItem = CheckListActivity.this.adapter
+									.getItem(getSelectedIndex());
+							if (selectedItem != null) {
+								selectedItem.setText(inputRename.getText().toString());
+								refresh();
+							}
+						}
+					}).setNegativeButton(android.R.string.cancel, EMPTY_CLICK_LISTENER).create();
 		}
 
 		if (id == DIALOG_DELETE) {
@@ -288,17 +287,18 @@ public class CheckListActivity extends ListActivity {
 										}
 									}
 								})
-						.setNegativeButton(android.R.string.no,
-								new DialogInterface.OnClickListener() {
-									public void onClick(DialogInterface dialog, int whichButton) {
-										// Do nothing.
-									}
-								}).create();
+						.setNegativeButton(android.R.string.no, EMPTY_CLICK_LISTENER).create();
 			}
 		}
 
 		return super.onCreateDialog(id);
 	}
+	
+	final DialogInterface.OnClickListener EMPTY_CLICK_LISTENER = new DialogInterface.OnClickListener() {
+		public void onClick(DialogInterface dialog, int whichButton) {
+			// Do nothing.
+		}
+	}; 
 
 	// context menu listener for nodes
 	final IconContextMenuOnClickListener contextMenuListener = new IconContextMenuOnClickListener() {
