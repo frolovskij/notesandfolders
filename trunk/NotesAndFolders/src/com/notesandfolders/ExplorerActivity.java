@@ -21,11 +21,9 @@ package com.notesandfolders;
 import java.text.SimpleDateFormat;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
-
-import com.notesandfolders.R;
-import com.tani.app.ui.IconContextMenu;
-import com.tani.app.ui.IconContextMenu.IconContextMenuOnClickListener;
+import java.util.Map;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -54,6 +52,9 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.tani.app.ui.IconContextMenu;
+import com.tani.app.ui.IconContextMenu.IconContextMenuOnClickListener;
 
 public class ExplorerActivity extends Activity implements OnItemClickListener {
 
@@ -87,15 +88,17 @@ public class ExplorerActivity extends Activity implements OnItemClickListener {
 	private long idToCopy;
 	private long idToMove;
 	
-	/**
-	 * When opening folder (or going back to the previous one) the item with this id will be selected
-	 */
-	private long idToSetFocusTo;
+	protected class PositionInfo {
+		public long id;
+		public int top;
+		
+		public PositionInfo(long id, int top) {
+			this.id = id;
+			this.top = top;
+		}
+	}
 	
-	/**
-	 * This is the y pos where the idToSetFocusTo-item will be 
-	 */
-	private int yToSetFocusTo;
+	private Map<Long, PositionInfo> savedPositions = new HashMap<Long, PositionInfo>();
 	
 	private long currentFolderId;
 
@@ -124,7 +127,7 @@ public class ExplorerActivity extends Activity implements OnItemClickListener {
 			return;
 		}
 
-		openDir(currentFolderId);
+		openDir(currentFolderId, false);
 	}
 
 	@Override
@@ -184,7 +187,7 @@ public class ExplorerActivity extends Activity implements OnItemClickListener {
 		// go to the parent folder if not in root folder
 		if (currentFolderId != 0) {
 			Node currentFolder = nh.getNodeById(currentFolderId);
-			openDir(currentFolder.getParentId());
+			openDir(currentFolder.getParentId(), true);
 		} else {
 			superOnBackPressed();
 		}
@@ -250,6 +253,16 @@ public class ExplorerActivity extends Activity implements OnItemClickListener {
 			return true;
 		}
 	};
+	
+	public void setSavedPositionToNewNode(Node newNode) {
+		PositionInfo pos = savedPositions.get(currentFolderId);
+		if (pos == null) {
+			pos = new PositionInfo(newNode.getId(), -1);
+			savedPositions.put(currentFolderId, pos);
+		} else {
+			pos.id = newNode.getId();
+		}
+	}
 
 	@Override
 	protected Dialog onCreateDialog(int id) {
@@ -321,8 +334,7 @@ public class ExplorerActivity extends Activity implements OnItemClickListener {
 										Node created = nh.createFolder(parent,
 												folderName);
 										if (created != null) {
-											ExplorerActivity.this.idToSetFocusTo = created
-													.getId();
+											setSavedPositionToNewNode(created);
 										}
 										refresh();
 									}
@@ -351,8 +363,7 @@ public class ExplorerActivity extends Activity implements OnItemClickListener {
 										Node created = nh.createNote(parent,
 												noteName, "");
 										if (created != null) {
-											ExplorerActivity.this.idToSetFocusTo = created
-													.getId();
+											setSavedPositionToNewNode(created);
 										}
 
 										refresh();
@@ -382,8 +393,7 @@ public class ExplorerActivity extends Activity implements OnItemClickListener {
 										Node created = nh.createCheckList(
 												parent, checkListName);
 										if (created != null) {
-											ExplorerActivity.this.idToSetFocusTo = created
-													.getId();
+											setSavedPositionToNewNode(created);
 										}
 
 										refresh();
@@ -606,17 +616,28 @@ public class ExplorerActivity extends Activity implements OnItemClickListener {
 		adapter = new NodeAdapter(this, R.layout.explorer_item, items);
 		lv.setAdapter(adapter);
 
-		for (int i = 0; i < adapter.getCount(); i++) {
-			Node n = adapter.getItem(i);
-			if (n != null && n.getId() == idToSetFocusTo) {
-				lv.setSelectionFromTop(i, yToSetFocusTo);
+		PositionInfo savedPositionInfo = savedPositions.get(currentFolderId);
+		if (savedPositionInfo != null) {
+			for (int i = 0; i < adapter.getCount(); i++) {
+				Node n = adapter.getItem(i);
+				if (n != null && n.getId() == savedPositionInfo.id) {
+					if (savedPositionInfo.top != -1) {
+						lv.setSelectionFromTop(i, savedPositionInfo.top);
+					} else {
+						lv.setSelection(i);
+					}
+				}
 			}
 		}
 
 		path.setText(nh.getFullPathById(currentFolderId));
 	}
 
-	private void openDir(long id) {
+	private void openDir(long id, boolean isParentFolder) {
+		if (isParentFolder) {
+			savedPositions.remove(currentFolderId);
+		}
+		
 		currentFolderId = id;
 		refresh();
 	}
@@ -638,7 +659,7 @@ public class ExplorerActivity extends Activity implements OnItemClickListener {
 		
 		switch (node.getType()) {
 		case FOLDER:
-			openDir(node.getId());
+			openDir(node.getId(), id == node.getParentId());
 			break;
 		case NOTE:
 			openNote(node.getId());
@@ -681,12 +702,7 @@ public class ExplorerActivity extends Activity implements OnItemClickListener {
 	public void onItemClick(AdapterView<?> parentView, View childView,
 			int position, long id) {
 		Node selected = (Node) lv.getItemAtPosition(position);
-		
-		// Before opening something let's save its id and position so that when we come back
-		// to the parent folder we can restore the same position
-		idToSetFocusTo = selected.getId();
-		yToSetFocusTo = childView.getTop();
-		
+		savedPositions.put(currentFolderId, new PositionInfo(selected.getId(), childView.getTop()));
 		onOpen(selected.getId());
 	}
 
