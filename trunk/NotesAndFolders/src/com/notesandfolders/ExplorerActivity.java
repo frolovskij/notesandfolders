@@ -101,6 +101,7 @@ public class ExplorerActivity extends Activity implements OnItemClickListener {
 	private Map<Long, PositionInfo> savedPositions = new HashMap<Long, PositionInfo>();
 	
 	private long currentFolderId;
+	private long parentFolderId;
 
 	// used in new & rename alert dialogs
 	private EditText inputNewFolder;
@@ -606,6 +607,7 @@ public class ExplorerActivity extends Activity implements OnItemClickListener {
 				items.add(0, parent);
 			}
 		}
+		parentFolderId = here.getParentId();
 
 		if (items.isEmpty()) {
 			placeholder.setVisibility(View.VISIBLE);
@@ -654,12 +656,10 @@ public class ExplorerActivity extends Activity implements OnItemClickListener {
 		startActivity(viewer);
 	}
 
-	private void onOpen(long id) {
-		Node node = nh.getNodeById(id);
-		
+	private void onOpen(Node node) {
 		switch (node.getType()) {
 		case FOLDER:
-			openDir(node.getId(), id == node.getParentId());
+			openDir(node.getId(), node.getParentId() == parentFolderId);
 			break;
 		case NOTE:
 			openNote(node.getId());
@@ -703,7 +703,7 @@ public class ExplorerActivity extends Activity implements OnItemClickListener {
 			int position, long id) {
 		Node selected = (Node) lv.getItemAtPosition(position);
 		savedPositions.put(currentFolderId, new PositionInfo(selected.getId(), childView.getTop()));
-		onOpen(selected.getId());
+		onOpen(selected);
 	}
 
 	public void onClose() {
