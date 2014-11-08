@@ -28,6 +28,15 @@ public class Node implements Serializable {
 	private long parentId;
 	private String name;
 	private String textContent;
+
+	/**
+	 * <ul>
+	 * <li>0 - encrypted the old way on Android < 4.2, still can be read on new Androids</li>
+	 * <li>1 - the right way</li>
+	 * </ul>
+	 */
+	private int encryptVersion;
+
 	private Date dateCreated;
 	private Date dateModified;
 	private NodeType type;
@@ -88,12 +97,24 @@ public class Node implements Serializable {
 		this.dateModified = dateModified;
 	}
 
+	public int getEncryptVersion() {
+		return encryptVersion;
+	}
+
+	public void setEncryptVersion(int encryptVersion) {
+		this.encryptVersion = encryptVersion;
+	}
+
 	public String toString() {
 		return String
-				.format("{id: '%d', parent_id: '%s', name: '%s', date_created: '%d', date_modified: '%d', type: '%d'}",
-						getId(), getParentId(), getName(), getDateCreated()
-								.getTime(), getDateModified().getTime(),
-						getType().ordinal());
+				.format("{id: '%d', parent_id: '%s', name: '%s', date_created: '%d', date_modified: '%d', type: '%d', encrypt_version: '%d'}",
+						getId(),
+						getParentId(),
+						getName(),
+						getDateCreated().getTime(),
+						getDateModified().getTime(),
+						getType().ordinal(),
+						getEncryptVersion());
 	}
 
 	public boolean equalsTo(Node other) {
@@ -101,10 +122,12 @@ public class Node implements Serializable {
 			return false;
 		}
 
-		return (getId() == other.getId() && getParentId() == other.getParentId()
-				&& getType() == other.getType()
-				&& getName().equals(other.getName())
-				&& getDateCreated().equals(other.getDateCreated()) && getDateModified()
-				.equals(other.getDateModified()));
+		return getId() == other.getId() &&
+				getParentId() == other.getParentId() &&
+				getType() == other.getType() &&
+				getName().equals(other.getName()) &&
+				getDateCreated().equals(other.getDateCreated()) &&
+				getDateModified().equals(other.getDateModified()) &&
+				getEncryptVersion() == other.getEncryptVersion();
 	}
 }

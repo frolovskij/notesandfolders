@@ -25,120 +25,132 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Date;
 
+import net.sf.andhsli.hotspotlogin.SimpleCrypto;
+
 import android.os.AsyncTask;
 import android.os.Environment;
 
 public class BackupTask extends
-		AsyncTask<Void, Integer, BackupTask.BackupResult> {
+    AsyncTask<Void, Integer, BackupTask.BackupResult> {
 
-	public enum BackupResult {
-		OK, CANT_CREATE_OUTPUT_DIRECTORY, CANT_CREATE_OUTPUT_FILE, FILE_ALREADY_EXISTS, CANT_WRITE_TO_OUTPUT_FILE, IO_ERROR
-	};
+  public enum BackupResult {
+    OK, CANT_CREATE_OUTPUT_DIRECTORY, CANT_CREATE_OUTPUT_FILE, FILE_ALREADY_EXISTS, CANT_WRITE_TO_OUTPUT_FILE, IO_ERROR
+  };
 
-	public static final String OUTPUT_DIR = "NotesAndFolders";
+  public static final String OUTPUT_DIR = "NotesAndFolders";
 
-	private BackupManagerActivity bm;
-	private NodeHelper nh;
+  private BackupManagerActivity bm;
+  private NodeHelper nh;
 
-	public BackupTask(BackupManagerActivity bm, NodeHelper nh) {
-		this.bm = bm;
-		this.nh = nh;
-	}
+  public BackupTask(BackupManagerActivity bm, NodeHelper nh) {
+    this.bm = bm;
+    this.nh = nh;
+  }
 
-	// PrintWriter, strings - 5056k
-	// DataOutputStream(BufferedOutputStream(FileOutputStream))), string - 5057k
-	// DataOutputStream(BufferedOutputStream(FileOutputStream))), byte[] - 3794
-	// DataOutputStream(GZIPOutputStream(BufferedOutputStream(FileOutputStream)))),
-	// byte[] -
-	@Override
-	protected BackupResult doInBackground(Void... arg0) {
-		File root = Environment.getExternalStorageDirectory();
+  // PrintWriter, strings - 5056k
+  // DataOutputStream(BufferedOutputStream(FileOutputStream))), string - 5057k
+  // DataOutputStream(BufferedOutputStream(FileOutputStream))), byte[] - 3794
+  // DataOutputStream(GZIPOutputStream(BufferedOutputStream(FileOutputStream)))),
+  // byte[] -
+  @Override
+  protected BackupResult doInBackground(Void... arg0) {
+    File root = Environment.getExternalStorageDirectory();
 
-		File outputDir = new File(root, OUTPUT_DIR);
-		if (!outputDir.exists()) {
-			if (outputDir.mkdirs() == false) {
-				return BackupResult.CANT_CREATE_OUTPUT_DIRECTORY;
-			}
-		}
+    File outputDir = new File(root, OUTPUT_DIR);
+    if (!outputDir.exists()) {
+      if (outputDir.mkdirs() == false) {
+        return BackupResult.CANT_CREATE_OUTPUT_DIRECTORY;
+      }
+    }
 
-		File backupFile = new File(outputDir, String.format("%d.nf1",
-				new Date().getTime()));
-		if (backupFile.exists()) {
-			return BackupResult.FILE_ALREADY_EXISTS;
-		}
+    File backupFile = new File(outputDir, String.format("%d.nf2",
+        new Date().getTime()));
+    if (backupFile.exists()) {
+      return BackupResult.FILE_ALREADY_EXISTS;
+    }
 
-		try {
-			if (backupFile.createNewFile() == false) {
-				return BackupResult.CANT_CREATE_OUTPUT_FILE;
-			}
-		} catch (IOException ex) {
-			ex.printStackTrace();
-			return BackupResult.CANT_CREATE_OUTPUT_FILE;
-		}
+    try {
+      if (backupFile.createNewFile() == false) {
+        return BackupResult.CANT_CREATE_OUTPUT_FILE;
+      }
+    } catch (IOException ex) {
+      ex.printStackTrace();
+      return BackupResult.CANT_CREATE_OUTPUT_FILE;
+    }
 
-		if (backupFile.canWrite() == false) {
-			return BackupResult.CANT_WRITE_TO_OUTPUT_FILE;
-		}
+    if (backupFile.canWrite() == false) {
+      return BackupResult.CANT_WRITE_TO_OUTPUT_FILE;
+    }
 
-		Settings s = new Settings(bm);
-		final String password = s.getPasswordSha1Hash();
-		final String key = s.getEncryptedKey();
+    Settings s = new Settings(bm);
+    final String passwordSha1 = s.getPasswordSha1Hash();
 
-		DataOutputStream dos = null;
-		try {
-			dos = new DataOutputStream(new BufferedOutputStream(
-					new FileOutputStream(backupFile)));
+    DataOutputStream dos = null;
+    try {
+      dos = new DataOutputStream(new BufferedOutputStream(
+          new FileOutputStream(backupFile)));
 
-			dos.writeUTF(password);
-			dos.writeUTF(key);
+      dos.writeUTF(passwordSha1);
 
-			int count = 0;
-			for (long id : nh.getAllIds()) {
-				byte[] nodeData = nh.getNodeAsByteArray(id);
-				if (nodeData != null) {
-					dos.writeInt(nodeData.length);
-					dos.write(nodeData);
-				}
+      String encryptedKey = s.getEncryptedKey();
+      int keyEncryptVersion = s.getInt(Settings.SETTINGS_KEY_ENCRYPT_VERSION, 0);
+      if (keyEncryptVersion == 0) {
+        String password = new TempStorage(bm).getPassword();
+        String oldKey = SimpleCrypto.decrypt(password, encryptedKey, keyEncryptVersion);
+        encryptedKey = SimpleCrypto.encrypt(password, oldKey);
+      }
+      dos.writeUTF(encryptedKey);
 
-				publishProgress(count++ + 1);
-			}
-		} catch (IOException e1) {
-			e1.printStackTrace();
-			return BackupResult.IO_ERROR;
-		} finally {
-			if (dos != null) {
-				try {
-					dos.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-		}
+      int count = 0;
+      for (long id : nh.getAllIds()) {
+        byte[] nodeData = nh.getNodeAsByteArray(id);
+        if (nodeData != null) {
+          dos.writeInt(nodeData.length);
+          dos.write(nodeData);
+        }
 
-		return BackupResult.OK;
-	}
+        publishProgress(count++ + 1);
+      }
+    } catch (IOException e1) {
+      e1.printStackTrace();
+      return BackupResult.IO_ERROR;
+    } catch (Exception e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    } finally {
+      if (dos != null) {
+        try {
+          dos.close();
+        } catch (IOException e) {
+          e.printStackTrace();
+        }
+      }
+    }
 
-	protected void onProgressUpdate(Integer... progress) {
-		if (progress.length > 0) {
-			bm.getBackupDialog().setProgress(progress[0]);
-		}
-	}
+    return BackupResult.OK;
+  }
 
-	@Override
-	protected void onPreExecute() {
-		bm.showDialog(BackupManagerActivity.DIALOG_BACKUP);
-	}
+  protected void onProgressUpdate(Integer... progress) {
+    if (progress.length > 0) {
+      bm.getBackupDialog().setProgress(progress[0]);
+    }
+  }
 
-	@Override
-	protected void onPostExecute(BackupResult result) {
-		bm.dismissDialog(BackupManagerActivity.DIALOG_BACKUP);
+  @Override
+  protected void onPreExecute() {
+    bm.showDialog(BackupManagerActivity.DIALOG_BACKUP);
+  }
 
-		if (bm != null) {
-			bm.onBackupTaskCompleted(result);
-		}
-	}
+  @Override
+  protected void onPostExecute(BackupResult result) {
+    bm.dismissDialog(BackupManagerActivity.DIALOG_BACKUP);
 
-	public void setActivity(BackupManagerActivity bm) {
-		this.bm = bm;
-	}
+    if (bm != null) {
+      bm.onBackupTaskCompleted(result);
+    }
+  }
+
+  public void setActivity(BackupManagerActivity bm) {
+    this.bm = bm;
+  }
 }
