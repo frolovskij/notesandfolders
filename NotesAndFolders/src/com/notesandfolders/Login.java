@@ -25,37 +25,41 @@ import java.security.NoSuchAlgorithmException;
 import net.sf.andhsli.hotspotlogin.SimpleCrypto;
 
 public class Login {
-	Settings settings;
+  Settings settings;
 
-	public Login(Settings settings) {
-		this.settings = settings;
-	}
+  public Login(Settings settings) {
+    this.settings = settings;
+  }
 
-	public static String getSha1Digest(String text) {
-		try {
-			MessageDigest md = MessageDigest.getInstance("SHA-1");
-			return SimpleCrypto.toHex(md.digest(text.getBytes("UTF-8")));
-		} catch (NoSuchAlgorithmException e) {
-			// Won't happen as we use SHA-1
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (UnsupportedEncodingException e) {
-			// Won't happen as we use UTF-8
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+  public static String getSha1Digest(String text) {
+    try {
+      MessageDigest md = MessageDigest.getInstance("SHA-1");
+      return SimpleCrypto.toHex(md.digest(text.getBytes("UTF-8")));
+    } catch (NoSuchAlgorithmException e) {
+      // Won't happen as we use SHA-1
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    } catch (UnsupportedEncodingException e) {
+      // Won't happen as we use UTF-8
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
 
-		return null;
-	}
+    return null;
+  }
 
-	public boolean isPasswordValid(String password) {
-		String passwordSha1Hash = settings.getPasswordSha1Hash();
-		return getSha1Digest(password).equals(passwordSha1Hash);
-	}
+  // todo It would be better to have a random salt which is generated every time a new password is set
+  public static String PASSWORD_SALT = "YW5hbCBzZXg=";
 
-	public boolean isEmptyPassword() {
-		String passwordSha1Hash = settings.getPasswordSha1Hash();
-		return passwordSha1Hash.equals(Settings.EMPTY_PASSWORD_SHA1_HASH);
-	}
+  public static boolean isPasswordValid(Settings settings, String password) {
+    String passwordSha1Hash = settings.getPasswordSha1Hash();
+    return getSha1Digest(password).equals(passwordSha1Hash) ||
+        getSha1Digest(password + PASSWORD_SALT).equals(passwordSha1Hash);
+  }
+
+  public boolean isEmptyPassword() {
+    String passwordSha1Hash = settings.getPasswordSha1Hash();
+    return passwordSha1Hash.equals(Settings.EMPTY_PASSWORD_SHA1_HASH);
+  }
 
 }

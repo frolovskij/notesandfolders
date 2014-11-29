@@ -85,7 +85,7 @@ public class LoginActivity extends Activity implements OnClickListener {
 
 	public void onClick(View v) {
 		if (v == okButton) {
-			if (login.isPasswordValid(password.getText().toString())) {
+			if (Login.isPasswordValid(settings, password.getText().toString())) {
 
 				Intent explorer = new Intent(this, ExplorerActivity.class);
 				new TempStorage(this)
