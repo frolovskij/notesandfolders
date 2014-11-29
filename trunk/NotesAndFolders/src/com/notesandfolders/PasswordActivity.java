@@ -54,12 +54,10 @@ public class PasswordActivity extends Activity implements OnClickListener {
     if (v == saveButton) {
       Settings s = new Settings(this);
 
-      String realCurrentPasswordHash = s.getPasswordSha1Hash();
-      String currentPasswordHash = Login.getSha1Digest(currentPasswordEdit.getText().toString());
       String newPassword = newPasswordEdit.getText().toString();
       String newPasswordConfirmation = newPasswordConfirmationEdit.getText().toString();
 
-      if (!realCurrentPasswordHash.equals(currentPasswordHash)) {
+      if (!Login.isPasswordValid(s, currentPasswordEdit.getText().toString())) {
         new AlertDialog.Builder(this).setMessage(R.string.password_msg_wrong_password).show();
       } else {
         if (!newPassword.equals(newPasswordConfirmation)) {

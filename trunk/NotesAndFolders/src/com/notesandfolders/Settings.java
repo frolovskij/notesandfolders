@@ -45,6 +45,7 @@ public class Settings {
     return getString(Settings.SETTINGS_PASSWORD_SHA1_HASH,
         EMPTY_PASSWORD_SHA1_HASH);
   }
+  
 
   public String getEncryptedKey() {
     return getString(Settings.SETTINGS_ENCRYPTED_KEY, "");
@@ -72,7 +73,7 @@ public class Settings {
       String oldKey = SimpleCrypto.decrypt(currentPassword, encryptedOldKeyHex, keyEncryptVersion);
       String encryptedNewKeyHex = SimpleCrypto.encrypt(newPassword, oldKey);
 
-      setString(Settings.SETTINGS_PASSWORD_SHA1_HASH, Login.getSha1Digest(newPassword));
+      setString(Settings.SETTINGS_PASSWORD_SHA1_HASH, Login.getSha1Digest(newPassword + Login.PASSWORD_SALT));
       setString(Settings.SETTINGS_ENCRYPTED_KEY, encryptedNewKeyHex);
       setInt(Settings.SETTINGS_KEY_ENCRYPT_VERSION, 1);
 
