@@ -2,7 +2,7 @@
 <resources>
 
     <string name="app_name" translatable="false">Notes &amp; Folders</string>
-    <string name="app_version" translatable="false">0.8</string>
+    <string name="app_version" translatable="false">0.8.1</string>
     <string name="msg_not_implemented_yet">Not implemented yet</string>
     <string name="insert_date_time">Insert date &amp; time</string>
     <string name="filename_copy_suffix">" - Copy"</string>
