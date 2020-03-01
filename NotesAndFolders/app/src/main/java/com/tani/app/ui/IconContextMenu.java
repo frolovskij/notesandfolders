@@ -25,6 +25,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.res.Resources;
 import android.content.res.Resources.Theme;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.util.TypedValue;
 import android.view.View;
@@ -101,8 +102,6 @@ public class IconContextMenu implements DialogInterface.OnCancelListener,
 				}
 			}
 		});
-
-		builder.setInverseBackgroundForced(true);
 
 		AlertDialog dialog = builder.create();
 		dialog.setOnCancelListener(this);
@@ -190,6 +189,7 @@ public class IconContextMenu implements DialogInterface.OnCancelListener,
 			TextView textView = (TextView) convertView;
 			textView.setTag(item);
 			textView.setText(item.text);
+			textView.setTextColor(Color.BLACK);
 			textView.setCompoundDrawablesWithIntrinsicBounds(item.image, null, null, null);
 
 			return textView;
