@@ -27,14 +27,19 @@ import com.notesandfolders.RestoreTask.RestoreResult;
 import com.tani.app.ui.IconContextMenu;
 import com.tani.app.ui.IconContextMenu.IconContextMenuOnClickListener;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -45,7 +50,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.AdapterView.OnItemLongClickListener;
 
-public class BackupManagerActivity extends Activity implements OnClickListener {
+public class BackupManagerActivity extends Activity implements OnClickListener, ActivityCompat.OnRequestPermissionsResultCallback {
 	private static final int DIALOG_CONTEXT_MENU = 0;
 	public static final int DIALOG_BACKUP = 1;
 	private static final int DIALOG_DELETE = 2;
@@ -54,6 +59,8 @@ public class BackupManagerActivity extends Activity implements OnClickListener {
 
 	private static final int MENU_RESTORE = 0;
 	private static final int MENU_DELETE = 1;
+
+	private static final int WRITE_EXTERNAL_STORAGE_GRANTED_FOR_READ = 1;
 
 	private Button backupButton;
 	private TextView emptyPlaceholder;
@@ -86,7 +93,14 @@ public class BackupManagerActivity extends Activity implements OnClickListener {
 		lv.setOnItemLongClickListener(itemLongClickHandler);
 
 		createContextMenu();
-		refresh();
+
+		if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+			ActivityCompat.requestPermissions(this,
+					new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+					WRITE_EXTERNAL_STORAGE_GRANTED_FOR_READ);
+		} else {
+			refresh();
+		}
 	}
 
 	public ProgressDialog getBackupDialog() {
@@ -311,6 +325,19 @@ public class BackupManagerActivity extends Activity implements OnClickListener {
 			emptyPlaceholder.setVisibility(View.VISIBLE);
 		} else {
 			emptyPlaceholder.setVisibility(View.GONE);
+		}
+	}
+
+	@Override
+	public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+		if (requestCode == WRITE_EXTERNAL_STORAGE_GRANTED_FOR_READ) {
+			if (grantResults.length > 0 && permissions[0].equals(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+				if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+					refresh();
+				} else {
+					this.finish();
+				}
+			}
 		}
 	}
 }
