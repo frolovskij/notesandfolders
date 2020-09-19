@@ -37,14 +37,14 @@ public class BackupTask extends
     OK, CANT_CREATE_OUTPUT_DIRECTORY, CANT_CREATE_OUTPUT_FILE, FILE_ALREADY_EXISTS, CANT_WRITE_TO_OUTPUT_FILE, IO_ERROR
   };
 
-  public static final String OUTPUT_DIR = "NotesAndFolders";
-
   private BackupManagerActivity bm;
   private NodeHelper nh;
+  private File outputDir;
 
-  public BackupTask(BackupManagerActivity bm, NodeHelper nh) {
+  public BackupTask(BackupManagerActivity bm, NodeHelper nh, File outputDir) {
     this.bm = bm;
     this.nh = nh;
+    this.outputDir = outputDir;
   }
 
   // PrintWriter, strings - 5056k
@@ -54,9 +54,6 @@ public class BackupTask extends
   // byte[] -
   @Override
   protected BackupResult doInBackground(Void... arg0) {
-    File root = Environment.getExternalStorageDirectory();
-
-    File outputDir = new File(root, OUTPUT_DIR);
     if (!outputDir.exists()) {
       if (outputDir.mkdirs() == false) {
         return BackupResult.CANT_CREATE_OUTPUT_DIRECTORY;

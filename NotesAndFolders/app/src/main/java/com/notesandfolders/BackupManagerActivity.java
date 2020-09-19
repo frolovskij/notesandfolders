@@ -62,6 +62,8 @@ public class BackupManagerActivity extends Activity implements OnClickListener, 
 
 	private static final int WRITE_EXTERNAL_STORAGE_GRANTED_FOR_READ = 1;
 
+	public static final String OUTPUT_DIR = "backups";
+
 	private Button backupButton;
 	private TextView emptyPlaceholder;
 	private ListView lv;
@@ -237,7 +239,8 @@ public class BackupManagerActivity extends Activity implements OnClickListener, 
 	public void onClick(View v) {
 		if (v == backupButton) {
 			backupTask = new BackupTask(this, new NodeHelper(this,
-					new TempStorage(this).getPassword()));
+					new TempStorage(this).getPassword()),
+					new File(getApplicationContext().getExternalFilesDir(null), OUTPUT_DIR));
 			backupTask.execute();
 		}
 	}
@@ -309,8 +312,7 @@ public class BackupManagerActivity extends Activity implements OnClickListener, 
 	private void refresh() {
 		items = new ArrayList<File>();
 
-		File outputDir = new File(Environment.getExternalStorageDirectory(),
-				BackupTask.OUTPUT_DIR);
+		File outputDir = new File(getApplicationContext().getExternalFilesDir(null), OUTPUT_DIR);
 
 		if (outputDir.exists()) {
 			for (File f : outputDir.listFiles()) {
